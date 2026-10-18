@@ -1,0 +1,31 @@
+{
+  "media": [
+    {
+      "id": 2,
+      "title": "Modern Family",
+      "type": "show",
+      "status": "in_progress",
+      "progress": "Season 7",
+      "poster": "https://static.tvmaze.com/uploads/images/medium_portrait/359/898320.jpg",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "rating": 5,
+      "review": "One of the best comedy series ever!",
+      "createdAt": "2026-10-17T13:42:14.775Z"
+    },
+    {
+      "id": 3,
+      "title": "Genshin Impact",
+      "type": "game",
+      "status": "in_progress",
+      "progress": "Adventure Rank 55",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5c/e2/13/5ce21317-a08a-24ac-cc5f-2b25a4d71fa6/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg",
+      "hoursPlayed": 42.5,
+      "targetHours": 100,
+      "rating": 4,
+      "review": "Great open world mobile RPG.",
+      "createdAt": "2026-10-17T14:50:00.000Z"
+    }
+  ],
+  "nextId": 4
+}
