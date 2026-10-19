@@ -1,0 +1,395 @@
+/* ── Import Modal Styling ─────────────────────────── */
+
+.import-overlay {
+  padding: 1rem;
+}
+
+.import-modal {
+  max-width: 900px;
+  width: 95vw;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: #172033;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75);
+}
+
+.import-modal-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.import-modal-title h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.import-modal-subtitle {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+/* ── Step 1: Paste Notes ─────────────────────────── */
+
+.import-step-paste {
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.import-tip {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.import-tip code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  color: #c7d2fe;
+}
+
+.import-textarea {
+  width: 100%;
+  min-height: 280px;
+  max-height: 48vh;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 1rem;
+  color: #f8fafc;
+  font-family: 'Consolas', 'Fira Code', 'Monaco', monospace;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.import-textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+.import-textarea::placeholder {
+  color: #475569;
+}
+
+.import-paste-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.stats-badge {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.stats-badge.success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.stats-badge.neutral {
+  color: #64748b;
+}
+
+.import-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* ── Step 2: Preview Table ───────────────────────── */
+
+.import-step-preview {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-small {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+}
+
+.preview-selection-toggles {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+}
+
+.btn-text-link {
+  background: none;
+  border: none;
+  color: #a5b4fc;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+
+.btn-text-link:hover:not(:disabled) {
+  color: #c7d2fe;
+}
+
+.separator {
+  color: #475569;
+}
+
+.preview-table-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 0.5rem 1.5rem;
+  min-height: 250px;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.preview-table th {
+  position: sticky;
+  top: 0;
+  background: #172033;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 2;
+}
+
+.preview-table td {
+  padding: 0.5rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+.preview-table tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.row-excluded {
+  opacity: 0.35;
+}
+
+.col-chk {
+  width: 32px;
+  text-align: center;
+}
+
+.col-chk input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  accent-color: #6366f1;
+}
+
+.col-title {
+  min-width: 200px;
+}
+
+.table-input.title-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+  color: #f1f5f9;
+  font-size: 0.88rem;
+  font-weight: 500;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.table-input.title-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #6366f1;
+}
+
+.col-type {
+  width: 110px;
+}
+
+.table-select {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #cbd5e0;
+  padding: 0.3rem 0.4rem;
+  font-size: 0.82rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.table-select option {
+  background: #1e293b;
+  color: #cbd5e0;
+}
+
+.col-date {
+  width: 120px;
+  white-space: nowrap;
+}
+
+.date-badge {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.col-venue {
+  width: 100px;
+}
+
+.venue-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.venue-toggle-btn.active-theatre {
+  background: rgba(236, 72, 153, 0.15);
+  border-color: rgba(236, 72, 153, 0.4);
+  color: #f472b6;
+  font-weight: 600;
+}
+
+.venue-toggle-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.col-status {
+  width: 115px;
+}
+
+.status-select {
+  font-size: 0.78rem;
+}
+
+/* ── Preview Footer & Progress ───────────────────── */
+
+.import-preview-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.footer-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.import-summary-text {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.import-summary-text strong {
+  color: #f1f5f9;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.import-progress-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #a5b4fc;
+  font-weight: 500;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 640px) {
+  .import-modal {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .preview-table th.col-date,
+  .preview-table td.col-date {
+    display: none;
+  }
+}

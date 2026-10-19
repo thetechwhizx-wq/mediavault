@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { fetchMedia, addMedia, updateMedia, deleteMedia } from './api';
+import { fetchMedia, addMedia, updateMedia, deleteMedia, bulkAddMedia } from './api';
 import Header from './components/Header';
 import FilterBar from './components/FilterBar';
 import MediaList from './components/MediaList';
 import AddMediaForm from './components/AddMediaForm';
 import EditMediaModal from './components/EditMediaModal';
+import ImportModal from './components/ImportModal';
 import './App.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
 
   // Modals
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
 
   // ── Data fetching ──────────────────────────────────
@@ -52,6 +54,27 @@ function App() {
     }
   };
 
+  const handleBulkImport = async (items, onProgress) => {
+    try {
+      // Import in chunks of 10 for responsive UI progress
+      const CHUNK_SIZE = 10;
+      for (let i = 0; i < items.length; i += CHUNK_SIZE) {
+        const chunk = items.slice(i, i + CHUNK_SIZE);
+        const res = await bulkAddMedia(chunk);
+        if (res && res.items) {
+          setMedia((prev) => [...prev, ...res.items]);
+        }
+        if (onProgress) {
+          onProgress(Math.min(items.length, i + CHUNK_SIZE), items.length);
+        }
+      }
+      setShowImportModal(false);
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   const handleUpdate = async (id, updates) => {
     try {
       const updated = await updateMedia(id, updates);
@@ -77,7 +100,6 @@ function App() {
   // Instant playtime update (e.g. Stop Session or +30m / +1h quick tap)
   const handleLogSession = async (id, newTotalHours) => {
     try {
-      // Optimistic update
       setMedia((prev) =>
         prev.map((m) => (m.id === id ? { ...m, hoursPlayed: newTotalHours } : m))
       );
@@ -115,6 +137,7 @@ function App() {
     const handleKey = (e) => {
       if (e.key === 'Escape') {
         setShowAddForm(false);
+        setShowImportModal(false);
         setEditingItem(null);
       }
     };
@@ -138,6 +161,7 @@ function App() {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onAddClick={() => setShowAddForm(true)}
+        onImportClick={() => setShowImportModal(true)}
       />
 
       <main className="main-content">
@@ -165,6 +189,13 @@ function App() {
       </main>
 
       {/* ── Modals ── */}
+      {showImportModal && (
+        <ImportModal
+          onImport={handleBulkImport}
+          onClose={() => setShowImportModal(false)}
+        />
+      )}
+
       {showAddForm && (
         <AddMediaForm
           onSubmit={handleAdd}

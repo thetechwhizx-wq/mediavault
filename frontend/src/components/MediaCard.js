@@ -15,6 +15,22 @@ const STATUS_META = {
   dropped: { label: 'Dropped', className: 'status-dropped' },
 };
 
+function formatWatchDate(dateStr) {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  const months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  if (parts.length === 3) {
+    const day = parseInt(parts[2], 10);
+    const m = months[parseInt(parts[1], 10)] || parts[1];
+    return `${day} ${m} ${parts[0]}`;
+  }
+  if (parts.length === 2) {
+    const m = months[parseInt(parts[1], 10)] || parts[1];
+    return `${m} ${parts[0]}`;
+  }
+  return dateStr;
+}
+
 function MediaCard({ item, onEdit, onDelete, onLogSession }) {
   const typeMeta = TYPE_META[item.type] || { icon: '📦', label: item.type };
   const statusMeta = STATUS_META[item.status] || { label: item.status, className: '' };
@@ -55,6 +71,7 @@ function MediaCard({ item, onEdit, onDelete, onLogSession }) {
   const hoursPlayed = Number(item.hoursPlayed) || 0;
   const targetHours = Number(item.targetHours) || 0;
   const progressPct = targetHours > 0 ? Math.min(100, Math.round((hoursPlayed / targetHours) * 100)) : 0;
+  const formattedDate = formatWatchDate(item.watchedDate);
 
   return (
     <div className={`media-card type-${item.type}`}>
@@ -66,6 +83,11 @@ function MediaCard({ item, onEdit, onDelete, onLogSession }) {
             <span className="card-type-badge overlay-badge">
               {typeMeta.icon} {typeMeta.label}
             </span>
+            {item.venue === 'theatre' && (
+              <span className="card-theatre-badge overlay-theatre" title="Watched in Theatre">
+                🎭 Theatre
+              </span>
+            )}
           </div>
         </div>
       ) : (
@@ -73,6 +95,11 @@ function MediaCard({ item, onEdit, onDelete, onLogSession }) {
           <span className="card-type-badge">
             {typeMeta.icon} {typeMeta.label}
           </span>
+          {item.venue === 'theatre' && (
+            <span className="card-theatre-badge" title="Watched in Theatre">
+              🎭 Theatre
+            </span>
+          )}
         </div>
       )}
 
@@ -93,8 +120,25 @@ function MediaCard({ item, onEdit, onDelete, onLogSession }) {
           <span className={`card-status ${statusMeta.className}`}>
             {statusMeta.label}
           </span>
+
+          {formattedDate && (
+            <span className="card-watch-date" title={`Watched on ${item.watchedDate}`}>
+              📅 {formattedDate}
+            </span>
+          )}
+
+          {item.venue === 'theatre' && !item.poster && (
+            <span className="card-theatre-badge">🎭 Theatre</span>
+          )}
+
           {item.progress && (
             <span className="card-progress">{item.progress}</span>
+          )}
+
+          {item.notes && (
+            <span className="card-notes-badge" title={item.notes}>
+              📌 {item.notes}
+            </span>
           )}
         </div>
 

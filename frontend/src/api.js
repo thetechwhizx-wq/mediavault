@@ -18,6 +18,16 @@ export async function addMedia(item) {
   return res.json();
 }
 
+export async function bulkAddMedia(items) {
+  const res = await fetch(`${API_URL}/bulk`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items }),
+  });
+  if (!res.ok) throw new Error('Failed to bulk import media');
+  return res.json();
+}
+
 export async function updateMedia(id, updates) {
   const res = await fetch(`${API_URL}/${id}`, {
     method: 'PATCH',

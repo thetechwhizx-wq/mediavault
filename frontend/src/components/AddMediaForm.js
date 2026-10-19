@@ -4,10 +4,12 @@ import './AddMediaForm.css';
 
 function AddMediaForm({ onSubmit, onClose }) {
   const [title, setTitle] = useState('');
-  const [type, setType] = useState('game');
-  const [status, setStatus] = useState('in_progress');
+  const [type, setType] = useState('movie');
+  const [status, setStatus] = useState('completed');
   const [progress, setProgress] = useState('');
   const [poster, setPoster] = useState('');
+  const [watchedDate, setWatchedDate] = useState('');
+  const [venue, setVenue] = useState('');
   const [hoursPlayed, setHoursPlayed] = useState('');
   const [targetHours, setTargetHours] = useState('');
   const [isFetchingMeta, setIsFetchingMeta] = useState(false);
@@ -54,6 +56,8 @@ function AddMediaForm({ onSubmit, onClose }) {
       status,
       progress: progress.trim(),
       poster: poster.trim(),
+      watchedDate: watchedDate.trim(),
+      venue,
       hoursPlayed: Number(hoursPlayed) || 0,
       targetHours: Number(targetHours) || 0,
     });
@@ -96,7 +100,7 @@ function AddMediaForm({ onSubmit, onClose }) {
             <input
               id="title"
               type="text"
-              placeholder="e.g. Genshin Impact, Modern Family"
+              placeholder="e.g. Gladiator 2, Daredevil, Elden Ring"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               onBlur={handleTitleBlur}
@@ -115,18 +119,38 @@ function AddMediaForm({ onSubmit, onClose }) {
                   setPoster('');
                 }}
               >
-                <option value="game">🎮 Game</option>
-                <option value="show">📺 Show</option>
                 <option value="movie">🎬 Movie</option>
+                <option value="show">📺 Show</option>
+                <option value="game">🎮 Game</option>
               </select>
             </div>
             <div className="form-group">
               <label htmlFor="status">Status</label>
               <select id="status" value={status} onChange={(e) => setStatus(e.target.value)}>
+                <option value="completed">Completed</option>
                 <option value="in_progress">In Progress</option>
                 <option value="plan_to_watch">Plan to Watch/Play</option>
-                <option value="completed">Completed</option>
                 <option value="dropped">Dropped</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Date & Venue Row */}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="watchedDate">Date Watched / Started</label>
+              <input
+                id="watchedDate"
+                type="date"
+                value={watchedDate}
+                onChange={(e) => setWatchedDate(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="venue">Venue</label>
+              <select id="venue" value={venue} onChange={(e) => setVenue(e.target.value)}>
+                <option value="">Default (Home / Device)</option>
+                <option value="theatre">🎭 Theatre / Cinema</option>
               </select>
             </div>
           </div>

@@ -67,6 +67,7 @@
   background: linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent);
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .overlay-badge {
@@ -301,3 +302,46 @@
   overflow: hidden;
   font-style: italic;
 }
+
+/* ── Badges: Theatre, Date, Notes ──────────────────── */
+.card-theatre-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  letter-spacing: 0.02em;
+}
+
+.overlay-theatre {
+  background: rgba(236, 72, 153, 0.85);
+  color: #fff;
+  border: none;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.card-watch-date {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.card-notes-badge {
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+

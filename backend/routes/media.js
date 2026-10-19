@@ -98,7 +98,19 @@ router.get('/', (req, res) => {
 // ─────────────────────────────────────────
 router.post('/', async (req, res) => {
   const data = readData();
-  const { title, type, status, progress, poster, hoursPlayed, targetHours } = req.body;
+  const {
+    title,
+    type,
+    status,
+    progress,
+    poster,
+    hoursPlayed,
+    targetHours,
+    watchedDate,
+    venue,
+    notes,
+    importedFrom
+  } = req.body;
 
   if (!title || !type) {
     return res.status(400).json({ error: 'Title and type are required' });
@@ -122,6 +134,10 @@ router.post('/', async (req, res) => {
     poster: finalPoster,
     hoursPlayed: Number(hoursPlayed) || 0,
     targetHours: Number(targetHours) || 0,
+    watchedDate: watchedDate || '',
+    venue: venue || '',
+    notes: notes || '',
+    importedFrom: importedFrom || 'manual',
     rating: null,
     review: '',
     createdAt: new Date().toISOString()
@@ -132,6 +148,64 @@ router.post('/', async (req, res) => {
   saveData(data);
 
   res.status(201).json(newItem);
+});
+
+// ─────────────────────────────────────────
+// POST /api/media/bulk — add MULTIPLE media items (e.g. from notes import)
+// ─────────────────────────────────────────
+router.post('/bulk', async (req, res) => {
+  const { items } = req.body;
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'items array is required' });
+  }
+
+  const data = readData();
+  const createdItems = [];
+
+  // Concurrency helper: process items in batches of 4 for fast poster fetching without throttling
+  const BATCH_SIZE = 4;
+  for (let i = 0; i < items.length; i += BATCH_SIZE) {
+    const batch = items.slice(i, i + BATCH_SIZE);
+    await Promise.all(
+      batch.map(async (rawItem) => {
+        let finalPoster = rawItem.poster || '';
+        if (!finalPoster && rawItem.title) {
+          try {
+            const meta = await fetchMetadata(rawItem.title, rawItem.type || 'movie');
+            if (meta && meta.poster) {
+              finalPoster = meta.poster;
+            }
+          } catch (e) {
+            // Ignore failure and continue
+          }
+        }
+
+        const newItem = {
+          id: data.nextId++,
+          title: (rawItem.title || '').trim(),
+          type: rawItem.type || 'movie',
+          status: rawItem.status || 'completed',
+          progress: rawItem.progress || '',
+          poster: finalPoster,
+          hoursPlayed: Number(rawItem.hoursPlayed) || 0,
+          targetHours: Number(rawItem.targetHours) || 0,
+          watchedDate: rawItem.watchedDate || '',
+          venue: rawItem.venue || '',
+          notes: rawItem.notes || '',
+          importedFrom: rawItem.importedFrom || 'bulk_import',
+          rating: rawItem.rating || null,
+          review: rawItem.review || '',
+          createdAt: new Date().toISOString()
+        };
+
+        data.media.push(newItem);
+        createdItems.push(newItem);
+      })
+    );
+  }
+
+  saveData(data);
+  res.status(201).json({ count: createdItems.length, items: createdItems });
 });
 
 // ─────────────────────────────────────────

@@ -4,11 +4,14 @@ import { searchMetadata } from '../api';
 import './AddMediaForm.css';
 
 function EditMediaModal({ item, onSubmit, onDelete, onClose }) {
-  const [title, setTitle] = useState(item.title);
-  const [type, setType] = useState(item.type);
-  const [status, setStatus] = useState(item.status);
+  const [title, setTitle] = useState(item.title || '');
+  const [type, setType] = useState(item.type || 'movie');
+  const [status, setStatus] = useState(item.status || 'completed');
   const [progress, setProgress] = useState(item.progress || '');
   const [poster, setPoster] = useState(item.poster || '');
+  const [watchedDate, setWatchedDate] = useState(item.watchedDate || '');
+  const [venue, setVenue] = useState(item.venue || '');
+  const [notes, setNotes] = useState(item.notes || '');
   const [hoursPlayed, setHoursPlayed] = useState(item.hoursPlayed !== undefined ? item.hoursPlayed : '');
   const [targetHours, setTargetHours] = useState(item.targetHours !== undefined ? item.targetHours : '');
   const [rating, setRating] = useState(item.rating || 0);
@@ -42,6 +45,9 @@ function EditMediaModal({ item, onSubmit, onDelete, onClose }) {
       status,
       progress: progress.trim(),
       poster: poster.trim(),
+      watchedDate: watchedDate.trim(),
+      venue,
+      notes: notes.trim(),
       hoursPlayed: Number(hoursPlayed) || 0,
       targetHours: Number(targetHours) || 0,
       rating: rating || null,
@@ -116,18 +122,38 @@ function EditMediaModal({ item, onSubmit, onDelete, onClose }) {
             <div className="form-group">
               <label htmlFor="edit-type">Type</label>
               <select id="edit-type" value={type} onChange={(e) => setType(e.target.value)}>
-                <option value="game">🎮 Game</option>
-                <option value="show">📺 Show</option>
                 <option value="movie">🎬 Movie</option>
+                <option value="show">📺 Show</option>
+                <option value="game">🎮 Game</option>
               </select>
             </div>
             <div className="form-group">
               <label htmlFor="edit-status">Status</label>
               <select id="edit-status" value={status} onChange={(e) => setStatus(e.target.value)}>
+                <option value="completed">Completed</option>
                 <option value="in_progress">In Progress</option>
                 <option value="plan_to_watch">Plan to Watch/Play</option>
-                <option value="completed">Completed</option>
                 <option value="dropped">Dropped</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="edit-watchedDate">Watch Date</label>
+              <input
+                id="edit-watchedDate"
+                type="text"
+                placeholder="YYYY-MM-DD or YYYY-MM"
+                value={watchedDate}
+                onChange={(e) => setWatchedDate(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="edit-venue">Venue</label>
+              <select id="edit-venue" value={venue} onChange={(e) => setVenue(e.target.value)}>
+                <option value="">Default (Home / Device)</option>
+                <option value="theatre">🎭 Theatre / Cinema</option>
               </select>
             </div>
           </div>
@@ -163,12 +189,23 @@ function EditMediaModal({ item, onSubmit, onDelete, onClose }) {
               <input
                 id="edit-progress"
                 type="text"
-                placeholder="e.g. Episode 5, 47 hours"
+                placeholder="e.g. Episode 5, Season 2"
                 value={progress}
                 onChange={(e) => setProgress(e.target.value)}
               />
             </div>
           )}
+
+          <div className="form-group">
+            <label htmlFor="edit-notes">Notes</label>
+            <input
+              id="edit-notes"
+              type="text"
+              placeholder="e.g. Rewatch, with friends, etc."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
 
           <div className="form-group">
             <label htmlFor="edit-poster">Poster / Image URL</label>
