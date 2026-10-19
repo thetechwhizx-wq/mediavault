@@ -51,6 +51,15 @@ function cleanMediaTitle(rawTitle) {
 
 function getTitleVariations(title) {
   const variations = [title];
+
+  // 1. Compound / joined words: "Iron heart" -> "Ironheart", "Iron-heart"
+  const words = title.trim().split(/\s+/);
+  if (words.length === 2) {
+    variations.push(words.join(''));
+    variations.push(words.join('-'));
+  }
+
+  // 2. Roman numerals: "2" <-> "II", "3" <-> "III"
   const romanMap = { '2': 'II', '3': 'III', '4': 'IV', '5': 'V', '6': 'VI' };
   const revMap = { 'ii': '2', 'iii': '3', 'iv': '4', 'v': '5', 'vi': '6' };
 
@@ -66,25 +75,31 @@ function getTitleVariations(title) {
 }
 
 // ─────────────────────────────────────────
-// Wikipedia REST Poster Search (Incredible for Regional Cinema, Cast & Exact Films)
+// Wikipedia REST Poster Search (Incredible for Regional Cinema, Cast, Studios & Exact Films)
 // ─────────────────────────────────────────
-async function searchWikipediaPosters(query, type = 'movie', year = '', cast = '') {
+async function searchWikipediaPosters(query, type = 'movie', year = '', hint = '') {
   const candidates = [];
   const seen = new Set();
+  const titleVars = getTitleVariations(query);
 
-  const searchTerms = [
-    [query, cast, year].filter(Boolean).join(' '),
-    [query, cast].filter(Boolean).join(' '),
-    [query, type === 'movie' ? 'film' : type === 'show' ? 'series' : 'video game'].filter(Boolean).join(' '),
-    query,
-  ];
+  const searchTerms = [];
+  for (const tv of titleVars) {
+    if (hint && year) searchTerms.push(`${tv} ${hint} ${year}`);
+    if (hint) searchTerms.push(`${tv} ${hint}`);
+    if (hint) searchTerms.push(`${tv} ${hint} ${type === 'show' ? 'series' : type === 'game' ? 'game' : 'film'}`);
+    searchTerms.push(`${tv} ${type === 'show' ? 'series' : type === 'game' ? 'video game' : 'film'}`);
+    searchTerms.push(tv);
+  }
 
   for (const term of searchTerms) {
     if (!term.trim()) continue;
     try {
       const res = await fetch(
         `https://en.wikipedia.org/w/rest.php/v1/search/page?q=${encodeURIComponent(term)}&limit=5`,
-        { headers: { 'User-Agent': 'MediaVault/1.0 (contact@mediavault.app)' } }
+        {
+          headers: { 'User-Agent': 'MediaVault/1.0 (contact@mediavault.app)' },
+          signal: AbortSignal.timeout(3500),
+        }
       );
       if (!res.ok) continue;
       const data = await res.json();
@@ -92,18 +107,30 @@ async function searchWikipediaPosters(query, type = 'movie', year = '', cast = '
         if (!p.key) continue;
         const sumRes = await fetch(
           `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(p.key)}`,
-          { headers: { 'User-Agent': 'MediaVault/1.0 (contact@mediavault.app)' } }
+          {
+            headers: { 'User-Agent': 'MediaVault/1.0 (contact@mediavault.app)' },
+            signal: AbortSignal.timeout(3500),
+          }
         );
         if (!sumRes.ok) continue;
         const sum = await sumRes.json();
         const poster = sum.thumbnail?.source;
         const desc = sum.description || '';
 
-        // Filter out people/biographies
+        // Filter out pure people/biographies
         if (
           /\b(director|actor|actress|producer|musician|singer|cricketer|politician)\b/i.test(desc) &&
-          !/\b(film|series|game)\b/i.test(desc.replace(/film director|film producer/i, ''))
+          !/\b(film|series|game|miniseries|media)\b/i.test(desc.replace(/film director|film producer/i, ''))
         ) {
+          continue;
+        }
+
+        // Must match query keywords (e.g. "Iron" AND "heart", or joined "ironheart")
+        const fullText = (sum.title + ' ' + desc).toLowerCase();
+        const qKeywords = query.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter((w) => w.length > 2);
+        const qJoined = query.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const matchesTitle = qKeywords.every((w) => fullText.includes(w)) || fullText.includes(qJoined);
+        if (!matchesTitle) {
           continue;
         }
 
@@ -121,9 +148,9 @@ async function searchWikipediaPosters(query, type = 'movie', year = '', cast = '
           });
         }
       }
-      if (candidates.length >= 3) break;
+      if (candidates.length >= 6) break;
     } catch (e) {
-      // Continue
+      // Continue on timeout/network error
     }
   }
 
@@ -133,7 +160,7 @@ async function searchWikipediaPosters(query, type = 'movie', year = '', cast = '
 // ─────────────────────────────────────────
 // Comprehensive Multi-Source Search
 // ─────────────────────────────────────────
-async function searchCoverCandidates(query, type = 'movie', year = '', cast = '') {
+async function searchCoverCandidates(query, type = 'movie', year = '', hint = '') {
   const candidates = [];
   const seenPosters = new Set();
   const { baseTitle, seasonHint, yearHint } = cleanMediaTitle(query);
@@ -144,7 +171,10 @@ async function searchCoverCandidates(query, type = 'movie', year = '', cast = ''
   // 1. Apple App Store / iTunes (Specialized & FIRST for Games)
   if (type === 'game') {
     try {
-      const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(searchTitle)}&entity=software&limit=8`);
+      const res = await fetch(
+        `https://itunes.apple.com/search?term=${encodeURIComponent(searchTitle)}&entity=software&limit=8`,
+        { signal: AbortSignal.timeout(3500) }
+      );
       if (res.ok) {
         const d = await res.json();
         for (const item of (d.results || [])) {
@@ -165,10 +195,10 @@ async function searchCoverCandidates(query, type = 'movie', year = '', cast = ''
     } catch (err) {}
   }
 
-  // 2. If cast is provided, Wikipedia is the champion at actor + title matching
-  if (cast && type !== 'game') {
+  // 2. If studio/actor/keyword hint is provided, Wikipedia is the champion
+  if (hint && type !== 'game') {
     try {
-      const wikiResults = await searchWikipediaPosters(searchTitle, type, targetYear, cast);
+      const wikiResults = await searchWikipediaPosters(searchTitle, type, targetYear, hint);
       for (const item of wikiResults) {
         if (!seenPosters.has(item.poster)) {
           seenPosters.add(item.poster);
@@ -178,7 +208,7 @@ async function searchCoverCandidates(query, type = 'movie', year = '', cast = ''
     } catch (e) {}
   }
 
-  // 3. OMDb API (IMDb Catalog — incredible for Movies, Hollywood & Indian/Global cinema)
+  // 3. OMDb API (IMDb Catalog — Hollywood, Global & Indian cinema)
   if (type === 'movie' || type === 'show') {
     for (const variation of titleVariations) {
       try {
@@ -186,13 +216,13 @@ async function searchCoverCandidates(query, type = 'movie', year = '', cast = ''
         if (targetYear) omdbUrl += `&y=${encodeURIComponent(targetYear)}`;
         omdbUrl += `&type=${type === 'show' ? 'series' : 'movie'}`;
 
-        let res = await fetch(omdbUrl);
+        let res = await fetch(omdbUrl, { signal: AbortSignal.timeout(3500) });
         let d = res.ok ? await res.json() : null;
 
         // If targetYear had 0 results, retry without year
         if ((!d || !d.Search || d.Search.length === 0) && targetYear) {
           const fallbackUrl = `https://www.omdbapi.com/?s=${encodeURIComponent(variation)}&type=${type === 'show' ? 'series' : 'movie'}&apikey=trilogy`;
-          res = await fetch(fallbackUrl);
+          res = await fetch(fallbackUrl, { signal: AbortSignal.timeout(3500) });
           d = res.ok ? await res.json() : null;
         }
 
@@ -219,7 +249,10 @@ async function searchCoverCandidates(query, type = 'movie', year = '', cast = ''
   // 4. TVMaze (Specialized for TV Series & Anime)
   if (type === 'show') {
     try {
-      const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTitle)}`);
+      const res = await fetch(
+        `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTitle)}`,
+        { signal: AbortSignal.timeout(3500) }
+      );
       if (res.ok) {
         const list = await res.json();
         for (const item of (list || []).slice(0, 5)) {
@@ -242,9 +275,9 @@ async function searchCoverCandidates(query, type = 'movie', year = '', cast = ''
   }
 
   // 5. Wikipedia Search (General fallback for movies, shows & video games)
-  if (candidates.length < 4) {
+  if (candidates.length < 5) {
     try {
-      const wikiResults = await searchWikipediaPosters(searchTitle, type, targetYear, cast);
+      const wikiResults = await searchWikipediaPosters(searchTitle, type, targetYear, hint);
       for (const item of wikiResults) {
         if (!seenPosters.has(item.poster)) {
           seenPosters.add(item.poster);
@@ -254,15 +287,45 @@ async function searchCoverCandidates(query, type = 'movie', year = '', cast = ''
     } catch (e) {}
   }
 
-  return candidates;
+  // 6. Smart Relevance Ranking — sorts results so studio/franchise/lead hints rank #1
+  candidates.sort((a, b) => {
+    const scoreA = calculateRelevance(a, searchTitle, targetYear, hint);
+    const scoreB = calculateRelevance(b, searchTitle, targetYear, hint);
+    return scoreB - scoreA;
+  });
+
+  return candidates.slice(0, 15);
+}
+
+function calculateRelevance(item, query, targetYear, hint) {
+  let score = 0;
+  const itemTitle = (item.title || '').toLowerCase();
+  const itemDesc = ((item.summary || '') + ' ' + (item.year || '')).toLowerCase();
+  const qClean = query.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const tClean = itemTitle.replace(/[^a-z0-9]/g, '');
+
+  if (tClean.includes(qClean)) score += 12;
+  const qWords = query.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+  const matchedWords = qWords.filter((w) => itemTitle.includes(w));
+  score += (matchedWords.length / Math.max(1, qWords.length)) * 8;
+
+  if (hint) {
+    const hLower = hint.toLowerCase();
+    if (itemTitle.includes(hLower) || itemDesc.includes(hLower)) {
+      score += 20; // Massive boost if studio/cast/keyword matches
+    }
+  }
+
+  if (targetYear && String(item.year).includes(targetYear)) score += 6;
+  return score;
 }
 
 // ─────────────────────────────────────────
 // Smart Single Metadata Matcher
 // ─────────────────────────────────────────
-async function fetchMetadata(rawTitle, type = 'movie', year = '', cast = '') {
+async function fetchMetadata(rawTitle, type = 'movie', year = '', hint = '') {
   try {
-    const candidates = await searchCoverCandidates(rawTitle, type, year, cast);
+    const candidates = await searchCoverCandidates(rawTitle, type, year, hint);
     if (candidates && candidates.length > 0) {
       // Prioritize matches that match the requested type and year
       const exactMatch = candidates.find((c) => {
@@ -280,7 +343,6 @@ async function fetchMetadata(rawTitle, type = 'movie', year = '', cast = '') {
     }
     return null;
   } catch (err) {
-    console.error('Metadata lookup error:', err.message);
     return null;
   }
 }
@@ -289,9 +351,10 @@ async function fetchMetadata(rawTitle, type = 'movie', year = '', cast = '') {
 // GET /api/media/candidates — search candidates for user to choose
 // ─────────────────────────────────────────
 router.get('/candidates', async (req, res) => {
-  const { title, type, year, cast } = req.query;
+  const { title, type, year, cast, hint } = req.query;
+  const userHint = hint || cast || '';
   if (!title) return res.status(400).json({ error: 'Title required' });
-  const results = await searchCoverCandidates(title, type || 'movie', year || '', cast || '');
+  const results = await searchCoverCandidates(title, type || 'movie', year || '', userHint);
   res.json(results || []);
 });
 
@@ -299,9 +362,10 @@ router.get('/candidates', async (req, res) => {
 // GET /api/media/metadata — live search single match
 // ─────────────────────────────────────────
 router.get('/metadata', async (req, res) => {
-  const { title, type, year, cast } = req.query;
+  const { title, type, year, cast, hint } = req.query;
+  const userHint = hint || cast || '';
   if (!title) return res.status(400).json({ error: 'Title required' });
-  const meta = await fetchMetadata(title, type || 'movie', year || '', cast || '');
+  const meta = await fetchMetadata(title, type || 'movie', year || '', userHint);
   res.json(meta || {});
 });
 
@@ -380,51 +444,66 @@ router.post('/bulk', async (req, res) => {
   const data = readData();
   const createdItems = [];
 
-  const BATCH_SIZE = 5;
-  for (let i = 0; i < items.length; i += BATCH_SIZE) {
-    const batch = items.slice(i, i + BATCH_SIZE);
-    await Promise.all(
-      batch.map(async (rawItem) => {
-        let finalPoster = rawItem.poster || '';
-        if (!finalPoster && rawItem.title) {
+  // 1. Immediately create and assign IDs to all items in memory
+  for (const rawItem of items) {
+    const newItem = {
+      id: data.nextId++,
+      title: (rawItem.title || '').trim(),
+      type: rawItem.type || 'movie',
+      status: rawItem.status || 'completed',
+      progress: rawItem.progress || '',
+      poster: rawItem.poster || '',
+      hoursPlayed: Number(rawItem.hoursPlayed) || 0,
+      targetHours: Number(rawItem.targetHours) || 0,
+      watchedDate: rawItem.watchedDate || '',
+      venue: rawItem.venue || '',
+      notes: rawItem.notes || '',
+      importedFrom: rawItem.importedFrom || 'bulk_import',
+      rating: rawItem.rating || null,
+      review: rawItem.review || '',
+      createdAt: new Date().toISOString(),
+    };
+
+    data.media.push(newItem);
+    createdItems.push(newItem);
+  }
+
+  // 2. Immediately commit all records to disk (instant, <15ms)
+  saveData(data);
+
+  // 3. Immediately respond to client — ALL 50+ ITEMS SAVED SUCCESSFULLY, NO CLIENT TIMEOUTS!
+  res.status(201).json({ count: createdItems.length, items: createdItems });
+
+  // 4. Background cover resolution worker (non-blocking)
+  setImmediate(async () => {
+    try {
+      let needsSave = false;
+      const latestData = readData();
+
+      for (const item of createdItems) {
+        if (!item.poster && item.title) {
           try {
             const meta = await fetchMetadata(
-              rawItem.title,
-              rawItem.type || 'movie',
-              rawItem.watchedDate ? rawItem.watchedDate.slice(0, 4) : ''
+              item.title,
+              item.type,
+              item.watchedDate ? item.watchedDate.slice(0, 4) : ''
             );
             if (meta && meta.poster) {
-              finalPoster = meta.poster;
+              const diskItem = latestData.media.find((m) => m.id === item.id);
+              if (diskItem) {
+                diskItem.poster = meta.poster;
+                needsSave = true;
+              }
             }
           } catch (e) {}
         }
+      }
 
-        const newItem = {
-          id: data.nextId++,
-          title: (rawItem.title || '').trim(),
-          type: rawItem.type || 'movie',
-          status: rawItem.status || 'completed',
-          progress: rawItem.progress || '',
-          poster: finalPoster,
-          hoursPlayed: Number(rawItem.hoursPlayed) || 0,
-          targetHours: Number(rawItem.targetHours) || 0,
-          watchedDate: rawItem.watchedDate || '',
-          venue: rawItem.venue || '',
-          notes: rawItem.notes || '',
-          importedFrom: rawItem.importedFrom || 'bulk_import',
-          rating: rawItem.rating || null,
-          review: rawItem.review || '',
-          createdAt: new Date().toISOString(),
-        };
-
-        data.media.push(newItem);
-        createdItems.push(newItem);
-      })
-    );
-  }
-
-  saveData(data);
-  res.status(201).json({ count: createdItems.length, items: createdItems });
+      if (needsSave) {
+        saveData(latestData);
+      }
+    } catch (e) {}
+  });
 });
 
 // ─────────────────────────────────────────

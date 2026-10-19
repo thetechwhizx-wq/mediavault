@@ -13,7 +13,7 @@ function CoverPickerModal({ item, onSelect, onClose }) {
   const [year, setYear] = useState(
     item.watchedDate ? item.watchedDate.slice(0, 4) : ''
   );
-  const [cast, setCast] = useState('');
+  const [hint, setHint] = useState('');
   const [customUrl, setCustomUrl] = useState('');
   const [activeTab, setActiveTab] = useState('search'); // 'search' | 'custom'
 
@@ -24,20 +24,20 @@ function CoverPickerModal({ item, onSelect, onClose }) {
   // Track active request ID to ignore stale responses
   const requestIdRef = useRef(0);
 
-  const performSearch = async (sTitle, sType, sYear, sCast) => {
+  const performSearch = async (sTitle, sType, sYear, sHint) => {
     const qTitle = (sTitle !== undefined ? sTitle : title).trim();
     if (!qTitle) return;
 
     const qType = sType !== undefined ? sType : type;
     const qYear = (sYear !== undefined ? sYear : year).trim();
-    const qCast = (sCast !== undefined ? sCast : cast).trim();
+    const qHint = (sHint !== undefined ? sHint : hint).trim();
 
     const currentReqId = ++requestIdRef.current;
     setLoading(true);
     setError(null);
 
     try {
-      const results = await fetchCoverCandidates(qTitle, qType, qYear, qCast);
+      const results = await fetchCoverCandidates(qTitle, qType, qYear, qHint);
       // Only apply if this is still the latest search
       if (currentReqId === requestIdRef.current) {
         setCandidates(results || []);
@@ -127,7 +127,7 @@ function CoverPickerModal({ item, onSelect, onClose }) {
                   value={type}
                   onChange={(e) => {
                     setType(e.target.value);
-                    performSearch(title, e.target.value, year, cast);
+                    performSearch(title, e.target.value, year, hint);
                   }}
                 >
                   <option value="movie">🎬 Movie</option>
@@ -137,24 +137,24 @@ function CoverPickerModal({ item, onSelect, onClose }) {
               </div>
 
               <div className="search-field year-field">
-                <label>Year Hint</label>
+                <label>Year</label>
                 <input
                   type="text"
                   maxLength="4"
-                  placeholder="e.g. 2017"
+                  placeholder="e.g. 2024"
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && performSearch()}
                 />
               </div>
 
-              <div className="search-field cast-field">
-                <label>Cast / Actor Hint</label>
+              <div className="search-field hint-field">
+                <label>Studio / Lead / Keyword</label>
                 <input
                   type="text"
-                  placeholder="e.g. Chris Evans, Sivakarthikeyan"
-                  value={cast}
-                  onChange={(e) => setCast(e.target.value)}
+                  placeholder="e.g. Marvel, Sivakarthikeyan, A24, HBO"
+                  value={hint}
+                  onChange={(e) => setHint(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && performSearch()}
                 />
               </div>

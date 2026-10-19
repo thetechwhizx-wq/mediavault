@@ -46,19 +46,19 @@ export async function deleteMedia(id) {
   return res.json();
 }
 
-export async function searchMetadata(title, type, year = '', cast = '') {
+export async function searchMetadata(title, type, year = '', hint = '') {
   let url = `${API_URL}/metadata?title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`;
   if (year) url += `&year=${encodeURIComponent(year)}`;
-  if (cast) url += `&cast=${encodeURIComponent(cast)}`;
+  if (hint) url += `&hint=${encodeURIComponent(hint)}&cast=${encodeURIComponent(hint)}`;
   const res = await fetch(url);
   if (!res.ok) return null;
   return res.json();
 }
 
-export async function fetchCoverCandidates(title, type, year = '', cast = '') {
+export async function fetchCoverCandidates(title, type, year = '', hint = '') {
   let url = `${API_URL}/candidates?title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`;
   if (year) url += `&year=${encodeURIComponent(year)}`;
-  if (cast) url += `&cast=${encodeURIComponent(cast)}`;
+  if (hint) url += `&hint=${encodeURIComponent(hint)}&cast=${encodeURIComponent(hint)}`;
   const res = await fetch(url);
   if (!res.ok) return [];
   return res.json();

@@ -59,18 +59,37 @@ function App() {
 
   const handleBulkImport = async (items, onProgress) => {
     try {
-      const CHUNK_SIZE = 10;
+      // Chunk in blocks of 50 items
+      const CHUNK_SIZE = 50;
+      let totalImported = 0;
+
       for (let i = 0; i < items.length; i += CHUNK_SIZE) {
         const chunk = items.slice(i, i + CHUNK_SIZE);
-        const res = await bulkAddMedia(chunk);
-        if (res && res.items) {
-          setMedia((prev) => [...prev, ...res.items]);
+        try {
+          const res = await bulkAddMedia(chunk);
+          if (res && res.items) {
+            setMedia((prev) => [...prev, ...res.items]);
+            totalImported += res.items.length;
+          }
+        } catch (chunkErr) {
+          console.error('Error importing chunk:', chunkErr);
         }
         if (onProgress) {
           onProgress(Math.min(items.length, i + CHUNK_SIZE), items.length);
         }
       }
+
       setShowImportModal(false);
+
+      // Auto re-fetch after 3.5s so background-resolved posters appear automatically!
+      setTimeout(async () => {
+        try {
+          const fresh = await fetchMedia();
+          if (fresh && Array.isArray(fresh)) {
+            setMedia(fresh);
+          }
+        } catch (e) {}
+      }, 3500);
     } catch (err) {
       console.error(err);
       throw err;
