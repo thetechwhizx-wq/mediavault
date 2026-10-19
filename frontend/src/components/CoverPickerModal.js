@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { fetchCoverCandidates } from '../api';
 import './CoverPickerModal.css';
 
@@ -21,28 +21,47 @@ function CoverPickerModal({ item, onSelect, onClose }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const searchCovers = useCallback(async () => {
-    if (!title.trim()) return;
+  // Track active request ID to ignore stale responses
+  const requestIdRef = useRef(0);
+
+  const performSearch = async (sTitle, sType, sYear, sCast) => {
+    const qTitle = (sTitle !== undefined ? sTitle : title).trim();
+    if (!qTitle) return;
+
+    const qType = sType !== undefined ? sType : type;
+    const qYear = (sYear !== undefined ? sYear : year).trim();
+    const qCast = (sCast !== undefined ? sCast : cast).trim();
+
+    const currentReqId = ++requestIdRef.current;
     setLoading(true);
     setError(null);
+
     try {
-      const results = await fetchCoverCandidates(title.trim(), type, year.trim(), cast.trim());
-      setCandidates(results || []);
-      if (!results || results.length === 0) {
-        setError('No cover pictures found for this search. Try adding or changing the actor/year hint or paste a direct image URL.');
+      const results = await fetchCoverCandidates(qTitle, qType, qYear, qCast);
+      // Only apply if this is still the latest search
+      if (currentReqId === requestIdRef.current) {
+        setCandidates(results || []);
+        if (!results || results.length === 0) {
+          setError('No cover pictures found. Try checking title spelling, year, or actor name, or paste a custom link.');
+        }
       }
     } catch (err) {
-      console.error(err);
-      setError('Search failed. Please ensure the backend is running.');
+      if (currentReqId === requestIdRef.current) {
+        console.error(err);
+        setError('Search failed. Please ensure the backend is running.');
+      }
     } finally {
-      setLoading(false);
+      if (currentReqId === requestIdRef.current) {
+        setLoading(false);
+      }
     }
-  }, [title, type, year, cast]);
+  };
 
-  // Initial search on mount
+  // Run search ONCE when modal opens
   useEffect(() => {
-    searchCovers();
-  }, [searchCovers]);
+    performSearch(cleanTitle || item.title || '', item.type || 'movie', item.watchedDate ? item.watchedDate.slice(0, 4) : '', '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePickCandidate = (posterUrl) => {
     onSelect(posterUrl);
@@ -98,13 +117,19 @@ function CoverPickerModal({ item, onSelect, onClose }) {
                   value={title}
                   placeholder="e.g. Gifted, Amaran, Squid Game"
                   onChange={(e) => setTitle(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && searchCovers()}
+                  onKeyDown={(e) => e.key === 'Enter' && performSearch()}
                 />
               </div>
 
               <div className="search-field type-field">
                 <label>Type</label>
-                <select value={type} onChange={(e) => setType(e.target.value)}>
+                <select
+                  value={type}
+                  onChange={(e) => {
+                    setType(e.target.value);
+                    performSearch(title, e.target.value, year, cast);
+                  }}
+                >
                   <option value="movie">🎬 Movie</option>
                   <option value="show">📺 Show</option>
                   <option value="game">🎮 Game</option>
@@ -119,7 +144,7 @@ function CoverPickerModal({ item, onSelect, onClose }) {
                   placeholder="e.g. 2017"
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && searchCovers()}
+                  onKeyDown={(e) => e.key === 'Enter' && performSearch()}
                 />
               </div>
 
@@ -130,14 +155,14 @@ function CoverPickerModal({ item, onSelect, onClose }) {
                   placeholder="e.g. Chris Evans, Sivakarthikeyan"
                   value={cast}
                   onChange={(e) => setCast(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && searchCovers()}
+                  onKeyDown={(e) => e.key === 'Enter' && performSearch()}
                 />
               </div>
 
               <button
                 type="button"
                 className="btn-primary btn-search-covers"
-                onClick={searchCovers}
+                onClick={() => performSearch()}
                 disabled={loading || !title.trim()}
               >
                 {loading ? 'Searching...' : '🔍 Search'}
@@ -149,7 +174,7 @@ function CoverPickerModal({ item, onSelect, onClose }) {
               {loading && (
                 <div className="candidates-loading">
                   <div className="spinner" />
-                  <p>Searching movie & show databases...</p>
+                  <p>Searching movie, TV & Wikipedia catalogs...</p>
                 </div>
               )}
 
@@ -161,29 +186,39 @@ function CoverPickerModal({ item, onSelect, onClose }) {
 
               {!loading && candidates.length > 0 && (
                 <div className="candidates-grid">
-                  {candidates.map((cand, idx) => (
-                    <div
-                      key={idx}
-                      className="candidate-card"
-                      onClick={() => handlePickCandidate(cand.poster)}
-                      title="Click to apply this cover"
-                    >
-                      <div className="candidate-poster-wrap">
-                        <img src={cand.poster} alt={cand.title} loading="lazy" />
-                        <span className="candidate-source-tag">{cand.source}</span>
+                  {candidates.map((cand, idx) => {
+                    const yearStr = String(cand.year || '');
+                    const cleanYear = yearStr.length > 25
+                      ? (yearStr.match(/\b(19\d\d|20\d\d)\b/)?.[0] || yearStr.slice(0, 20) + '...')
+                      : yearStr;
+                    const sourceClass = (cand.source || '').toLowerCase().replace(/[^a-z]/g, '');
+
+                    return (
+                      <div
+                        key={idx}
+                        className="candidate-card"
+                        onClick={() => handlePickCandidate(cand.poster)}
+                        title="Click to apply this cover"
+                      >
+                        <div className="candidate-poster-wrap">
+                          <img src={cand.poster} alt={cand.title} loading="lazy" />
+                          <span className={`candidate-source-tag source-${sourceClass}`}>
+                            {cand.source}
+                          </span>
+                        </div>
+                        <div className="candidate-details">
+                          <strong className="candidate-title">{cand.title}</strong>
+                          <span className="candidate-meta">
+                            {cleanYear ? `${cleanYear} • ` : ''}
+                            {cand.type === 'show' ? '📺 TV' : cand.type === 'game' ? '🎮 Game' : '🎬 Movie'}
+                          </span>
+                        </div>
+                        <button type="button" className="btn-select-candidate">
+                          ✓ Select This Cover
+                        </button>
                       </div>
-                      <div className="candidate-details">
-                        <strong className="candidate-title">{cand.title}</strong>
-                        <span className="candidate-meta">
-                          {cand.year ? `${cand.year} • ` : ''}
-                          {cand.type === 'show' ? '📺 TV' : cand.type === 'game' ? '🎮 Game' : '🎬 Movie'}
-                        </span>
-                      </div>
-                      <button type="button" className="btn-select-candidate">
-                        ✓ Select This Cover
-                      </button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>

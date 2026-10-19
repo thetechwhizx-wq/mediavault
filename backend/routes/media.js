@@ -49,6 +49,87 @@ function cleanMediaTitle(rawTitle) {
   };
 }
 
+function getTitleVariations(title) {
+  const variations = [title];
+  const romanMap = { '2': 'II', '3': 'III', '4': 'IV', '5': 'V', '6': 'VI' };
+  const revMap = { 'ii': '2', 'iii': '3', 'iv': '4', 'v': '5', 'vi': '6' };
+
+  for (const [digit, roman] of Object.entries(romanMap)) {
+    const rx = new RegExp('\\b' + digit + '\\b', 'gi');
+    if (rx.test(title)) variations.push(title.replace(rx, roman));
+  }
+  for (const [roman, digit] of Object.entries(revMap)) {
+    const rx = new RegExp('\\b' + roman + '\\b', 'gi');
+    if (rx.test(title)) variations.push(title.replace(rx, digit));
+  }
+  return [...new Set(variations)];
+}
+
+// ─────────────────────────────────────────
+// Wikipedia REST Poster Search (Incredible for Regional Cinema, Cast & Exact Films)
+// ─────────────────────────────────────────
+async function searchWikipediaPosters(query, type = 'movie', year = '', cast = '') {
+  const candidates = [];
+  const seen = new Set();
+
+  const searchTerms = [
+    [query, cast, year].filter(Boolean).join(' '),
+    [query, cast].filter(Boolean).join(' '),
+    [query, type === 'movie' ? 'film' : type === 'show' ? 'series' : 'video game'].filter(Boolean).join(' '),
+    query,
+  ];
+
+  for (const term of searchTerms) {
+    if (!term.trim()) continue;
+    try {
+      const res = await fetch(
+        `https://en.wikipedia.org/w/rest.php/v1/search/page?q=${encodeURIComponent(term)}&limit=5`,
+        { headers: { 'User-Agent': 'MediaVault/1.0 (contact@mediavault.app)' } }
+      );
+      if (!res.ok) continue;
+      const data = await res.json();
+      for (const p of data.pages || []) {
+        if (!p.key) continue;
+        const sumRes = await fetch(
+          `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(p.key)}`,
+          { headers: { 'User-Agent': 'MediaVault/1.0 (contact@mediavault.app)' } }
+        );
+        if (!sumRes.ok) continue;
+        const sum = await sumRes.json();
+        const poster = sum.thumbnail?.source;
+        const desc = sum.description || '';
+
+        // Filter out people/biographies
+        if (
+          /\b(director|actor|actress|producer|musician|singer|cricketer|politician)\b/i.test(desc) &&
+          !/\b(film|series|game)\b/i.test(desc.replace(/film director|film producer/i, ''))
+        ) {
+          continue;
+        }
+
+        if (poster && !seen.has(poster)) {
+          seen.add(poster);
+          // Extract 4 digit year if in description
+          const yMatch = desc.match(/\b(19\d\d|20\d\d)\b/);
+          candidates.push({
+            title: sum.title.replace(/\s*\([^)]*\)\s*$/, '').trim(),
+            year: yMatch ? yMatch[1] : desc,
+            type,
+            poster,
+            source: 'Wikipedia',
+            summary: sum.extract ? sum.extract.slice(0, 160) + '...' : desc,
+          });
+        }
+      }
+      if (candidates.length >= 3) break;
+    } catch (e) {
+      // Continue
+    }
+  }
+
+  return candidates;
+}
+
 // ─────────────────────────────────────────
 // Comprehensive Multi-Source Search
 // ─────────────────────────────────────────
@@ -58,40 +139,85 @@ async function searchCoverCandidates(query, type = 'movie', year = '', cast = ''
   const { baseTitle, seasonHint, yearHint } = cleanMediaTitle(query);
   const targetYear = year || yearHint;
   const searchTitle = baseTitle || query.trim();
+  const titleVariations = getTitleVariations(searchTitle);
 
-  // 1. OMDb API (IMDb Catalog — incredible for Movies, Hollywood & Indian/Global cinema)
-  try {
-    let omdbUrl = `https://www.omdbapi.com/?s=${encodeURIComponent(searchTitle)}&apikey=trilogy`;
-    if (targetYear) omdbUrl += `&y=${encodeURIComponent(targetYear)}`;
-    if (type === 'movie' || type === 'show') {
-      omdbUrl += `&type=${type === 'show' ? 'series' : 'movie'}`;
-    }
-
-    const res = await fetch(omdbUrl);
-    if (res.ok) {
-      const d = await res.json();
-      if (d && d.Search) {
-        for (const item of d.Search) {
-          if (item.Poster && item.Poster !== 'N/A' && !seenPosters.has(item.Poster)) {
-            seenPosters.add(item.Poster);
+  // 1. Apple App Store / iTunes (Specialized & FIRST for Games)
+  if (type === 'game') {
+    try {
+      const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(searchTitle)}&entity=software&limit=8`);
+      if (res.ok) {
+        const d = await res.json();
+        for (const item of (d.results || [])) {
+          const img = item.artworkUrl512 || item.artworkUrl100;
+          if (img && !seenPosters.has(img)) {
+            seenPosters.add(img);
             candidates.push({
-              title: item.Title,
-              year: item.Year,
-              type: item.Type === 'series' ? 'show' : item.Type,
-              poster: item.Poster,
-              source: 'IMDb',
-              imdbID: item.imdbID,
+              title: item.trackName,
+              year: item.releaseDate ? item.releaseDate.slice(0, 4) : '',
+              type: 'game',
+              poster: img,
+              source: 'AppStore',
+              summary: item.genres ? item.genres.join(', ') : '',
             });
           }
         }
       }
-    }
-  } catch (err) {
-    // Continue
+    } catch (err) {}
   }
 
-  // 2. TVMaze (Specialized for TV Series & Anime)
-  if (type === 'show' || candidates.length < 3) {
+  // 2. If cast is provided, Wikipedia is the champion at actor + title matching
+  if (cast && type !== 'game') {
+    try {
+      const wikiResults = await searchWikipediaPosters(searchTitle, type, targetYear, cast);
+      for (const item of wikiResults) {
+        if (!seenPosters.has(item.poster)) {
+          seenPosters.add(item.poster);
+          candidates.push(item);
+        }
+      }
+    } catch (e) {}
+  }
+
+  // 3. OMDb API (IMDb Catalog — incredible for Movies, Hollywood & Indian/Global cinema)
+  if (type === 'movie' || type === 'show') {
+    for (const variation of titleVariations) {
+      try {
+        let omdbUrl = `https://www.omdbapi.com/?s=${encodeURIComponent(variation)}&apikey=trilogy`;
+        if (targetYear) omdbUrl += `&y=${encodeURIComponent(targetYear)}`;
+        omdbUrl += `&type=${type === 'show' ? 'series' : 'movie'}`;
+
+        let res = await fetch(omdbUrl);
+        let d = res.ok ? await res.json() : null;
+
+        // If targetYear had 0 results, retry without year
+        if ((!d || !d.Search || d.Search.length === 0) && targetYear) {
+          const fallbackUrl = `https://www.omdbapi.com/?s=${encodeURIComponent(variation)}&type=${type === 'show' ? 'series' : 'movie'}&apikey=trilogy`;
+          res = await fetch(fallbackUrl);
+          d = res.ok ? await res.json() : null;
+        }
+
+        if (d && d.Search) {
+          for (const item of d.Search) {
+            if (item.Poster && item.Poster !== 'N/A' && !seenPosters.has(item.Poster)) {
+              seenPosters.add(item.Poster);
+              candidates.push({
+                title: item.Title,
+                year: item.Year,
+                type: item.Type === 'series' ? 'show' : item.Type,
+                poster: item.Poster,
+                source: 'IMDb',
+                imdbID: item.imdbID,
+              });
+            }
+          }
+        }
+      } catch (err) {}
+      if (candidates.length >= 6) break;
+    }
+  }
+
+  // 4. TVMaze (Specialized for TV Series & Anime)
+  if (type === 'show') {
     try {
       const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTitle)}`);
       if (res.ok) {
@@ -112,60 +238,20 @@ async function searchCoverCandidates(query, type = 'movie', year = '', cast = ''
           }
         }
       }
-    } catch (err) {
-      // Continue
-    }
-  }
-
-  // 3. Apple App Store / iTunes (Specialized for Mobile & Desktop Games)
-  if (type === 'game' || candidates.length === 0) {
-    try {
-      const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(searchTitle)}&entity=software&limit=6`);
-      if (res.ok) {
-        const d = await res.json();
-        for (const item of (d.results || [])) {
-          const img = item.artworkUrl512 || item.artworkUrl100;
-          if (img && !seenPosters.has(img)) {
-            seenPosters.add(img);
-            candidates.push({
-              title: item.trackName,
-              year: item.releaseDate ? item.releaseDate.slice(0, 4) : '',
-              type: 'game',
-              poster: img,
-              source: 'AppStore',
-              summary: item.genres ? item.genres.join(', ') : '',
-            });
-          }
-        }
-      }
-    } catch (err) {
-      // Continue
-    }
-  }
-
-  // 4. If cast was provided or candidates are still empty, try secondary general search
-  if (candidates.length === 0 && (cast || searchTitle !== query.trim())) {
-    try {
-      const fallbackQuery = cast ? `${searchTitle} ${cast}` : query.trim();
-      const res = await fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(fallbackQuery)}&apikey=trilogy`);
-      if (res.ok) {
-        const d = await res.json();
-        if (d && d.Search) {
-          for (const item of d.Search) {
-            if (item.Poster && item.Poster !== 'N/A' && !seenPosters.has(item.Poster)) {
-              seenPosters.add(item.Poster);
-              candidates.push({
-                title: item.Title,
-                year: item.Year,
-                type: item.Type === 'series' ? 'show' : item.Type,
-                poster: item.Poster,
-                source: 'IMDb',
-              });
-            }
-          }
-        }
-      }
     } catch (err) {}
+  }
+
+  // 5. Wikipedia Search (General fallback for movies, shows & video games)
+  if (candidates.length < 4) {
+    try {
+      const wikiResults = await searchWikipediaPosters(searchTitle, type, targetYear, cast);
+      for (const item of wikiResults) {
+        if (!seenPosters.has(item.poster)) {
+          seenPosters.add(item.poster);
+          candidates.push(item);
+        }
+      }
+    } catch (e) {}
   }
 
   return candidates;
@@ -178,14 +264,18 @@ async function fetchMetadata(rawTitle, type = 'movie', year = '', cast = '') {
   try {
     const candidates = await searchCoverCandidates(rawTitle, type, year, cast);
     if (candidates && candidates.length > 0) {
-      // Prioritize matches that match the requested type
-      const exactTypeMatch = candidates.find((c) => c.type === type);
-      const chosen = exactTypeMatch || candidates[0];
+      // Prioritize matches that match the requested type and year
+      const exactMatch = candidates.find((c) => {
+        const matchType = c.type === type;
+        const matchYear = year ? String(c.year).includes(year) : true;
+        return matchType && matchYear;
+      }) || candidates.find((c) => c.type === type) || candidates[0];
+
       return {
-        poster: chosen.poster,
-        year: chosen.year,
+        poster: exactMatch.poster,
+        year: exactMatch.year,
         genres: [],
-        summary: chosen.summary || '',
+        summary: exactMatch.summary || '',
       };
     }
     return null;
@@ -342,12 +432,24 @@ router.post('/bulk', async (req, res) => {
 // ─────────────────────────────────────────
 router.post('/refresh-missing', async (req, res) => {
   const data = readData();
-  const missingItems = data.media.filter((m) => !m.poster || m.poster === '');
-  let updatedCount = 0;
+  const force = req.body?.force || req.query?.force === 'true';
 
-  const BATCH_SIZE = 5;
-  for (let i = 0; i < missingItems.length; i += BATCH_SIZE) {
-    const batch = missingItems.slice(i, i + BATCH_SIZE);
+  // Items to fix:
+  // 1. Missing poster
+  // 2. Erroneous App Store icons attached to movies or shows
+  // 3. Movies that were mistakenly assigned TVMaze episode images
+  const itemsToFix = data.media.filter((m) => {
+    if (force) return true;
+    if (!m.poster || m.poster.trim() === '') return true;
+    if (m.type !== 'game' && m.poster.includes('mzstatic.com')) return true;
+    if (m.type === 'movie' && m.poster.includes('tvmaze.com')) return true;
+    return false;
+  });
+
+  let updatedCount = 0;
+  const BATCH_SIZE = 4;
+  for (let i = 0; i < itemsToFix.length; i += BATCH_SIZE) {
+    const batch = itemsToFix.slice(i, i + BATCH_SIZE);
     await Promise.all(
       batch.map(async (item) => {
         try {
@@ -356,7 +458,7 @@ router.post('/refresh-missing', async (req, res) => {
             item.type,
             item.watchedDate ? item.watchedDate.slice(0, 4) : ''
           );
-          if (meta && meta.poster) {
+          if (meta && meta.poster && meta.poster !== item.poster) {
             item.poster = meta.poster;
             updatedCount++;
           }
@@ -369,7 +471,7 @@ router.post('/refresh-missing', async (req, res) => {
     saveData(data);
   }
 
-  res.json({ updated: updatedCount, totalChecked: missingItems.length, media: data.media });
+  res.json({ updated: updatedCount, totalChecked: itemsToFix.length, media: data.media });
 });
 
 // ─────────────────────────────────────────
