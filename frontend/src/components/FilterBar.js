@@ -13,6 +13,7 @@ const STATUS_OPTIONS = [
   { value: 'plan_to_watch', label: 'Plan to Watch/Play' },
   { value: 'in_progress', label: 'In Progress' },
   { value: 'completed', label: 'Completed' },
+  { value: 'rewatch', label: '🔄 Rewatch' },
   { value: 'dropped', label: 'Dropped' },
 ];
 

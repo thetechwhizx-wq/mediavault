@@ -12,6 +12,7 @@ const STATUS_META = {
   plan_to_watch: { label: 'Plan', className: 'status-planned' },
   in_progress: { label: 'In Progress', className: 'status-progress' },
   completed: { label: 'Completed', className: 'status-completed' },
+  rewatch: { label: '🔄 Rewatch', className: 'status-rewatch' },
   dropped: { label: 'Dropped', className: 'status-dropped' },
 };
 

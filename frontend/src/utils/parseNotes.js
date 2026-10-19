@@ -145,7 +145,9 @@ export function parseNotes(rawText) {
 
     // Determine initial status based on notes
     let status = 'completed';
-    if (/not finished|incomplete|dropped|dnf/i.test(notes)) {
+    if (isRewatchDot || /rewatch/i.test(notes)) {
+      status = 'rewatch';
+    } else if (/not finished|incomplete|dropped|dnf/i.test(notes)) {
       status = 'dropped';
     } else if (restarted) {
       status = 'in_progress';

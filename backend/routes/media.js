@@ -402,7 +402,8 @@ router.post('/', async (req, res) => {
 
   let finalPoster = poster || '';
   if (!finalPoster) {
-    const meta = await fetchMetadata(title, type);
+    const yearHint = watchedDate ? watchedDate.slice(0, 4) : '';
+    const meta = await fetchMetadata(title, type, yearHint, notes || '');
     if (meta && meta.poster) {
       finalPoster = meta.poster;
     }
@@ -474,33 +475,40 @@ router.post('/bulk', async (req, res) => {
   // 3. Immediately respond to client — ALL 50+ ITEMS SAVED SUCCESSFULLY, NO CLIENT TIMEOUTS!
   res.status(201).json({ count: createdItems.length, items: createdItems });
 
-  // 4. Background cover resolution worker (non-blocking)
+  // 4. Fast background cover resolution worker (processes 4 in parallel, saves iteratively)
   setImmediate(async () => {
     try {
-      let needsSave = false;
       const latestData = readData();
+      const needsPosters = createdItems.filter((i) => !i.poster && i.title);
 
-      for (const item of createdItems) {
-        if (!item.poster && item.title) {
-          try {
-            const meta = await fetchMetadata(
-              item.title,
-              item.type,
-              item.watchedDate ? item.watchedDate.slice(0, 4) : ''
-            );
-            if (meta && meta.poster) {
-              const diskItem = latestData.media.find((m) => m.id === item.id);
-              if (diskItem) {
-                diskItem.poster = meta.poster;
-                needsSave = true;
+      const BATCH = 4;
+      for (let b = 0; b < needsPosters.length; b += BATCH) {
+        const slice = needsPosters.slice(b, b + BATCH);
+        let batchSaved = false;
+
+        await Promise.all(
+          slice.map(async (item) => {
+            try {
+              const meta = await fetchMetadata(
+                item.title,
+                item.type,
+                item.watchedDate ? item.watchedDate.slice(0, 4) : '',
+                item.notes || ''
+              );
+              if (meta && meta.poster) {
+                const diskItem = latestData.media.find((m) => m.id === item.id);
+                if (diskItem) {
+                  diskItem.poster = meta.poster;
+                  batchSaved = true;
+                }
               }
-            }
-          } catch (e) {}
-        }
-      }
+            } catch (e) {}
+          })
+        );
 
-      if (needsSave) {
-        saveData(latestData);
+        if (batchSaved) {
+          saveData(latestData);
+        }
       }
     } catch (e) {}
   });

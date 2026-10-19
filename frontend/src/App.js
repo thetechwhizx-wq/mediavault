@@ -81,15 +81,23 @@ function App() {
 
       setShowImportModal(false);
 
-      // Auto re-fetch after 3.5s so background-resolved posters appear automatically!
-      setTimeout(async () => {
+      // Auto live-poll every 2.5s so background-resolved posters pop in live!
+      let cycles = 0;
+      const pollTimer = setInterval(async () => {
+        cycles++;
         try {
           const fresh = await fetchMedia();
           if (fresh && Array.isArray(fresh)) {
             setMedia(fresh);
+            const stillMissing = fresh.some((m) => !m.poster);
+            if (!stillMissing || cycles >= 6) {
+              clearInterval(pollTimer);
+            }
           }
-        } catch (e) {}
-      }, 3500);
+        } catch (e) {
+          clearInterval(pollTimer);
+        }
+      }, 2500);
     } catch (err) {
       console.error(err);
       throw err;

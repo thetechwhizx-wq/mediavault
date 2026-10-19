@@ -129,6 +129,7 @@ function AddMediaForm({ onSubmit, onClose }) {
               <select id="status" value={status} onChange={(e) => setStatus(e.target.value)}>
                 <option value="completed">Completed</option>
                 <option value="in_progress">In Progress</option>
+                <option value="rewatch">🔄 Rewatch</option>
                 <option value="plan_to_watch">Plan to Watch/Play</option>
                 <option value="dropped">Dropped</option>
               </select>

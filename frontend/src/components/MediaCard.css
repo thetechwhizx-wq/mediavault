@@ -177,6 +177,12 @@
   color: #34d399;
 }
 
+.status-rewatch {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
 .status-dropped {
   background: rgba(239, 68, 68, 0.15);
   color: #f87171;
