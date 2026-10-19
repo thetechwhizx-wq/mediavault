@@ -3,7 +3,7 @@ import MediaCard from './MediaCard';
 import EmptyState from './EmptyState';
 import './MediaList.css';
 
-function MediaList({ items, onEdit, onDelete, onLogSession }) {
+function MediaList({ items, onEdit, onDelete, onLogSession, onPickCover }) {
   if (!items || items.length === 0) {
     return <EmptyState />;
   }
@@ -17,6 +17,7 @@ function MediaList({ items, onEdit, onDelete, onLogSession }) {
           onEdit={onEdit}
           onDelete={onDelete}
           onLogSession={onLogSession}
+          onPickCover={onPickCover}
         />
       ))}
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.css';
 
-function Header({ searchQuery, onSearchChange, onAddClick, onImportClick }) {
+function Header({ searchQuery, onSearchChange, onAddClick, onImportClick, onFixCovers }) {
   return (
     <header className="header">
       <div className="header-inner">
@@ -19,6 +19,9 @@ function Header({ searchQuery, onSearchChange, onAddClick, onImportClick }) {
               onChange={(e) => onSearchChange(e.target.value)}
             />
           </div>
+          <button className="btn-fix-covers" onClick={onFixCovers} title="Auto-find covers for items missing pictures">
+            <span>🖼️</span> Fix Covers
+          </button>
           <button className="btn-import" onClick={onImportClick} title="Import from copied notes">
             <span>📋</span> Import Notes
           </button>

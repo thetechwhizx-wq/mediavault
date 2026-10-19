@@ -46,8 +46,28 @@ export async function deleteMedia(id) {
   return res.json();
 }
 
-export async function searchMetadata(title, type) {
-  const res = await fetch(`${API_URL}/metadata?title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`);
+export async function searchMetadata(title, type, year = '', cast = '') {
+  let url = `${API_URL}/metadata?title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`;
+  if (year) url += `&year=${encodeURIComponent(year)}`;
+  if (cast) url += `&cast=${encodeURIComponent(cast)}`;
+  const res = await fetch(url);
   if (!res.ok) return null;
+  return res.json();
+}
+
+export async function fetchCoverCandidates(title, type, year = '', cast = '') {
+  let url = `${API_URL}/candidates?title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`;
+  if (year) url += `&year=${encodeURIComponent(year)}`;
+  if (cast) url += `&cast=${encodeURIComponent(cast)}`;
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export async function refreshMissingCovers() {
+  const res = await fetch(`${API_URL}/refresh-missing`, {
+    method: 'POST',
+  });
+  if (!res.ok) throw new Error('Failed to refresh covers');
   return res.json();
 }

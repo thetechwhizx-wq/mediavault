@@ -31,7 +31,7 @@ function formatWatchDate(dateStr) {
   return dateStr;
 }
 
-function MediaCard({ item, onEdit, onDelete, onLogSession }) {
+function MediaCard({ item, onEdit, onDelete, onLogSession, onPickCover }) {
   const typeMeta = TYPE_META[item.type] || { icon: '📦', label: item.type };
   const statusMeta = STATUS_META[item.status] || { label: item.status, className: '' };
 
@@ -77,7 +77,7 @@ function MediaCard({ item, onEdit, onDelete, onLogSession }) {
     <div className={`media-card type-${item.type}`}>
       {/* Poster Image / Cover */}
       {item.poster ? (
-        <div className="card-poster-wrapper">
+        <div className="card-poster-wrapper" onClick={() => onPickCover && onPickCover(item)} style={{ cursor: 'pointer' }} title="Click to change cover">
           <img src={item.poster} alt={item.title} className="card-poster-img" loading="lazy" />
           <div className="card-poster-overlay">
             <span className="card-type-badge overlay-badge">
@@ -107,6 +107,9 @@ function MediaCard({ item, onEdit, onDelete, onLogSession }) {
         <div className="card-title-row">
           <h3 className="card-title">{item.title}</h3>
           <div className="card-actions">
+            <button className="card-btn pick-cover" onClick={() => onPickCover && onPickCover(item)} title="Choose / Change Cover">
+              🖼️
+            </button>
             <button className="card-btn edit" onClick={() => onEdit(item)} title="Edit">
               ✏️
             </button>

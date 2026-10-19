@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { fetchMedia, addMedia, updateMedia, deleteMedia, bulkAddMedia } from './api';
+import { fetchMedia, addMedia, updateMedia, deleteMedia, bulkAddMedia, refreshMissingCovers } from './api';
 import Header from './components/Header';
 import FilterBar from './components/FilterBar';
 import MediaList from './components/MediaList';
 import AddMediaForm from './components/AddMediaForm';
 import EditMediaModal from './components/EditMediaModal';
 import ImportModal from './components/ImportModal';
+import CoverPickerModal from './components/CoverPickerModal';
 import './App.css';
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [coverPickerItem, setCoverPickerItem] = useState(null);
+  const [isFixingCovers, setIsFixingCovers] = useState(false);
 
   // ── Data fetching ──────────────────────────────────
   const loadMedia = useCallback(async () => {
@@ -56,7 +59,6 @@ function App() {
 
   const handleBulkImport = async (items, onProgress) => {
     try {
-      // Import in chunks of 10 for responsive UI progress
       const CHUNK_SIZE = 10;
       for (let i = 0; i < items.length; i += CHUNK_SIZE) {
         const chunk = items.slice(i, i + CHUNK_SIZE);
@@ -106,17 +108,50 @@ function App() {
       await updateMedia(id, { hoursPlayed: newTotalHours });
     } catch (err) {
       console.error(err);
-      loadMedia(); // Revert on failure
+      loadMedia();
+    }
+  };
+
+  // Cover picker handler
+  const handleApplyCover = async (posterUrl) => {
+    if (!coverPickerItem) return;
+    try {
+      const updated = await updateMedia(coverPickerItem.id, { poster: posterUrl });
+      setMedia((prev) => prev.map((m) => (m.id === coverPickerItem.id ? updated : m)));
+      setCoverPickerItem(null);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to update cover picture');
+    }
+  };
+
+  // 1-Click Auto Fix for Missing Covers
+  const handleFixMissingCovers = async () => {
+    const missingCount = media.filter((m) => !m.poster || m.poster === '').length;
+    if (missingCount === 0) {
+      alert('All items already have cover pictures! If any item has the wrong cover, click the 🖼️ button on its card to pick from candidates.');
+      return;
+    }
+
+    try {
+      setIsFixingCovers(true);
+      const res = await refreshMissingCovers();
+      if (res && res.media) {
+        setMedia(res.media);
+      }
+      alert(`Auto-fix complete! Successfully found & updated ${res.updated || 0} covers out of ${missingCount} missing.`);
+    } catch (err) {
+      console.error(err);
+      alert('Auto-fix encountered an error: ' + err.message);
+    } finally {
+      setIsFixingCovers(false);
     }
   };
 
   // ── Filtering logic ────────────────────────────────
   const filtered = media.filter((item) => {
-    // Type filter
     if (typeFilter !== 'all' && item.type !== typeFilter) return false;
-    // Status filter
     if (statusFilter !== 'all' && item.status !== statusFilter) return false;
-    // Search
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       if (!item.title.toLowerCase().includes(q)) return false;
@@ -139,6 +174,7 @@ function App() {
         setShowAddForm(false);
         setShowImportModal(false);
         setEditingItem(null);
+        setCoverPickerItem(null);
       }
     };
     window.addEventListener('keydown', handleKey);
@@ -162,6 +198,7 @@ function App() {
         onSearchChange={setSearchQuery}
         onAddClick={() => setShowAddForm(true)}
         onImportClick={() => setShowImportModal(true)}
+        onFixCovers={handleFixMissingCovers}
       />
 
       <main className="main-content">
@@ -169,6 +206,12 @@ function App() {
           <div className="error-banner">
             <span>⚠️ {error}</span>
             <button onClick={loadMedia}>Retry</button>
+          </div>
+        )}
+
+        {isFixingCovers && (
+          <div className="error-banner" style={{ borderColor: 'rgba(99, 102, 241, 0.4)', background: 'rgba(99, 102, 241, 0.15)', color: '#c7d2fe' }}>
+            <span>⏳ Searching databases and auto-fetching missing covers for your vault... Please wait a moment.</span>
           </div>
         )}
 
@@ -185,10 +228,19 @@ function App() {
           onEdit={setEditingItem}
           onDelete={(item) => setEditingItem(item)}
           onLogSession={handleLogSession}
+          onPickCover={(item) => setCoverPickerItem(item)}
         />
       </main>
 
       {/* ── Modals ── */}
+      {coverPickerItem && (
+        <CoverPickerModal
+          item={coverPickerItem}
+          onSelect={handleApplyCover}
+          onClose={() => setCoverPickerItem(null)}
+        />
+      )}
+
       {showImportModal && (
         <ImportModal
           onImport={handleBulkImport}
