@@ -96,6 +96,9 @@ export function parseNotes(rawText) {
     // Skip divider lines (e.g. ---, ===)
     if (/^[-=_*~]{2,}$/.test(line)) continue;
 
+    // Detect if line starts with a standalone dot (e.g. ". Boys") -> indicates Rewatch!
+    const isRewatchDot = /^\.\s*[a-zA-Z0-9]/i.test(line);
+
     // Strip leading number + dot (e.g. "1.", "12.", "22.", or just ".")
     let working = line.replace(/^\d*\.\s*/, '').trim();
     if (!working) continue;
@@ -108,10 +111,11 @@ export function parseNotes(rawText) {
     }
 
     // Detect notes such as (not finished), (rewatch), (incomplete), (dropped)
-    let notes = '';
+    let notes = isRewatchDot ? 'Rewatch' : '';
     const notesMatch = working.match(/\((not finished|rewatch(?:ed)?|incomplete|dropped|dnf)\)/i);
     if (notesMatch) {
-      notes = notesMatch[1];
+      const parsedNote = notesMatch[1];
+      notes = notes ? `${notes}, ${parsedNote}` : parsedNote;
       working = working.replace(notesMatch[0], '').trim();
     }
 

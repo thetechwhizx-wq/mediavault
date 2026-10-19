@@ -24,7 +24,7 @@ app.use(cors());
 
 // This tells Express to understand JSON data that gets sent to it
 // Without this, req.body would be empty and you'd never receive data
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // Your first route — a health check
 // When someone visits http://localhost:5000/ they get this response

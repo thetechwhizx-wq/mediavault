@@ -135,7 +135,13 @@ function MediaCard({ item, onEdit, onDelete, onLogSession }) {
             <span className="card-progress">{item.progress}</span>
           )}
 
-          {item.notes && (
+          {item.notes && item.notes.includes('Rewatch') && (
+            <span className="card-rewatch-badge" title="Rewatched">
+              🔄 Rewatch
+            </span>
+          )}
+
+          {item.notes && !item.notes.includes('Rewatch') && (
             <span className="card-notes-badge" title={item.notes}>
               📌 {item.notes}
             </span>
