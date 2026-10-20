@@ -1,5 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { fetchMedia, addMedia, updateMedia, deleteMedia, bulkAddMedia, refreshMissingCovers } from './api';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  fetchMedia,
+  addMedia,
+  updateMedia,
+  deleteMedia,
+  bulkAddMedia,
+  refreshMissingCovers,
+} from './api';
 import Header from './components/Header';
 import FilterBar from './components/FilterBar';
 import MediaList from './components/MediaList';
@@ -7,6 +14,7 @@ import AddMediaForm from './components/AddMediaForm';
 import EditMediaModal from './components/EditMediaModal';
 import ImportModal from './components/ImportModal';
 import CoverPickerModal from './components/CoverPickerModal';
+import VaultInsightsModal from './components/VaultInsightsModal';
 import './App.css';
 
 function App() {
@@ -19,10 +27,20 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [yearFilter, setYearFilter] = useState('all');
+  const [theatreOnly, setTheatreOnly] = useState(false);
+  const [viewMode, setViewMode] = useState(() => {
+    try {
+      return localStorage.getItem('mediavault_view_mode') || 'grid';
+    } catch (e) {
+      return 'grid';
+    }
+  });
 
   // Modals
   const [showAddForm, setShowAddForm] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showInsightsModal, setShowInsightsModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [coverPickerItem, setCoverPickerItem] = useState(null);
   const [isFixingCovers, setIsFixingCovers] = useState(false);
@@ -45,6 +63,33 @@ function App() {
     loadMedia();
   }, [loadMedia]);
 
+  // ── Save view mode preference ──────────────────────
+  const handleViewModeChange = (mode) => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem('mediavault_view_mode', mode);
+    } catch (e) {}
+  };
+
+  // ── Dynamic Years & Venue Counts ───────────────────
+  const availableYears = useMemo(() => {
+    const set = new Set();
+    media.forEach((m) => {
+      if (m.watchedDate && /^\d{4}/.test(m.watchedDate)) {
+        set.add(m.watchedDate.slice(0, 4));
+      }
+    });
+    return Array.from(set).sort((a, b) => b.localeCompare(a));
+  }, [media]);
+
+  const theatreCount = useMemo(() => {
+    return media.filter(
+      (m) =>
+        m.venue === 'theatre' ||
+        (m.notes && /theatre|theater|cinema|imax/i.test(m.notes))
+    ).length;
+  }, [media]);
+
   // ── CRUD handlers ──────────────────────────────────
   const handleAdd = async (item) => {
     try {
@@ -59,7 +104,6 @@ function App() {
 
   const handleBulkImport = async (items, onProgress) => {
     try {
-      // Chunk in blocks of 50 items
       const CHUNK_SIZE = 50;
       let totalImported = 0;
 
@@ -156,7 +200,9 @@ function App() {
   const handleFixMissingCovers = async () => {
     const missingCount = media.filter((m) => !m.poster || m.poster === '').length;
     if (missingCount === 0) {
-      alert('All items already have cover pictures! If any item has the wrong cover, click the 🖼️ button on its card to pick from candidates.');
+      alert(
+        'All items already have cover pictures! If any item has the wrong cover, click the 🖼️ button on its card to pick from candidates.'
+      );
       return;
     }
 
@@ -166,7 +212,9 @@ function App() {
       if (res && res.media) {
         setMedia(res.media);
       }
-      alert(`Auto-fix complete! Successfully found & updated ${res.updated || 0} covers out of ${missingCount} missing.`);
+      alert(
+        `Auto-fix complete! Successfully found & updated ${res.updated || 0} covers out of ${missingCount} missing.`
+      );
     } catch (err) {
       console.error(err);
       alert('Auto-fix encountered an error: ' + err.message);
@@ -179,6 +227,23 @@ function App() {
   const filtered = media.filter((item) => {
     if (typeFilter !== 'all' && item.type !== typeFilter) return false;
     if (statusFilter !== 'all' && item.status !== statusFilter) return false;
+
+    // Filter by theatre
+    if (theatreOnly) {
+      const isTheatre =
+        item.venue === 'theatre' ||
+        (item.notes && /theatre|theater|cinema|imax/i.test(item.notes));
+      if (!isTheatre) return false;
+    }
+
+    // Filter by year
+    if (yearFilter !== 'all') {
+      if (!item.watchedDate || !item.watchedDate.startsWith(yearFilter)) {
+        return false;
+      }
+    }
+
+    // Search query
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       if (!item.title.toLowerCase().includes(q)) return false;
@@ -200,6 +265,7 @@ function App() {
       if (e.key === 'Escape') {
         setShowAddForm(false);
         setShowImportModal(false);
+        setShowInsightsModal(false);
         setEditingItem(null);
         setCoverPickerItem(null);
       }
@@ -226,6 +292,7 @@ function App() {
         onAddClick={() => setShowAddForm(true)}
         onImportClick={() => setShowImportModal(true)}
         onFixCovers={handleFixMissingCovers}
+        onInsightsClick={() => setShowInsightsModal(true)}
       />
 
       <main className="main-content">
@@ -237,8 +304,17 @@ function App() {
         )}
 
         {isFixingCovers && (
-          <div className="error-banner" style={{ borderColor: 'rgba(99, 102, 241, 0.4)', background: 'rgba(99, 102, 241, 0.15)', color: '#c7d2fe' }}>
-            <span>⏳ Searching databases and auto-fetching missing covers for your vault... Please wait a moment.</span>
+          <div
+            className="error-banner"
+            style={{
+              borderColor: 'rgba(99, 102, 241, 0.4)',
+              background: 'rgba(99, 102, 241, 0.15)',
+              color: '#c7d2fe',
+            }}
+          >
+            <span>
+              ⏳ Searching databases and auto-fetching missing covers for your vault... Please wait a moment.
+            </span>
           </div>
         )}
 
@@ -248,6 +324,14 @@ function App() {
           onTypeChange={setTypeFilter}
           onStatusChange={setStatusFilter}
           counts={counts}
+          yearFilter={yearFilter}
+          onYearChange={setYearFilter}
+          availableYears={availableYears}
+          theatreOnly={theatreOnly}
+          onTheatreToggle={() => setTheatreOnly((prev) => !prev)}
+          theatreCount={theatreCount}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
         />
 
         <MediaList
@@ -256,10 +340,19 @@ function App() {
           onDelete={(item) => setEditingItem(item)}
           onLogSession={handleLogSession}
           onPickCover={(item) => setCoverPickerItem(item)}
+          viewMode={viewMode}
         />
       </main>
 
       {/* ── Modals ── */}
+      {showInsightsModal && (
+        <VaultInsightsModal
+          initialYear={yearFilter === 'all' ? (availableYears[0] || 'all') : yearFilter}
+          availableYears={availableYears}
+          onClose={() => setShowInsightsModal(false)}
+        />
+      )}
+
       {coverPickerItem && (
         <CoverPickerModal
           item={coverPickerItem}

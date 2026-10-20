@@ -37,7 +37,7 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
 }
 
 .search-box {
@@ -60,7 +60,7 @@
   color: #e2e8f0;
   padding: 0.5rem 0.75rem 0.5rem 2.25rem;
   font-size: 0.9rem;
-  width: 200px;
+  width: 180px;
   outline: none;
   transition: border-color 0.2s, background 0.2s;
 }
@@ -72,6 +72,29 @@
 
 .search-box input::placeholder {
   color: #718096;
+}
+
+/* ── Insights Button ── */
+.btn-insights {
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  color: #c4b5fd;
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.btn-insights:hover {
+  background: rgba(139, 92, 246, 0.28);
+  border-color: #a78bfa;
+  transform: translateY(-1px);
 }
 
 .btn-fix-covers {
@@ -100,8 +123,8 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #e2e8f0;
   border-radius: 8px;
-  padding: 0.5rem 0.9rem;
-  font-size: 0.88rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -125,8 +148,8 @@
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 0.5rem 1.15rem;
-  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -161,21 +184,26 @@
   .header-actions {
     width: 100%;
     flex-wrap: wrap;
+    gap: 0.4rem;
   }
 
   .search-box {
     flex: 1;
-    min-width: 140px;
+    min-width: 100%;
+    margin-bottom: 0.25rem;
   }
 
   .search-box input {
     width: 100%;
   }
 
+  .btn-insights,
   .btn-fix-covers,
   .btn-import,
   .btn-add {
-    padding: 0.45rem 0.75rem;
-    font-size: 0.82rem;
+    flex: 1;
+    justify-content: center;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.78rem;
   }
 }

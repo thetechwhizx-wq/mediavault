@@ -370,6 +370,188 @@ router.get('/metadata', async (req, res) => {
 });
 
 // ─────────────────────────────────────────
+// GET /api/media/stats — Detailed Analytics & Insights
+// ─────────────────────────────────────────
+router.get('/stats', (req, res) => {
+  const data = readData();
+  const allMedia = data.media || [];
+  const reqYear = req.query.year || 'all';
+
+  // 1. Detect all available years present in the media library
+  const yearSet = new Set();
+  allMedia.forEach((m) => {
+    if (m.watchedDate && /^\d{4}/.test(m.watchedDate)) {
+      yearSet.add(m.watchedDate.slice(0, 4));
+    }
+  });
+  const availableYears = Array.from(yearSet).sort((a, b) => b.localeCompare(a));
+
+  // 2. Filter items for selected year
+  const media = reqYear === 'all'
+    ? allMedia
+    : allMedia.filter((m) => m.watchedDate && m.watchedDate.startsWith(reqYear));
+
+  // 3. Media Type Counts
+  const movies = media.filter((m) => m.type === 'movie');
+  const shows = media.filter((m) => m.type === 'show');
+  const games = media.filter((m) => m.type === 'game');
+
+  // 4. Theatres & Venues
+  const theatreMovies = movies.filter(
+    (m) => m.venue === 'theatre' || (m.notes && /theatre|theater|cinema|imax/i.test(m.notes))
+  );
+  const theatrePercentage = movies.length > 0 ? Math.round((theatreMovies.length / movies.length) * 100) : 0;
+
+  // 5. Rewatches
+  const rewatchCount = media.filter(
+    (m) => m.status === 'rewatch' || (m.notes && /rewatch/i.test(m.notes))
+  ).length;
+
+  // 6. Mobile Gaming Stats
+  let totalGamingHours = 0;
+  let topGame = null;
+  let maxGameHours = 0;
+  games.forEach((g) => {
+    const hours = Number(g.hoursPlayed) || 0;
+    totalGamingHours += hours;
+    if (hours > maxGameHours) {
+      maxGameHours = hours;
+      topGame = { id: g.id, title: g.title, hoursPlayed: hours, poster: g.poster };
+    }
+  });
+  const gamesActive = games.filter((g) => g.status === 'in_progress').length;
+  const gamesCompleted = games.filter((g) => g.status === 'completed').length;
+  const gamesDropped = games.filter((g) => g.status === 'dropped').length;
+
+  // 7. Monthly Distribution (Jan - Dec)
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const monthlyData = monthNames.map((name, idx) => {
+    const monthIndexStr = String(idx + 1).padStart(2, '0');
+    const monthItems = media.filter((m) => {
+      if (!m.watchedDate) return false;
+      const parts = m.watchedDate.split('-');
+      return parts.length >= 2 && parts[1] === monthIndexStr;
+    });
+
+    return {
+      month: name,
+      monthIndex: idx + 1,
+      total: monthItems.length,
+      movies: monthItems.filter((m) => m.type === 'movie').length,
+      shows: monthItems.filter((m) => m.type === 'show').length,
+      games: monthItems.filter((m) => m.type === 'game').length,
+      theatre: monthItems.filter((m) => m.venue === 'theatre').length,
+    };
+  });
+
+  // Calculate Peak & Driest Month (among months with activity)
+  let peakMonth = null;
+  let driestMonth = null;
+  let maxCount = -1;
+  let minCount = 99999;
+
+  monthlyData.forEach((m) => {
+    if (m.total > maxCount && m.total > 0) {
+      maxCount = m.total;
+      peakMonth = m;
+    }
+    if (m.total < minCount && m.total > 0) {
+      minCount = m.total;
+      driestMonth = m;
+    }
+  });
+
+  // 8. Generate Smart Habit & Mood Insights
+  const insights = [];
+
+  if (peakMonth && peakMonth.total > 0) {
+    insights.push({
+      type: 'peak',
+      icon: '🔥',
+      title: 'Peak Entertainment Month',
+      description: `${peakMonth.month} ${reqYear !== 'all' ? reqYear : ''} was your absolute peak with ${peakMonth.total} titles logged!`,
+    });
+  }
+
+  if (theatreMovies.length > 0) {
+    const titles = theatreMovies.slice(0, 3).map((m) => m.title).join(', ');
+    insights.push({
+      type: 'theatre',
+      icon: '🎟️',
+      title: 'Big Screen Enthusiast',
+      description: `You caught ${theatreMovies.length} movies in theatres (${theatrePercentage}% of your films), including ${titles}.`,
+    });
+  }
+
+  if (driestMonth && peakMonth && driestMonth.total <= 2 && peakMonth.total >= 6) {
+    insights.push({
+      type: 'dry',
+      icon: '🏜️',
+      title: 'Driest Period Alert',
+      description: `${driestMonth.month} was your quietest stretch, logging only ${driestMonth.total} title(s).`,
+    });
+  }
+
+  if (rewatchCount > 0) {
+    insights.push({
+      type: 'rewatch',
+      icon: '🔄',
+      title: 'Comfort Favorites',
+      description: `Logged ${rewatchCount} rewatch title${rewatchCount > 1 ? 's' : ''}. Nothing beats returning to a trusted favorite!`,
+    });
+  }
+
+  if (totalGamingHours > 0) {
+    insights.push({
+      type: 'gaming',
+      icon: '🎮',
+      title: 'Gaming Activity',
+      description: `Logged ${totalGamingHours.toFixed(1)} hours of mobile gaming.${topGame ? ` Most played: ${topGame.title} (${topGame.hoursPlayed} hrs).` : ''}`,
+    });
+  }
+
+  // Entertainment Persona
+  let persona = 'Cinephile Explorer';
+  if (theatreMovies.length >= 4) {
+    persona = 'Theatrical VIP 🎟️';
+  } else if (totalGamingHours > 20) {
+    persona = 'Master Gamer 🎮';
+  } else if (shows.length > movies.length) {
+    persona = 'Series Binge Master 📺';
+  }
+
+  res.json({
+    year: reqYear,
+    availableYears,
+    total: media.length,
+    moviesCount: movies.length,
+    showsCount: shows.length,
+    gamesCount: games.length,
+    theatreCount: theatreMovies.length,
+    theatrePercentage,
+    theatreMovies: theatreMovies.slice(0, 12).map((m) => ({
+      id: m.id,
+      title: m.title,
+      watchedDate: m.watchedDate,
+      poster: m.poster,
+    })),
+    rewatchCount,
+    gaming: {
+      totalHours: Number(totalGamingHours.toFixed(1)),
+      topGame,
+      active: gamesActive,
+      completed: gamesCompleted,
+      dropped: gamesDropped,
+    },
+    monthlyData,
+    peakMonth,
+    driestMonth,
+    insights,
+    persona,
+  });
+});
+
+// ─────────────────────────────────────────
 // GET /api/media — get ALL media items
 // ─────────────────────────────────────────
 router.get('/', (req, res) => {

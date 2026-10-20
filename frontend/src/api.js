@@ -71,3 +71,9 @@ export async function refreshMissingCovers() {
   if (!res.ok) throw new Error('Failed to refresh covers');
   return res.json();
 }
+
+export async function fetchStats(year = 'all') {
+  const res = await fetch(`${API_URL}/stats?year=${encodeURIComponent(year)}`);
+  if (!res.ok) throw new Error('Failed to fetch statistics');
+  return res.json();
+}
