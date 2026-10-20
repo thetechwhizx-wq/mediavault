@@ -8,6 +8,7 @@ function VaultInsightsModal({ initialYear = 'all', availableYears = [], onClose 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [activeChartTab, setActiveChartTab] = useState('all'); // 'all', 'movies', 'shows', 'games'
 
   useEffect(() => {
     let isCurrent = true;
@@ -34,30 +35,33 @@ function VaultInsightsModal({ initialYear = 'all', availableYears = [], onClose 
     };
   }, [selectedYear]);
 
-  // Max total for relative bar chart scaling
+  // Max total for monthly relative scaling
   const maxMonthlyCount = stats?.monthlyData
     ? Math.max(...stats.monthlyData.map((m) => m.total), 1)
     : 1;
 
-  // Generate shareable Wrapped text
+  // Generate shareable Wrapped text with multi-signal evidence
   const handleCopyWrapped = () => {
     if (!stats) return;
     const yearLabel = selectedYear === 'all' ? 'All-Time' : selectedYear;
-    const peakText = stats.peakMonth
-      ? `${stats.peakMonth.month} (${stats.peakMonth.total} titles)`
-      : 'N/A';
+    const primaryPersona = stats.personaProfile?.primary || { name: stats.persona, evidence: '' };
+    const secondaryList = stats.personaProfile?.secondary || [];
+    const secondaryText = secondaryList.length > 0
+      ? `\n🎖️ Secondary Traits: ${secondaryList.map((s) => `${s.name} ${s.icon}`).join(', ')}`
+      : '';
 
     const text = `🎬 MediaVault ${yearLabel} Wrapped 📊
 ━━━━━━━━━━━━━━━━━━━━
-🏆 Persona: ${stats.persona}
+🏆 Primary Persona: ${primaryPersona.name} ${primaryPersona.icon || ''}
+💬 Evidence: ${primaryPersona.evidence || 'Eclectic catalog of favorites.'}${secondaryText}
 ✨ Total Titles: ${stats.total}
 🎥 Movies: ${stats.moviesCount} (${stats.theatreCount} in Theatres 🎭)
 📺 Series & Shows: ${stats.showsCount}
 🎮 Mobile Gaming: ${stats.gaming?.totalHours || 0} hrs
-🔥 Peak Month: ${peakText}
+🔥 Peak Month: ${stats.peakMonth ? `${stats.peakMonth.month} (${stats.peakMonth.total} titles)` : 'N/A'}
 🔄 Comfort Rewatches: ${stats.rewatchCount}
 ━━━━━━━━━━━━━━━━━━━━
-Tracked with MediaVault 🚀`;
+Tracked with MediaVault (Obsidian Kinetic) 🚀`;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text);
@@ -68,51 +72,81 @@ Tracked with MediaVault 🚀`;
     }
   };
 
+  const personaProfile = stats?.personaProfile || null;
+  const primaryPersona = personaProfile?.primary || null;
+  const secondaryPersonas = personaProfile?.secondary || [];
+  const signals = personaProfile?.signals || {};
+
+  // Estimates for display
+  const estimatedWatchHours = stats
+    ? Math.round(stats.moviesCount * 2 + stats.showsCount * 8 + (stats.gaming?.totalHours || 0))
+    : 0;
+
   return (
     <div className="modal-overlay insights-overlay" onClick={onClose}>
       <div className="modal insights-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
+        {/* Header matching Stitch Obsidian Kinetic style */}
         <div className="insights-header">
           <div className="insights-title-area">
-            <span className="insights-logo">📊</span>
-            <div>
-              <h2>Vault Insights & Analytics</h2>
-              <p className="insights-subtitle">
-                Track your viewing habits, peak binge months & big screen moments
-              </p>
+            <span className="insights-tag-pill">Curator Intelligence</span>
+            <div className="insights-title-row">
+              <span className="insights-brand-icon">
+                <span className="material-symbols-outlined">analytics</span>
+              </span>
+              <div>
+                <h2>Vault Insights & Analytics</h2>
+                <p className="insights-subtitle">
+                  Deep-dive statistics across your logged media, watch velocity, and habit scoring.
+                </p>
+              </div>
             </div>
           </div>
-          <button className="modal-close" onClick={onClose}>
-            ✕
-          </button>
-        </div>
 
-        {/* Year Filter Switcher */}
-        <div className="insights-year-switcher">
-          <span className="year-switcher-label">Period:</span>
-          <button
-            className={`insights-year-btn ${selectedYear === 'all' ? 'active' : ''}`}
-            onClick={() => setSelectedYear('all')}
-          >
-            All-Time
-          </button>
-          {availableYears.map((yr) => (
-            <button
-              key={yr}
-              className={`insights-year-btn ${selectedYear === yr ? 'active' : ''}`}
-              onClick={() => setSelectedYear(yr)}
-            >
-              {yr}
+          <div className="insights-header-actions">
+            <button className="insights-action-btn" onClick={handleCopyWrapped} title="Share Wrapped">
+              <span className="material-symbols-outlined">ios_share</span>
+              <span>{copied ? 'Copied!' : 'Share'}</span>
             </button>
-          ))}
+            <button className="modal-close" onClick={onClose} aria-label="Close modal">
+              ✕
+            </button>
+          </div>
         </div>
 
-        {/* Content Body */}
+        {/* Timeframe Segmented Control (Stitch UI) */}
+        <div className="insights-timeframe-bar">
+          <div className="timeframe-segmented-control">
+            <button
+              className={`timeframe-btn ${selectedYear === 'all' ? 'active' : ''}`}
+              onClick={() => setSelectedYear('all')}
+            >
+              All-Time
+            </button>
+            {availableYears.map((yr) => (
+              <button
+                key={yr}
+                className={`timeframe-btn ${selectedYear === yr ? 'active' : ''}`}
+                onClick={() => setSelectedYear(yr)}
+              >
+                {yr}
+              </button>
+            ))}
+          </div>
+
+          {stats?.peakMonth && (
+            <div className="insights-live-sync-indicator">
+              <span className="pulse-dot"></span>
+              <span>Peak: {stats.peakMonth.month} ({stats.peakMonth.total} items)</span>
+            </div>
+          )}
+        </div>
+
+        {/* Modal Scroll Body */}
         <div className="insights-body">
           {loading && (
             <div className="insights-loading">
               <div className="spinner" />
-              <p>Calculating vault insights...</p>
+              <p>Analyzing library signals and evaluating personas...</p>
             </div>
           )}
 
@@ -120,121 +154,240 @@ Tracked with MediaVault 🚀`;
 
           {!loading && !error && stats && (
             <>
-              {/* Persona Hero Banner */}
-              <div className="insights-persona-banner">
-                <div className="persona-sparkle">✨</div>
-                <div className="persona-info">
-                  <span className="persona-tag">Your Entertainment Persona</span>
-                  <h3 className="persona-name">{stats.persona}</h3>
-                </div>
-                <div className="persona-stat">
-                  <span className="persona-number">{stats.total}</span>
-                  <span className="persona-desc">
-                    Titles {selectedYear === 'all' ? 'All-Time' : `in ${selectedYear}`}
-                  </span>
-                </div>
-              </div>
-
-              {/* KPI Cards Grid */}
-              <div className="kpi-grid">
-                <div className="kpi-card">
-                  <div className="kpi-icon movie-icon">🎬</div>
-                  <div className="kpi-info">
-                    <span className="kpi-value">{stats.moviesCount}</span>
-                    <span className="kpi-label">Movies Watched</span>
-                    <span className="kpi-sub">
-                      {stats.total > 0
-                        ? `${Math.round((stats.moviesCount / stats.total) * 100)}% of library`
-                        : ''}
-                    </span>
+              {/* 1. Multi-Signal Persona Hero Banner */}
+              <div className="persona-kinetic-banner">
+                <div className="persona-banner-glow"></div>
+                <div className="persona-banner-main">
+                  <div className="persona-badge-row">
+                    <span className="persona-kicker">Evaluated Entertainment Persona</span>
+                    {primaryPersona?.score && (
+                      <span className="persona-affinity-chip">
+                        {primaryPersona.score}% Match Affinity
+                      </span>
+                    )}
                   </div>
-                </div>
-
-                <div className="kpi-card">
-                  <div className="kpi-icon theatre-icon">🎭</div>
-                  <div className="kpi-info">
-                    <span className="kpi-value">{stats.theatreCount}</span>
-                    <span className="kpi-label">Big Screen / Theatres</span>
-                    <span className="kpi-sub">
-                      {stats.moviesCount > 0
-                        ? `${stats.theatrePercentage}% of your films`
-                        : '0%'}
-                    </span>
+                  <div className="persona-headline-group">
+                    <span className="persona-hero-icon">{primaryPersona?.icon || '🎬'}</span>
+                    <div>
+                      <h3 className="persona-hero-title">
+                        {primaryPersona?.name || stats.persona}
+                      </h3>
+                      <p className="persona-quote">
+                        "{primaryPersona?.quote || 'A bespoke collection of cinematic moments.'}"
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="kpi-card">
-                  <div className="kpi-icon show-icon">📺</div>
-                  <div className="kpi-info">
-                    <span className="kpi-value">{stats.showsCount}</span>
-                    <span className="kpi-label">Series & Anime</span>
-                    <span className="kpi-sub">
-                      {stats.total > 0
-                        ? `${Math.round((stats.showsCount / stats.total) * 100)}% of library`
-                        : ''}
-                    </span>
+                  {/* Plain English Evidence */}
+                  <div className="persona-evidence-box">
+                    <span className="material-symbols-outlined evidence-icon">verified</span>
+                    <p className="persona-evidence-text">
+                      <strong>The Evidence:</strong>{' '}
+                      {primaryPersona?.evidence || 'Balanced distribution of media across formats.'}
+                    </p>
                   </div>
-                </div>
 
-                <div className="kpi-card">
-                  <div className="kpi-icon rewatch-icon">🔄</div>
-                  <div className="kpi-info">
-                    <span className="kpi-value">{stats.rewatchCount}</span>
-                    <span className="kpi-label">Comfort Rewatches</span>
-                    <span className="kpi-sub">Revisiting favorites</span>
-                  </div>
-                </div>
-
-                <div className="kpi-card">
-                  <div className="kpi-icon game-icon">🎮</div>
-                  <div className="kpi-info">
-                    <span className="kpi-value">{stats.gaming?.totalHours || 0}h</span>
-                    <span className="kpi-label">Mobile Gaming</span>
-                    <span className="kpi-sub">
-                      {stats.gaming?.topGame ? stats.gaming.topGame.title : 'Playtime'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Monthly Activity Bar Chart */}
-              <div className="insights-section chart-section">
-                <div className="section-title-row">
-                  <h3>📅 Monthly Activity</h3>
-                  {stats.peakMonth && (
-                    <span className="chart-badge peak-badge">
-                      🔥 Peak: {stats.peakMonth.month} ({stats.peakMonth.total} titles)
-                    </span>
+                  {/* Secondary Traits Runners-Up */}
+                  {secondaryPersonas.length > 0 && (
+                    <div className="persona-secondary-traits">
+                      <span className="secondary-label">Secondary Traits:</span>
+                      <div className="secondary-pills">
+                        {secondaryPersonas.map((sec) => (
+                          <div key={sec.id} className="secondary-pill" title={sec.evidence}>
+                            <span>{sec.icon}</span>
+                            <span className="secondary-pill-name">{sec.name}</span>
+                            <span className="secondary-pill-score">{sec.score}%</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
 
-                <div className="bar-chart-container">
-                  <div className="bar-chart">
+                <div className="persona-banner-stats">
+                  <div className="banner-stat-block">
+                    <span className="stat-big-num">{stats.total}</span>
+                    <span className="stat-subtext">Total Catalogued</span>
+                  </div>
+                  <div className="banner-stat-block">
+                    <span className="stat-big-num text-tertiary">
+                      {signals.completionRate !== undefined ? `${signals.completionRate}%` : '100%'}
+                    </span>
+                    <span className="stat-subtext">Completion Rate</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Bento Grid 4-Column KPI Row (Obsidian Kinetic) */}
+              <div className="bento-kpi-grid">
+                {/* Bento Card 1: Watch Time & Velocity */}
+                <div className="bento-card">
+                  <div className="bento-card-header">
+                    <span className="bento-card-title">Est. Screen Time</span>
+                    <span className="bento-badge-tertiary">
+                      <span className="material-symbols-outlined text-xs">trending_up</span>
+                      Active
+                    </span>
+                  </div>
+                  <div className="bento-card-value-row">
+                    <span className="bento-card-num">{estimatedWatchHours}</span>
+                    <span className="bento-card-unit">hrs</span>
+                  </div>
+                  <p className="bento-card-caption">
+                    ~{Math.round(stats.moviesCount * 2)}h Movies • ~{Math.round(stats.showsCount * 8)}h TV • {stats.gaming?.totalHours || 0}h Gaming
+                  </p>
+                  {/* Decorative sparkline */}
+                  <div className="bento-sparkline">
+                    <svg viewBox="0 0 140 32" preserveAspectRatio="none">
+                      <path
+                        d="M0 24 L20 20 L40 26 L60 12 L80 18 L100 8 L120 14 L140 4"
+                        fill="none"
+                        stroke="#8083ff"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Bento Card 2: Completion Efficiency */}
+                <div className="bento-card">
+                  <div className="bento-card-header">
+                    <span className="bento-card-title">Completion Ratio</span>
+                    <span className="bento-badge-purple">
+                      {signals.completionRate !== undefined ? `${signals.completionRate}%` : '—'}
+                    </span>
+                  </div>
+                  <div className="bento-card-value-row">
+                    <span className="bento-card-num">{signals.completedCount || stats.total}</span>
+                    <span className="bento-card-denom">/ {signals.startedCount || stats.total}</span>
+                  </div>
+                  <p className="bento-card-caption">
+                    {signals.planToWatchCount || 0} Queued Backlog • {signals.rewatchCount || 0} Rewatches
+                  </p>
+                  {/* Multi-tier progress bar */}
+                  <div className="bento-progress-track">
+                    <div
+                      className="progress-slice-completed"
+                      style={{ width: `${signals.completionRate || 85}%` }}
+                      title="Completed"
+                    />
+                    <div
+                      className="progress-slice-progress"
+                      style={{ width: `${Math.min(10, 100 - (signals.completionRate || 85))}%` }}
+                      title="In Progress"
+                    />
+                  </div>
+                </div>
+
+                {/* Bento Card 3: Cinema & Theatres */}
+                <div className="bento-card">
+                  <div className="bento-card-header">
+                    <span className="bento-card-title">Silver Screen Share</span>
+                    <span className="bento-badge-theatre">
+                      🎭 {stats.theatrePercentage}%
+                    </span>
+                  </div>
+                  <div className="bento-card-value-row">
+                    <span className="bento-card-num">{stats.theatreCount}</span>
+                    <span className="bento-card-unit">films</span>
+                  </div>
+                  <p className="bento-card-caption">
+                    Caught in theatres out of {stats.moviesCount} total movies logged
+                  </p>
+                  <div className="bento-theatre-preview">
+                    {stats.theatreMovies?.slice(0, 3).map((m) => (
+                      <span key={m.id} className="theatre-pill-compact" title={m.title}>
+                        {m.title}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bento Card 4: Daily Binge & Weekend Pace */}
+                <div className="bento-card">
+                  <div className="bento-card-header">
+                    <span className="bento-card-title">Binge Rhythm</span>
+                    <span className="bento-badge-neutral">
+                      {signals.weekendShare ? `${signals.weekendShare}% Wknd` : 'Balanced'}
+                    </span>
+                  </div>
+                  <div className="bento-card-value-row">
+                    <span className="bento-card-num">{signals.bingeDays || 0}</span>
+                    <span className="bento-card-unit">marathons</span>
+                  </div>
+                  <p className="bento-card-caption">
+                    Days with 3+ logged releases • {signals.rewatchCount || 0} comfort re-evaluations
+                  </p>
+                  <div className="bento-status-row">
+                    <span className="text-tertiary flex items-center gap-1 font-bold">
+                      <span className="material-symbols-outlined text-xs">bolt</span> Healthy Velocity
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Monthly Activity & Streams Chart (Obsidian Kinetic) */}
+              <div className="insights-chart-card">
+                <div className="chart-header-row">
+                  <div>
+                    <h3 className="chart-title">Media Consumption & Watch Velocity</h3>
+                    <p className="chart-subtitle">
+                      Monthly aggregate distribution across cinema, episodic series, and games
+                    </p>
+                  </div>
+                  <div className="chart-stream-toggles">
+                    <button
+                      className={`stream-toggle-btn ${activeChartTab === 'all' ? 'active' : ''}`}
+                      onClick={() => setActiveChartTab('all')}
+                    >
+                      All Streams
+                    </button>
+                    <button
+                      className={`stream-toggle-btn ${activeChartTab === 'movies' ? 'active' : ''}`}
+                      onClick={() => setActiveChartTab('movies')}
+                    >
+                      Movies
+                    </button>
+                    <button
+                      className={`stream-toggle-btn ${activeChartTab === 'shows' ? 'active' : ''}`}
+                      onClick={() => setActiveChartTab('shows')}
+                    >
+                      TV Shows
+                    </button>
+                    <button
+                      className={`stream-toggle-btn ${activeChartTab === 'games' ? 'active' : ''}`}
+                      onClick={() => setActiveChartTab('games')}
+                    >
+                      Gaming
+                    </button>
+                  </div>
+                </div>
+
+                {/* Custom Interactive Monthly SVG/Bar Visualization */}
+                <div className="kinetic-monthly-chart">
+                  <div className="chart-columns-grid">
                     {stats.monthlyData.map((m) => {
+                      let displayVal = m.total;
+                      if (activeChartTab === 'movies') displayVal = m.movies;
+                      if (activeChartTab === 'shows') displayVal = m.shows;
+                      if (activeChartTab === 'games') displayVal = m.games;
+
                       const heightPercent =
-                        m.total > 0 ? Math.max((m.total / maxMonthlyCount) * 100, 8) : 0;
-                      const isPeak = stats.peakMonth?.month === m.month && m.total > 0;
-                      const isDry =
-                        stats.driestMonth?.month === m.month &&
-                        m.total > 0 &&
-                        stats.peakMonth?.month !== m.month;
+                        displayVal > 0 ? Math.max((displayVal / maxMonthlyCount) * 100, 10) : 0;
+                      const isPeak = stats.peakMonth?.month === m.month && displayVal > 0;
 
                       return (
-                        <div key={m.month} className="bar-column">
-                          <div className="bar-value">
-                            {m.total > 0 ? m.total : ''}
-                            {isPeak && <span className="peak-flame">🔥</span>}
-                          </div>
-                          <div className="bar-track">
+                        <div key={m.month} className="kinetic-chart-column">
+                          <span className="col-val">{displayVal > 0 ? displayVal : ''}</span>
+                          <div className="col-track">
                             <div
-                              className={`bar-fill ${isPeak ? 'peak-fill' : ''} ${
-                                isDry ? 'dry-fill' : ''
-                              }`}
+                              className={`col-fill ${isPeak ? 'peak' : ''} ${activeChartTab}`}
                               style={{ height: `${heightPercent}%` }}
-                              title={`${m.month}: ${m.total} total (${m.movies} movies, ${m.shows} shows, ${m.theatre} theatre)`}
+                              title={`${m.month}: ${m.total} total (${m.movies} movies, ${m.shows} shows, ${m.games} games)`}
                             />
                           </div>
-                          <span className={`bar-label ${isPeak ? 'peak-label' : ''}`}>
+                          <span className={`col-month ${isPeak ? 'peak-text' : ''}`}>
                             {m.month}
                           </span>
                         </div>
@@ -242,9 +395,70 @@ Tracked with MediaVault 🚀`;
                     })}
                   </div>
                 </div>
+
+                <div className="chart-legend-footer">
+                  <div className="legend-item">
+                    <span className="legend-dot bg-primary"></span>
+                    <span>Cinema & Films ({stats.moviesCount})</span>
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-dot bg-secondary"></span>
+                    <span>TV Series ({stats.showsCount})</span>
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-dot bg-tertiary"></span>
+                    <span>Interactive & Games ({stats.gamesCount})</span>
+                  </div>
+                  <div className="legend-item ml-auto">
+                    <span className="theatre-pill-tiny">🎭 {stats.theatreCount} Theatrical</span>
+                  </div>
+                </div>
               </div>
 
-              {/* Smart Habits & Mood Insights */}
+              {/* 4. Theatrical Cinema Reel (Obsidian Kinetic) */}
+              {stats.theatreMovies && stats.theatreMovies.length > 0 && (
+                <div className="insights-section theatre-gallery-section">
+                  <div className="section-title-row">
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-tertiary">theaters</span>
+                      <h3>Silver Screen Showcase ({stats.theatreMovies.length})</h3>
+                    </div>
+                    <span className="theatre-badge-pill">Caught in Cinema</span>
+                  </div>
+                  <div className="theatre-reel-kinetic">
+                    {stats.theatreMovies.map((movie) => (
+                      <div key={movie.id} className="theatre-card-kinetic">
+                        <div className="theatre-poster-wrap">
+                          {movie.poster ? (
+                            <img
+                              src={movie.poster}
+                              alt={movie.title}
+                              className="theatre-poster-img"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          ) : (
+                            <div className="theatre-empty-poster">🎭</div>
+                          )}
+                          <div className="theatre-scrim-gradient"></div>
+                          <span className="theatre-glass-badge">🎟️ Cinema</span>
+                        </div>
+                        <div className="theatre-card-info">
+                          <span className="theatre-card-title" title={movie.title}>
+                            {movie.title}
+                          </span>
+                          {movie.watchedDate && (
+                            <span className="theatre-card-date">{movie.watchedDate}</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 5. Smart Habits & Observation Cards */}
               {stats.insights && stats.insights.length > 0 && (
                 <div className="insights-section">
                   <div className="section-title-row">
@@ -263,70 +477,6 @@ Tracked with MediaVault 🚀`;
                   </div>
                 </div>
               )}
-
-              {/* Theatrical Cinema Reel */}
-              {stats.theatreMovies && stats.theatreMovies.length > 0 && (
-                <div className="insights-section">
-                  <div className="section-title-row">
-                    <h3>🎟️ Big Screen Reel ({stats.theatreMovies.length})</h3>
-                    <span className="theatre-subtag">Caught at Cinema</span>
-                  </div>
-                  <div className="theatre-reel">
-                    {stats.theatreMovies.map((movie) => (
-                      <div key={movie.id} className="theatre-item">
-                        <div className="theatre-poster-wrap">
-                          {movie.poster ? (
-                            <img
-                              src={movie.poster}
-                              alt={movie.title}
-                              className="theatre-poster"
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                              }}
-                            />
-                          ) : (
-                            <div className="theatre-placeholder">🎭</div>
-                          )}
-                          <span className="theatre-ticket">🎟️ Cinema</span>
-                        </div>
-                        <div className="theatre-title" title={movie.title}>
-                          {movie.title}
-                        </div>
-                        {movie.watchedDate && (
-                          <div className="theatre-date">{movie.watchedDate}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Spotify-Wrapped Style Summary Card */}
-              <div className="insights-section wrapped-section">
-                <div className="wrapped-card">
-                  <div className="wrapped-header">
-                    <span className="wrapped-pill">
-                      MEDIAVAULT {selectedYear === 'all' ? 'ALL-TIME' : selectedYear}
-                    </span>
-                    <h4>Year in Review</h4>
-                  </div>
-                  <p className="wrapped-body">
-                    You logged <strong>{stats.total} titles</strong>. Your peak entertainment
-                    month was{' '}
-                    <strong>
-                      {stats.peakMonth ? stats.peakMonth.month : 'various'}
-                    </strong>
-                    , with <strong>{stats.theatreCount} big-screen cinema releases</strong> and{' '}
-                    <strong>{stats.rewatchCount} comfort rewatches</strong>.
-                  </p>
-                  <div className="wrapped-footer">
-                    <span className="wrapped-persona-badge">🏆 {stats.persona}</span>
-                    <button className="btn-copy-wrapped" onClick={handleCopyWrapped}>
-                      {copied ? '✅ Copied to Clipboard!' : '📋 Copy Wrapped Summary'}
-                    </button>
-                  </div>
-                </div>
-              </div>
             </>
           )}
         </div>

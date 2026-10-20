@@ -2,6 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
+const { calculatePersonas } = require('../personaEngine');
 const {
   isMongo,
   getAllMedia,
@@ -507,15 +508,8 @@ router.get('/stats', async (req, res) => {
     });
   }
 
-  // Entertainment Persona
-  let persona = 'Cinephile Explorer';
-  if (theatreMovies.length >= 4) {
-    persona = 'Theatrical VIP 🎟️';
-  } else if (totalGamingHours > 20) {
-    persona = 'Master Gamer 🎮';
-  } else if (shows.length > movies.length) {
-    persona = 'Series Binge Master 📺';
-  }
+  // Entertainment Persona Engine
+  const personaResult = calculatePersonas(media, { movies, shows, games, theatreMovies });
 
   res.json({
     year: reqYear,
@@ -544,7 +538,8 @@ router.get('/stats', async (req, res) => {
     peakMonth,
     driestMonth,
     insights,
-    persona,
+    persona: `${personaResult.primary.name} ${personaResult.primary.icon}`,
+    personaProfile: personaResult,
   });
 });
 
