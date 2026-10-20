@@ -783,4 +783,24 @@ router.delete('/:id', (req, res) => {
   res.json({ message: 'Deleted successfully' });
 });
 
+// ─────────────────────────────────────────
+// POST /api/media/bulk-delete — REMOVE multiple items by IDs
+// ─────────────────────────────────────────
+router.post('/bulk-delete', (req, res) => {
+  const { ids } = req.body;
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ error: 'Array of ids required' });
+  }
+  const data = readData();
+  const idSet = new Set(ids.map((id) => parseInt(id)));
+  const beforeCount = data.media.length;
+  data.media = data.media.filter((m) => !idSet.has(m.id));
+  saveData(data);
+  res.json({
+    deletedCount: beforeCount - data.media.length,
+    remainingTotal: data.media.length,
+    media: data.media,
+  });
+});
+
 module.exports = router;

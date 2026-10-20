@@ -1,0 +1,497 @@
+.dup-overlay {
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.dup-modal {
+  max-width: 880px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.dup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+}
+
+.dup-title-area {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dup-logo {
+  font-size: 1.8rem;
+}
+
+.dup-title-area h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.dup-subtitle {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0.2rem 0 0 0;
+}
+
+/* ── Tabs & Quick Actions Bar ── */
+.dup-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.dup-tabs {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+}
+
+.dup-tab {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  color: #cbd5e1;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.dup-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dup-tab.active {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: #818cf8;
+  color: #e0e7ff;
+  font-weight: 600;
+}
+
+.btn-clean-exact {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-clean-exact:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+/* ── Body ── */
+.dup-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.dup-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1rem;
+  text-align: center;
+}
+
+.dup-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.dup-empty-state h3 {
+  color: #f1f5f9;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.dup-empty-state p {
+  color: #94a3b8;
+  font-size: 0.88rem;
+  margin-top: 0.4rem;
+}
+
+/* ── Group Card ── */
+.dup-group-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  transition: border-color 0.2s;
+}
+
+.dup-group-card.card-rewatch-alert {
+  border-color: rgba(234, 179, 8, 0.35);
+  background: rgba(234, 179, 8, 0.03);
+}
+
+.dup-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.dup-group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dup-type-icon {
+  font-size: 1.2rem;
+}
+
+.dup-group-title h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.dup-status-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.badge-rewatch-alert {
+  background: rgba(234, 179, 8, 0.18);
+  color: #fef08a;
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+}
+
+.badge-diff-status {
+  background: rgba(168, 85, 247, 0.15);
+  color: #e9d5ff;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+}
+
+.badge-exact {
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+}
+
+.rewatch-notice-box {
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.25);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.8rem;
+  color: #fef08a;
+  line-height: 1.4;
+}
+
+/* ── Comparison Columns ── */
+.dup-comparison-grid {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dup-item-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.dup-item-card.state-keep {
+  border-color: rgba(16, 185, 129, 0.45);
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.dup-item-card.state-delete {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.item-decision-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.state-keep .item-decision-tag {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.state-delete .item-decision-tag {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.dup-item-content {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.dup-poster {
+  width: 52px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #1e293b;
+}
+
+.dup-poster-ph {
+  width: 52px;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: #1e293b;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dup-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.dup-id {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-family: monospace;
+}
+
+.dup-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.dup-detail-label {
+  color: #64748b;
+  font-size: 0.75rem;
+  width: 48px;
+}
+
+.dup-detail-value {
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.dup-detail-value.highlight {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.dup-detail-value.italic {
+  font-style: italic;
+  color: #94a3b8;
+}
+
+.btn-swap-choice {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-swap-choice:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+/* ── Group Actions ── */
+.dup-group-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 0.65rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.action-delete-prompt {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.action-delete-prompt strong {
+  color: #fca5a5;
+}
+
+.action-buttons-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-dup-delete {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-dup-delete:hover {
+  background: rgba(239, 68, 68, 0.28);
+  border-color: #f87171;
+}
+
+.btn-dup-rewatch {
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  color: #fef08a;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-dup-rewatch:hover {
+  background: rgba(234, 179, 8, 0.28);
+}
+
+.btn-dup-keep {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  border-radius: 6px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-dup-keep:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+/* ── Mobile Responsive ── */
+@media (max-width: 640px) {
+  .dup-modal {
+    max-height: 100vh;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .dup-header {
+    padding: 1rem;
+  }
+
+  .dup-body {
+    padding: 1rem;
+  }
+
+  .dup-comparison-grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-swap-choice {
+    align-self: center;
+    transform: rotate(90deg);
+  }
+
+  .btn-swap-choice:hover {
+    transform: rotate(90deg) scale(1.1);
+  }
+
+  .dup-group-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-buttons-wrap {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn-dup-delete,
+  .btn-dup-rewatch,
+  .btn-dup-keep {
+    flex: 1;
+    text-align: center;
+  }
+}

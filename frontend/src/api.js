@@ -77,3 +77,14 @@ export async function fetchStats(year = 'all') {
   if (!res.ok) throw new Error('Failed to fetch statistics');
   return res.json();
 }
+
+export async function bulkDeleteMedia(ids) {
+  const res = await fetch(`${API_URL}/bulk-delete`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ids }),
+  });
+  if (!res.ok) throw new Error('Failed to bulk delete media');
+  return res.json();
+}
+

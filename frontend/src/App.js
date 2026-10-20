@@ -5,6 +5,7 @@ import {
   updateMedia,
   deleteMedia,
   bulkAddMedia,
+  bulkDeleteMedia,
   refreshMissingCovers,
 } from './api';
 import Header from './components/Header';
@@ -15,6 +16,7 @@ import EditMediaModal from './components/EditMediaModal';
 import ImportModal from './components/ImportModal';
 import CoverPickerModal from './components/CoverPickerModal';
 import VaultInsightsModal from './components/VaultInsightsModal';
+import DuplicateCleanerModal from './components/DuplicateCleanerModal';
 import './App.css';
 
 function App() {
@@ -41,6 +43,7 @@ function App() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showInsightsModal, setShowInsightsModal] = useState(false);
+  const [showDuplicatesModal, setShowDuplicatesModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [coverPickerItem, setCoverPickerItem] = useState(null);
   const [isFixingCovers, setIsFixingCovers] = useState(false);
@@ -88,6 +91,25 @@ function App() {
         m.venue === 'theatre' ||
         (m.notes && /theatre|theater|cinema|imax/i.test(m.notes))
     ).length;
+  }, [media]);
+
+  // ── Duplicate Groups Count ─────────────────────────
+  const duplicateCount = useMemo(() => {
+    const counts = {};
+    let dups = 0;
+    media.forEach((m) => {
+      const norm = (m.title || '')
+        .toLowerCase()
+        .replace(/[^\w\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const key = `${norm}|${m.type}`;
+      counts[key] = (counts[key] || 0) + 1;
+      if (counts[key] === 2) {
+        dups++;
+      }
+    });
+    return dups;
   }, [media]);
 
   // ── CRUD handlers ──────────────────────────────────
@@ -167,6 +189,17 @@ function App() {
     } catch (err) {
       console.error(err);
       alert('Failed to delete media. Please try again.');
+    }
+  };
+
+  const handleBulkDelete = async (ids) => {
+    try {
+      await bulkDeleteMedia(ids);
+      const idSet = new Set(ids);
+      setMedia((prev) => prev.filter((m) => !idSet.has(m.id)));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to bulk delete media: ' + err.message);
     }
   };
 
@@ -266,6 +299,7 @@ function App() {
         setShowAddForm(false);
         setShowImportModal(false);
         setShowInsightsModal(false);
+        setShowDuplicatesModal(false);
         setEditingItem(null);
         setCoverPickerItem(null);
       }
@@ -293,6 +327,8 @@ function App() {
         onImportClick={() => setShowImportModal(true)}
         onFixCovers={handleFixMissingCovers}
         onInsightsClick={() => setShowInsightsModal(true)}
+        duplicateCount={duplicateCount}
+        onDuplicatesClick={() => setShowDuplicatesModal(true)}
       />
 
       <main className="main-content">
@@ -345,6 +381,16 @@ function App() {
       </main>
 
       {/* ── Modals ── */}
+      {showDuplicatesModal && (
+        <DuplicateCleanerModal
+          media={media}
+          onDeleteOne={handleDelete}
+          onBulkDelete={handleBulkDelete}
+          onUpdateOne={handleUpdate}
+          onClose={() => setShowDuplicatesModal(false)}
+        />
+      )}
+
       {showInsightsModal && (
         <VaultInsightsModal
           initialYear={yearFilter === 'all' ? (availableYears[0] || 'all') : yearFilter}

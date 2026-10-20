@@ -74,6 +74,38 @@
   color: #718096;
 }
 
+/* ── Duplicates Button ── */
+.btn-duplicates {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fde68a;
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-duplicates:hover {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #fbbf24;
+  transform: translateY(-1px);
+}
+
+.dup-badge-count {
+  background: #f59e0b;
+  color: #1e1b4b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.05rem 0.4rem;
+  border-radius: 10px;
+}
+
 /* ── Insights Button ── */
 .btn-insights {
   background: rgba(139, 92, 246, 0.15);
@@ -197,6 +229,7 @@
     width: 100%;
   }
 
+  .btn-duplicates,
   .btn-insights,
   .btn-fix-covers,
   .btn-import,

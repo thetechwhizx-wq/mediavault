@@ -8,6 +8,8 @@ function Header({
   onImportClick,
   onFixCovers,
   onInsightsClick,
+  duplicateCount = 0,
+  onDuplicatesClick,
 }) {
   return (
     <header className="header">
@@ -26,6 +28,18 @@ function Header({
               onChange={(e) => onSearchChange(e.target.value)}
             />
           </div>
+
+          {duplicateCount > 0 && (
+            <button
+              className="btn-duplicates"
+              onClick={onDuplicatesClick}
+              title={`${duplicateCount} duplicate entries detected. Click to review, clean, or mark rewatches.`}
+            >
+              <span>🧹</span> Duplicates
+              <span className="dup-badge-count">{duplicateCount}</span>
+            </button>
+          )}
+
           <button
             className="btn-insights"
             onClick={onInsightsClick}
