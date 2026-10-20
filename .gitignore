@@ -29,3 +29,5 @@ Thumbs.db
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+/stitch-design/

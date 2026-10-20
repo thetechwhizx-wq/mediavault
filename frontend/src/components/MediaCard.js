@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import StarRating from './StarRating';
 import './MediaCard.css';
 
 const TYPE_META = {
-  movie: { icon: '🎬', label: 'Movie' },
-  show: { icon: '📺', label: 'Show' },
-  game: { icon: '🎮', label: 'Game' },
+  movie: { icon: '🎬', label: 'Movie', color: '#c0c1ff' },
+  show: { icon: '📺', label: 'Series', color: '#d0bcff' },
+  game: { icon: '🎮', label: 'Game', color: '#4edea3' },
 };
 
 const STATUS_META = {
-  plan_to_watch: { label: 'Plan', className: 'status-planned' },
-  in_progress: { label: 'In Progress', className: 'status-progress' },
-  completed: { label: 'Completed', className: 'status-completed' },
-  rewatch: { label: '🔄 Rewatch', className: 'status-rewatch' },
-  dropped: { label: 'Dropped', className: 'status-dropped' },
+  plan_to_watch: { label: 'Plan to Watch', className: 'status-planned', dotColor: '#06b6d4' },
+  in_progress: { label: 'In Progress', className: 'status-progress', dotColor: '#f59e0b' },
+  completed: { label: 'Completed', className: 'status-completed', dotColor: '#4edea3' },
+  rewatch: { label: 'Rewatch', className: 'status-rewatch', dotColor: '#d0bcff' },
+  dropped: { label: 'Dropped', className: 'status-dropped', dotColor: '#ffb4ab' },
 };
 
 function formatWatchDate(dateStr) {
@@ -33,10 +32,10 @@ function formatWatchDate(dateStr) {
 }
 
 function MediaCard({ item, onEdit, onDelete, onLogSession, onPickCover }) {
-  const typeMeta = TYPE_META[item.type] || { icon: '📦', label: item.type };
-  const statusMeta = STATUS_META[item.status] || { label: item.status, className: '' };
+  const typeMeta = TYPE_META[item.type] || { icon: '📦', label: item.type, color: '#c0c1ff' };
+  const statusMeta = STATUS_META[item.status] || { label: item.status, className: '', dotColor: '#908fa0' };
 
-  // Mobile Gaming active play session timer state
+  // Gaming active session timer state
   const [timerActive, setTimerActive] = useState(false);
   const [sessionSeconds, setSessionSeconds] = useState(0);
 
@@ -76,115 +75,141 @@ function MediaCard({ item, onEdit, onDelete, onLogSession, onPickCover }) {
 
   return (
     <div className={`media-card type-${item.type}`}>
-      {/* Poster Image / Cover */}
-      {item.poster ? (
-        <div className="card-poster-wrapper" onClick={() => onPickCover && onPickCover(item)} style={{ cursor: 'pointer' }} title="Click to change cover">
-          <img src={item.poster} alt={item.title} className="card-poster-img" loading="lazy" />
-          <div className="card-poster-overlay">
-            <span className="card-type-badge overlay-badge">
-              {typeMeta.icon} {typeMeta.label}
-            </span>
-            {item.venue === 'theatre' && (
-              <span className="card-theatre-badge overlay-theatre" title="Watched in Theatre">
-                🎭 Theatre
-              </span>
-            )}
+      {/* 2:3 Cinematic Poster Container */}
+      <div className="card-poster-wrapper">
+        {item.poster ? (
+          <img
+            src={item.poster}
+            alt={item.title}
+            className="card-poster-img"
+            loading="lazy"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
+          />
+        ) : (
+          <div className="card-poster-placeholder">
+            <span className="placeholder-icon">{typeMeta.icon}</span>
           </div>
-        </div>
-      ) : (
-        <div className="card-header no-poster">
-          <span className="card-type-badge">
-            {typeMeta.icon} {typeMeta.label}
+        )}
+
+        {/* Gradient Scrim Overlay */}
+        <div className="card-poster-scrim" />
+
+        {/* Top-Left: Type Badge */}
+        <div className="card-top-left-badges">
+          <span className="card-glass-badge type-badge">
+            <span className="badge-icon">{typeMeta.icon}</span> {typeMeta.label}
           </span>
           {item.venue === 'theatre' && (
-            <span className="card-theatre-badge" title="Watched in Theatre">
+            <span className="card-glass-badge theatre-badge" title="Watched in Theatre">
               🎭 Theatre
             </span>
           )}
         </div>
-      )}
 
-      <div className="card-body">
-        <div className="card-title-row">
-          <h3 className="card-title">{item.title}</h3>
-          <div className="card-actions">
-            <button className="card-btn pick-cover" onClick={() => onPickCover && onPickCover(item)} title="Choose / Change Cover">
-              🖼️
-            </button>
-            <button className="card-btn edit" onClick={() => onEdit(item)} title="Edit">
-              ✏️
-            </button>
-            <button className="card-btn delete" onClick={() => onDelete(item)} title="Delete">
-              🗑️
-            </button>
+        {/* Top-Right: Rating Star */}
+        {item.rating > 0 && (
+          <div className="card-top-right-badges">
+            <span className="card-glass-badge rating-badge">
+              ⭐ {item.rating}
+            </span>
           </div>
+        )}
+
+        {/* Hover Quick Actions Bar */}
+        <div className="card-hover-actions">
+          <button
+            className="card-quick-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onPickCover && onPickCover(item);
+            }}
+            title="Choose / Change Cover Picture"
+          >
+            🖼️
+          </button>
+          <button
+            className="card-quick-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit && onEdit(item);
+            }}
+            title="Edit Details"
+          >
+            ✏️
+          </button>
+          <button
+            className="card-quick-btn delete-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete && onDelete(item);
+            }}
+            title="Delete from Vault"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+
+      {/* Card Info Footer */}
+      <div className="card-info" onClick={() => onEdit && onEdit(item)}>
+        <div className="card-header-info">
+          <h4 className="card-title" title={item.title}>
+            {item.title}
+          </h4>
+          {(item.progress || item.notes) && (
+            <span className="card-subtitle" title={item.progress || item.notes}>
+              {item.progress || item.notes}
+            </span>
+          )}
         </div>
 
-        <div className="card-meta">
-          <span className={`card-status ${statusMeta.className}`}>
+        {/* Status Beacon Row */}
+        <div className="card-status-row">
+          <span className={`status-beacon ${statusMeta.className}`}>
+            <span
+              className="status-dot"
+              style={{ backgroundColor: statusMeta.dotColor }}
+            />
             {statusMeta.label}
           </span>
-
-          {formattedDate && (
-            <span className="card-watch-date" title={`Watched on ${item.watchedDate}`}>
-              📅 {formattedDate}
-            </span>
-          )}
-
-          {item.venue === 'theatre' && !item.poster && (
-            <span className="card-theatre-badge">🎭 Theatre</span>
-          )}
-
-          {item.progress && (
-            <span className="card-progress">{item.progress}</span>
-          )}
-
-          {item.notes && item.notes.includes('Rewatch') && (
-            <span className="card-rewatch-badge" title="Rewatched">
-              🔄 Rewatch
-            </span>
-          )}
-
-          {item.notes && !item.notes.includes('Rewatch') && (
-            <span className="card-notes-badge" title={item.notes}>
-              📌 {item.notes}
-            </span>
-          )}
+          {formattedDate && <span className="card-date">{formattedDate}</span>}
         </div>
 
-        {/* Specialized Mobile Gaming Hours & Active Session Tracker */}
+        {/* Specialized Mobile Gaming Playtime */}
         {item.type === 'game' && (
-          <div className="game-tracker-section">
-            <div className="game-hours-display">
-              <span className="hours-label">⏱️ Playtime:</span>
-              <strong className="hours-value">
-                {hoursPlayed} hrs {targetHours > 0 ? `/ ${targetHours} hrs (${progressPct}%)` : ''}
-              </strong>
+          <div className="card-game-section" onClick={(e) => e.stopPropagation()}>
+            <div className="game-time-row">
+              <span className="game-label">Playtime:</span>
+              <strong className="game-value">{hoursPlayed} hrs</strong>
             </div>
 
             {targetHours > 0 && (
-              <div className="hours-progress-bar-bg">
+              <div className="game-progress-track">
                 <div
-                  className="hours-progress-bar-fill"
+                  className="game-progress-fill"
                   style={{ width: `${progressPct}%` }}
                 />
               </div>
             )}
 
-            {/* Quick 1-tap mobile session logger */}
-            <div className="session-timer-bar">
+            <div className="game-quick-controls">
               {timerActive ? (
-                <button className="btn-timer stop" onClick={handleStopSession}>
-                  ⏹️ Stop & Save ({formatTimer(sessionSeconds)})
+                <button className="btn-timer-stop" onClick={handleStopSession}>
+                  ⏹️ Stop ({formatTimer(sessionSeconds)})
                 </button>
               ) : (
-                <div className="timer-controls">
-                  <button className="btn-timer start" onClick={() => setTimerActive(true)}>
-                    ▶️ Play Session
+                <>
+                  <button
+                    className="btn-timer-start"
+                    onClick={() => setTimerActive(true)}
+                  >
+                    ▶️ Session
                   </button>
                   <button
                     className="btn-quick-add"
-                    title="Quick add 30 mins"
+                    title="+30 mins"
                     onClick={() => {
                       const newTotal = Number((hoursPlayed + 0.5).toFixed(2));
                       if (onLogSession) onLogSession(item.id, newTotal);
@@ -194,7 +219,7 @@ function MediaCard({ item, onEdit, onDelete, onLogSession, onPickCover }) {
                   </button>
                   <button
                     className="btn-quick-add"
-                    title="Quick add 1 hour"
+                    title="+1 hour"
                     onClick={() => {
                       const newTotal = Number((hoursPlayed + 1.0).toFixed(2));
                       if (onLogSession) onLogSession(item.id, newTotal);
@@ -202,20 +227,17 @@ function MediaCard({ item, onEdit, onDelete, onLogSession, onPickCover }) {
                   >
                     +1h
                   </button>
-                </div>
+                </>
               )}
             </div>
           </div>
         )}
 
-        {item.rating && (
-          <div className="card-rating">
-            <StarRating rating={item.rating} readonly />
-          </div>
-        )}
-
+        {/* Review snippet if present */}
         {item.review && (
-          <p className="card-review">{item.review}</p>
+          <p className="card-review-snippet" title={item.review}>
+            "{item.review}"
+          </p>
         )}
       </div>
     </div>

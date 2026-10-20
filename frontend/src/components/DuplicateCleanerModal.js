@@ -109,8 +109,6 @@ function DuplicateCleanerModal({
   // Delete individual duplicate
   const handleDeleteGroupDuplicate = async (group) => {
     const idToDelete = getIdToDelete(group);
-    const itemToDelete = group.items.find((m) => m.id === idToDelete);
-    const itemToKeep = group.items.find((m) => m.id !== idToDelete);
 
     if (
       group.isPotentialRewatch &&

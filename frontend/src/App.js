@@ -10,6 +10,7 @@ import {
 } from './api';
 import Header from './components/Header';
 import FilterBar from './components/FilterBar';
+import ActiveMediaShelf from './components/ActiveMediaShelf';
 import MediaList from './components/MediaList';
 import AddMediaForm from './components/AddMediaForm';
 import EditMediaModal from './components/EditMediaModal';
@@ -30,6 +31,7 @@ function App() {
   const [typeFilter, setTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [yearFilter, setYearFilter] = useState('all');
+  const [genreFilter, setGenreFilter] = useState('All Genres');
   const [theatreOnly, setTheatreOnly] = useState(false);
   const [viewMode, setViewMode] = useState(() => {
     try {
@@ -93,6 +95,46 @@ function App() {
     ).length;
   }, [media]);
 
+  // ── In-Progress Active Items ───────────────────────
+  const inProgressItems = useMemo(() => {
+    return media.filter((m) => m.status === 'in_progress');
+  }, [media]);
+
+  // ── Top Ticker Stats Summary ───────────────────────
+  const statsSummary = useMemo(() => {
+    const targetItems =
+      yearFilter === 'all'
+        ? media
+        : media.filter((m) => m.watchedDate && m.watchedDate.startsWith(yearFilter));
+
+    let gamingHours = 0;
+    let watchHours = 0;
+    let totalRatings = 0;
+    let ratingCount = 0;
+
+    targetItems.forEach((m) => {
+      if (m.type === 'game') {
+        gamingHours += Number(m.hoursPlayed) || 0;
+      } else {
+        watchHours += m.type === 'movie' ? 2 : 4;
+      }
+      if (m.rating && Number(m.rating) > 0) {
+        totalRatings += Number(m.rating);
+        ratingCount++;
+      }
+    });
+
+    const meanRating =
+      ratingCount > 0 ? (totalRatings / ratingCount).toFixed(2) : 0;
+
+    return {
+      total: targetItems.length,
+      watchHours,
+      gamingHours: Number(gamingHours.toFixed(1)),
+      meanRating,
+    };
+  }, [media, yearFilter]);
+
   // ── Duplicate Groups Count ─────────────────────────
   const duplicateCount = useMemo(() => {
     const counts = {};
@@ -127,7 +169,6 @@ function App() {
   const handleBulkImport = async (items, onProgress) => {
     try {
       const CHUNK_SIZE = 50;
-      let totalImported = 0;
 
       for (let i = 0; i < items.length; i += CHUNK_SIZE) {
         const chunk = items.slice(i, i + CHUNK_SIZE);
@@ -135,7 +176,6 @@ function App() {
           const res = await bulkAddMedia(chunk);
           if (res && res.items) {
             setMedia((prev) => [...prev, ...res.items]);
-            totalImported += res.items.length;
           }
         } catch (chunkErr) {
           console.error('Error importing chunk:', chunkErr);
@@ -276,6 +316,13 @@ function App() {
       }
     }
 
+    // Filter by genre
+    if (genreFilter !== 'All Genres') {
+      const g = genreFilter.toLowerCase();
+      const textToSearch = `${item.title} ${item.notes || ''} ${item.review || ''}`.toLowerCase();
+      if (!textToSearch.includes(g)) return false;
+    }
+
     // Search query
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -343,9 +390,9 @@ function App() {
           <div
             className="error-banner"
             style={{
-              borderColor: 'rgba(99, 102, 241, 0.4)',
-              background: 'rgba(99, 102, 241, 0.15)',
-              color: '#c7d2fe',
+              borderColor: 'rgba(128, 131, 255, 0.4)',
+              background: 'rgba(128, 131, 255, 0.15)',
+              color: '#c0c1ff',
             }}
           >
             <span>
@@ -354,6 +401,7 @@ function App() {
           </div>
         )}
 
+        {/* Ticker & Filter Bar */}
         <FilterBar
           typeFilter={typeFilter}
           statusFilter={statusFilter}
@@ -368,8 +416,21 @@ function App() {
           theatreCount={theatreCount}
           viewMode={viewMode}
           onViewModeChange={handleViewModeChange}
+          statsSummary={statsSummary}
+          genreFilter={genreFilter}
+          onGenreChange={setGenreFilter}
         />
 
+        {/* Active Media Shelf ("In Progress") */}
+        {!searchQuery && statusFilter === 'all' && viewMode === 'grid' && inProgressItems.length > 0 && (
+          <ActiveMediaShelf
+            inProgressItems={inProgressItems}
+            onEdit={setEditingItem}
+            onLogSession={handleLogSession}
+          />
+        )}
+
+        {/* Main Vault Archive Grid / Timeline */}
         <MediaList
           items={filtered}
           onEdit={setEditingItem}

@@ -1,12 +1,21 @@
+/* ── Media Grid (High-Density 6-Column Responsive) ── */
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 1.15rem;
+}
+
+@media (max-width: 900px) {
+  .media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.85rem;
+  }
 }
 
 @media (max-width: 640px) {
   .media-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
   }
 }
 
@@ -14,7 +23,7 @@
 .timeline-container {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
   position: relative;
 }
 
@@ -29,16 +38,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.65rem 1rem;
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(24, 28, 36, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 4px solid #6366f1;
+  border-left: 3px solid var(--primary-container);
   border-radius: 10px;
   position: sticky;
-  top: 70px;
+  top: 72px;
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .timeline-title-area {
@@ -53,9 +62,9 @@
 
 .timeline-month-title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--on-surface);
   letter-spacing: -0.01em;
 }
 
@@ -67,31 +76,31 @@
 }
 
 .timeline-count-badge {
-  background: rgba(255, 255, 255, 0.08);
-  color: #cbd5e1;
+  background: var(--surface-highest);
+  color: var(--on-surface-variant);
   padding: 0.2rem 0.55rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
   font-weight: 600;
 }
 
 .timeline-theatre-badge {
-  background: rgba(234, 179, 8, 0.18);
+  background: rgba(234, 179, 8, 0.15);
   color: #fef08a;
   border: 1px solid rgba(234, 179, 8, 0.3);
   padding: 0.2rem 0.55rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
 .timeline-rewatch-badge {
-  background: rgba(16, 185, 129, 0.15);
-  color: #a7f3d0;
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(87, 27, 193, 0.25);
+  color: var(--secondary);
+  border: 1px solid rgba(208, 188, 255, 0.25);
   padding: 0.2rem 0.55rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
   font-weight: 600;
 }
 
@@ -104,6 +113,6 @@
   }
 
   .timeline-month-title {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
   }
 }
