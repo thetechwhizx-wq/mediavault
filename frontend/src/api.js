@@ -1,6 +1,10 @@
 // Dynamic backend host so accessing from mobile phone (e.g. http://10.39.173.202:3000) works seamlessly!
+const isLocalDev = window.location.port === '3000' || window.location.hostname === 'localhost';
 const BACKEND_HOST = window.location.hostname || 'localhost';
-const API_URL = `http://${BACKEND_HOST}:5000/api/media`;
+const API_URL =
+  process.env.REACT_APP_API_URL ||
+  (isLocalDev ? `http://${BACKEND_HOST}:5000/api/media` : '/api/media');
+
 
 export async function fetchMedia() {
   const res = await fetch(API_URL);

@@ -2,18 +2,16 @@
 
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
+const {
+  isMongo,
+  getAllMedia,
+  addMediaItem,
+  updateMediaItem,
+  deleteMediaItem,
+  bulkAddMediaItems,
+  bulkDeleteMediaItems,
+} = require('../db');
 
-const DATA_FILE = __dirname + '/../data.json';
-
-function readData() {
-  const raw = fs.readFileSync(DATA_FILE, 'utf8');
-  return JSON.parse(raw);
-}
-
-function saveData(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
 
 // ─────────────────────────────────────────
 // Smart Title Normalizer
@@ -372,9 +370,8 @@ router.get('/metadata', async (req, res) => {
 // ─────────────────────────────────────────
 // GET /api/media/stats — Detailed Analytics & Insights
 // ─────────────────────────────────────────
-router.get('/stats', (req, res) => {
-  const data = readData();
-  const allMedia = data.media || [];
+router.get('/stats', async (req, res) => {
+  const allMedia = await getAllMedia();
   const reqYear = req.query.year || 'all';
 
   // 1. Detect all available years present in the media library
@@ -554,16 +551,15 @@ router.get('/stats', (req, res) => {
 // ─────────────────────────────────────────
 // GET /api/media — get ALL media items
 // ─────────────────────────────────────────
-router.get('/', (req, res) => {
-  const data = readData();
-  res.json(data.media);
+router.get('/', async (req, res) => {
+  const media = await getAllMedia();
+  res.json(media);
 });
 
 // ─────────────────────────────────────────
 // POST /api/media — add a NEW media item
 // ─────────────────────────────────────────
 router.post('/', async (req, res) => {
-  const data = readData();
   const {
     title,
     type,
@@ -591,10 +587,9 @@ router.post('/', async (req, res) => {
     }
   }
 
-  const newItem = {
-    id: data.nextId++,
+  const newItem = await addMediaItem({
     title: title.trim(),
-    type: type,
+    type,
     status: status || 'plan_to_watch',
     progress: progress || '',
     poster: finalPoster,
@@ -606,11 +601,7 @@ router.post('/', async (req, res) => {
     importedFrom: importedFrom || 'manual',
     rating: null,
     review: '',
-    createdAt: new Date().toISOString(),
-  };
-
-  data.media.push(newItem);
-  saveData(data);
+  });
 
   res.status(201).json(newItem);
 });
@@ -624,50 +615,32 @@ router.post('/bulk', async (req, res) => {
     return res.status(400).json({ error: 'items array is required' });
   }
 
-  const data = readData();
-  const createdItems = [];
+  const rawItems = items.map((rawItem) => ({
+    title: (rawItem.title || '').trim(),
+    type: rawItem.type || 'movie',
+    status: rawItem.status || 'completed',
+    progress: rawItem.progress || '',
+    poster: rawItem.poster || '',
+    hoursPlayed: Number(rawItem.hoursPlayed) || 0,
+    targetHours: Number(rawItem.targetHours) || 0,
+    watchedDate: rawItem.watchedDate || '',
+    venue: rawItem.venue || '',
+    notes: rawItem.notes || '',
+    importedFrom: rawItem.importedFrom || 'bulk_import',
+    rating: rawItem.rating || null,
+    review: rawItem.review || '',
+  }));
 
-  // 1. Immediately create and assign IDs to all items in memory
-  for (const rawItem of items) {
-    const newItem = {
-      id: data.nextId++,
-      title: (rawItem.title || '').trim(),
-      type: rawItem.type || 'movie',
-      status: rawItem.status || 'completed',
-      progress: rawItem.progress || '',
-      poster: rawItem.poster || '',
-      hoursPlayed: Number(rawItem.hoursPlayed) || 0,
-      targetHours: Number(rawItem.targetHours) || 0,
-      watchedDate: rawItem.watchedDate || '',
-      venue: rawItem.venue || '',
-      notes: rawItem.notes || '',
-      importedFrom: rawItem.importedFrom || 'bulk_import',
-      rating: rawItem.rating || null,
-      review: rawItem.review || '',
-      createdAt: new Date().toISOString(),
-    };
-
-    data.media.push(newItem);
-    createdItems.push(newItem);
-  }
-
-  // 2. Immediately commit all records to disk (instant, <15ms)
-  saveData(data);
-
-  // 3. Immediately respond to client — ALL 50+ ITEMS SAVED SUCCESSFULLY, NO CLIENT TIMEOUTS!
+  const createdItems = await bulkAddMediaItems(rawItems);
   res.status(201).json({ count: createdItems.length, items: createdItems });
 
-  // 4. Fast background cover resolution worker (processes 4 in parallel, saves iteratively)
+  // Fast background cover resolution worker
   setImmediate(async () => {
     try {
-      const latestData = readData();
       const needsPosters = createdItems.filter((i) => !i.poster && i.title);
-
       const BATCH = 4;
       for (let b = 0; b < needsPosters.length; b += BATCH) {
         const slice = needsPosters.slice(b, b + BATCH);
-        let batchSaved = false;
-
         await Promise.all(
           slice.map(async (item) => {
             try {
@@ -678,19 +651,11 @@ router.post('/bulk', async (req, res) => {
                 item.notes || ''
               );
               if (meta && meta.poster) {
-                const diskItem = latestData.media.find((m) => m.id === item.id);
-                if (diskItem) {
-                  diskItem.poster = meta.poster;
-                  batchSaved = true;
-                }
+                await updateMediaItem(item.id, { poster: meta.poster });
               }
             } catch (e) {}
           })
         );
-
-        if (batchSaved) {
-          saveData(latestData);
-        }
       }
     } catch (e) {}
   });
@@ -700,14 +665,10 @@ router.post('/bulk', async (req, res) => {
 // POST /api/media/refresh-missing — Auto-fix all items that have missing covers
 // ─────────────────────────────────────────
 router.post('/refresh-missing', async (req, res) => {
-  const data = readData();
+  const allMedia = await getAllMedia();
   const force = req.body?.force || req.query?.force === 'true';
 
-  // Items to fix:
-  // 1. Missing poster
-  // 2. Erroneous App Store icons attached to movies or shows
-  // 3. Movies that were mistakenly assigned TVMaze episode images
-  const itemsToFix = data.media.filter((m) => {
+  const itemsToFix = allMedia.filter((m) => {
     if (force) return true;
     if (!m.poster || m.poster.trim() === '') return true;
     if (m.type !== 'game' && m.poster.includes('mzstatic.com')) return true;
@@ -728,7 +689,7 @@ router.post('/refresh-missing', async (req, res) => {
             item.watchedDate ? item.watchedDate.slice(0, 4) : ''
           );
           if (meta && meta.poster && meta.poster !== item.poster) {
-            item.poster = meta.poster;
+            await updateMediaItem(item.id, { poster: meta.poster });
             updatedCount++;
           }
         } catch (e) {}
@@ -736,70 +697,63 @@ router.post('/refresh-missing', async (req, res) => {
     );
   }
 
-  if (updatedCount > 0) {
-    saveData(data);
-  }
-
-  res.json({ updated: updatedCount, totalChecked: itemsToFix.length, media: data.media });
+  const refreshedMedia = await getAllMedia();
+  res.json({ updated: updatedCount, totalChecked: itemsToFix.length, media: refreshedMedia });
 });
 
 // ─────────────────────────────────────────
 // PATCH /api/media/:id — UPDATE one item
 // ─────────────────────────────────────────
 router.patch('/:id', async (req, res) => {
-  const data = readData();
-  const id = parseInt(req.params.id);
-  const item = data.media.find((m) => m.id === id);
+  const id = parseInt(req.params.id, 10);
+  const updates = { ...req.body };
 
-  if (!item) {
-    return res.status(404).json({ error: 'Item not found' });
-  }
-
-  if (req.body.refreshPoster || (!item.poster && req.body.title)) {
-    const targetTitle = req.body.title || item.title;
-    const targetType = req.body.type || item.type;
-    const meta = await fetchMetadata(targetTitle, targetType);
-    if (meta && meta.poster) {
-      req.body.poster = meta.poster;
+  if (updates.refreshPoster || (!updates.poster && updates.title)) {
+    const allMedia = await getAllMedia();
+    const current = allMedia.find((m) => m.id === id);
+    if (current && (!current.poster || updates.refreshPoster)) {
+      const targetTitle = updates.title || current.title;
+      const targetType = updates.type || current.type;
+      const meta = await fetchMetadata(targetTitle, targetType);
+      if (meta && meta.poster) {
+        updates.poster = meta.poster;
+      }
     }
   }
 
-  delete req.body.refreshPoster;
-  Object.assign(item, req.body);
-
-  saveData(data);
-  res.json(item);
+  delete updates.refreshPoster;
+  const updated = await updateMediaItem(id, updates);
+  if (!updated) {
+    return res.status(404).json({ error: 'Item not found' });
+  }
+  res.json(updated);
 });
 
 // ─────────────────────────────────────────
 // DELETE /api/media/:id — REMOVE one item
 // ─────────────────────────────────────────
-router.delete('/:id', (req, res) => {
-  const data = readData();
-  const id = parseInt(req.params.id);
-
-  data.media = data.media.filter((m) => m.id !== id);
-  saveData(data);
+router.delete('/:id', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const success = await deleteMediaItem(id);
+  if (!success) {
+    return res.status(404).json({ error: 'Item not found' });
+  }
   res.json({ message: 'Deleted successfully' });
 });
 
 // ─────────────────────────────────────────
 // POST /api/media/bulk-delete — REMOVE multiple items by IDs
 // ─────────────────────────────────────────
-router.post('/bulk-delete', (req, res) => {
+router.post('/bulk-delete', async (req, res) => {
   const { ids } = req.body;
   if (!Array.isArray(ids) || ids.length === 0) {
     return res.status(400).json({ error: 'Array of ids required' });
   }
-  const data = readData();
-  const idSet = new Set(ids.map((id) => parseInt(id)));
-  const beforeCount = data.media.length;
-  data.media = data.media.filter((m) => !idSet.has(m.id));
-  saveData(data);
+  const result = await bulkDeleteMediaItems(ids);
   res.json({
-    deletedCount: beforeCount - data.media.length,
-    remainingTotal: data.media.length,
-    media: data.media,
+    deletedCount: result.deletedCount,
+    remainingTotal: result.media ? result.media.length : 0,
+    media: result.media,
   });
 });
 
