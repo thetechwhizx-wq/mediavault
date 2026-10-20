@@ -1,5 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const dns = require('dns');
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (e) {}
 const mongoose = require('mongoose');
 const Media = require('./models/Media');
 
