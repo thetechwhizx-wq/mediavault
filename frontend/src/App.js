@@ -296,63 +296,64 @@ function App() {
     }
   };
 
-  // ── Cinema & TV Filtering logic ────────────────────
-  const filteredCinema = cinemaMedia.filter((item) => {
-    if (typeFilter !== 'all' && item.type !== typeFilter) return false;
-    if (statusFilter !== 'all' && item.status !== statusFilter) return false;
+  // ── Unified Media Filtering logic (Movies, Shows, Games across 2025, 2026, All Years & Genres) ──
+  const filteredMedia = useMemo(() => {
+    return media.filter((item) => {
+      // 1. Type Filter (all, movie, show, game)
+      if (typeFilter !== 'all' && item.type !== typeFilter) return false;
 
-    // Filter by theatre
-    if (theatreOnly) {
-      const isTheatre =
-        item.venue === 'theatre' ||
-        (item.notes && /theatre|theater|cinema|imax/i.test(item.notes));
-      if (!isTheatre) return false;
-    }
+      // 2. Status Filter
+      if (statusFilter !== 'all' && item.status !== statusFilter) return false;
 
-    // Filter by year
-    if (yearFilter !== 'all') {
-      if (!item.watchedDate || !item.watchedDate.startsWith(yearFilter)) {
-        return false;
+      // 3. Theatre Filter
+      if (theatreOnly) {
+        const isTheatre =
+          item.venue === 'theatre' ||
+          (item.notes && /theatre|theater|cinema|imax/i.test(item.notes));
+        if (!isTheatre) return false;
       }
-    }
 
-    // Filter by genre (checks item.genres array and fallback text)
-    if (genreFilter !== 'All Genres') {
-      const g = genreFilter.toLowerCase();
-      const hasGenre =
-        Array.isArray(item.genres) &&
-        item.genres.some(
-          (genreName) =>
-            genreName.toLowerCase().includes(g) || g.includes(genreName.toLowerCase())
-        );
-      const textToSearch = `${item.title} ${item.notes || ''} ${item.review || ''}`.toLowerCase();
-      if (!hasGenre && !textToSearch.includes(g)) return false;
-    }
+      // 4. Year Filter (matches 2025, 2026, or any year across watchedDate, playedFrom, or playedMonth)
+      if (yearFilter !== 'all') {
+        const itemDate = item.watchedDate || item.playedFrom || item.playedMonth || '';
+        if (!itemDate.startsWith(yearFilter)) {
+          return false;
+        }
+      }
 
-    // Search query
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      if (!item.title.toLowerCase().includes(q)) return false;
-    }
-    return true;
-  });
+      // 5. Genre Filter (checks item.genres array and fallback text)
+      if (genreFilter !== 'All Genres') {
+        const g = genreFilter.toLowerCase();
+        const hasGenre =
+          Array.isArray(item.genres) &&
+          item.genres.some(
+            (genreName) =>
+              genreName.toLowerCase().includes(g) || g.includes(genreName.toLowerCase())
+          );
+        const textToSearch = `${item.title} ${item.notes || ''} ${item.review || ''} ${(item.genres || []).join(' ')}`.toLowerCase();
+        if (!hasGenre && !textToSearch.includes(g)) return false;
+      }
+
+      // 6. Search query
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        const searchTarget = `${item.title} ${item.notes || ''} ${item.review || ''} ${(item.genres || []).join(' ')}`.toLowerCase();
+        if (!searchTarget.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [media, typeFilter, statusFilter, theatreOnly, yearFilter, genreFilter, searchQuery]);
 
   // ── Counts for filter badges ───────────────────────
-  const counts = {
-    all: cinemaMedia.length,
-    movie: cinemaMedia.filter((m) => m.type === 'movie').length,
-    show: cinemaMedia.filter((m) => m.type === 'show').length,
-    game: gamesMedia.length,
-  };
+  const counts = useMemo(() => ({
+    all: media.length,
+    movie: media.filter((m) => m.type === 'movie').length,
+    show: media.filter((m) => m.type === 'show').length,
+    game: media.filter((m) => m.type === 'game').length,
+  }), [media]);
 
   const handleTypeChange = (newType) => {
-    if (newType === 'game') {
-      setActiveVaultTab('games');
-      setTypeFilter('all');
-    } else {
-      setActiveVaultTab('cinema');
-      setTypeFilter(newType);
-    }
+    setTypeFilter(newType);
   };
 
   // ── Keyboard: Escape to close modals ───────────────
@@ -471,9 +472,38 @@ function App() {
               />
             )}
 
+            {/* Quick banner if viewing Games in Archive Grid */}
+            {typeFilter === 'game' && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: 'rgba(128, 131, 255, 0.1)',
+                  border: '1px solid rgba(128, 131, 255, 0.25)',
+                  padding: '0.65rem 1.25rem',
+                  borderRadius: '12px',
+                  marginBottom: '1rem',
+                  color: '#dfe2ee',
+                  fontSize: '0.85rem',
+                  flexWrap: 'wrap',
+                  gap: '0.5rem',
+                }}
+              >
+                <span>🎮 Viewing all 36 games in archive. Prefer the interactive monthly timeline?</span>
+                <button
+                  className="btn-secondary small"
+                  style={{ padding: '0.35rem 0.8rem', fontSize: '0.8rem', cursor: 'pointer' }}
+                  onClick={() => setActiveVaultTab('games')}
+                >
+                  Open Games Vault Timeline →
+                </button>
+              </div>
+            )}
+
             {/* Main Vault Archive Grid / Timeline */}
             <MediaList
-              items={filteredCinema}
+              items={filteredMedia}
               onEdit={setEditingItem}
               onDelete={(item) => setEditingItem(item)}
               onLogSession={handleLogSession}

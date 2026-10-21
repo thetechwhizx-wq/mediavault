@@ -17,7 +17,9 @@
         "Romance",
         "Drama"
       ],
-      "runtimeMinutes": 22
+      "runtimeMinutes": 22,
+      "watchedDate": "2025",
+      "dateConfidence": "year_only"
     },
     {
       "id": 4,
@@ -35,7 +37,9 @@
         "Game",
         "Sports"
       ],
-      "runtimeMinutes": 0
+      "runtimeMinutes": 0,
+      "watchedDate": "2026-01-01",
+      "playedMonth": "2026-01"
     },
     {
       "id": 5,
@@ -46,7 +50,7 @@
       "poster": "https://static.tvmaze.com/uploads/images/original_untouched/586/1466410.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -59,7 +63,8 @@
         "Fantasy",
         "Mystery"
       ],
-      "runtimeMinutes": 45
+      "runtimeMinutes": 45,
+      "dateConfidence": "year_only"
     },
     {
       "id": 6,
@@ -70,7 +75,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BZjU4OWNiYzQtMzc1NS00NjZlLTgyYTctZWY4ZmEzMTkxYjA4XkEyXkFqcGc@._V1_QL75_UX380_CR0,4,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -83,7 +88,8 @@
         "Crime",
         "Sci-Fi"
       ],
-      "runtimeMinutes": 60
+      "runtimeMinutes": 60,
+      "dateConfidence": "year_only"
     },
     {
       "id": 7,
@@ -94,7 +100,7 @@
       "poster": "https://static.tvmaze.com/uploads/images/original_untouched/286/715906.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "not finished",
       "importedFrom": "bulk_import",
@@ -107,7 +113,8 @@
         "Drama",
         "History"
       ],
-      "runtimeMinutes": 44
+      "runtimeMinutes": 44,
+      "dateConfidence": "year_only"
     },
     {
       "id": 8,
@@ -118,7 +125,7 @@
       "poster": "https://static.tvmaze.com/uploads/images/original_untouched/576/1440521.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -131,7 +138,8 @@
         "Mystery",
         "Thriller"
       ],
-      "runtimeMinutes": 55
+      "runtimeMinutes": 55,
+      "dateConfidence": "year_only"
     },
     {
       "id": 9,
@@ -142,7 +150,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BMTUwMjA5NTg4MF5BMl5BanBnXkFtZTgwODUyODkwMzI@._V1_QL75_UX380_CR0,1,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -155,7 +163,8 @@
         "Crime",
         "Sci-Fi"
       ],
-      "runtimeMinutes": 50
+      "runtimeMinutes": 50,
+      "dateConfidence": "year_only"
     },
     {
       "id": 10,
@@ -166,7 +175,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BODcwOTg2MDE3NF5BMl5BanBnXkFtZTgwNTUyNTY1NjM@._V1_QL75_UX380_CR0,0,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -180,7 +189,8 @@
         "Sci-Fi",
         "Thriller"
       ],
-      "runtimeMinutes": 54
+      "runtimeMinutes": 54,
+      "dateConfidence": "year_only"
     },
     {
       "id": 11,
@@ -216,7 +226,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BODcwOTg2MDE3NF5BMl5BanBnXkFtZTgwNTUyNTY1NjM@._V1_QL75_UX380_CR0,0,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -230,7 +240,8 @@
         "Sci-Fi",
         "Thriller"
       ],
-      "runtimeMinutes": 54
+      "runtimeMinutes": 54,
+      "dateConfidence": "year_only"
     },
     {
       "id": 13,
@@ -388,7 +399,7 @@
       "poster": "https://static.tvmaze.com/uploads/images/original_untouched/594/1485959.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -400,7 +411,8 @@
         "Mystery",
         "Sci-Fi"
       ],
-      "runtimeMinutes": 50
+      "runtimeMinutes": 50,
+      "dateConfidence": "year_only"
     },
     {
       "id": 20,
@@ -411,7 +423,7 @@
       "poster": "https://static.tvmaze.com/uploads/images/original_untouched/622/1556313.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -424,7 +436,8 @@
         "Horror",
         "Sci-Fi"
       ],
-      "runtimeMinutes": 60
+      "runtimeMinutes": 60,
+      "dateConfidence": "year_only"
     },
     {
       "id": 22,
@@ -462,7 +475,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BZWNiZjVlZTUtNGUwYi00MjJmLTg2MDctNWEzYTJiMzY1ODc4XkEyXkFqcGc@._V1_QL75_UX380_CR0,20,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -475,7 +488,8 @@
         "Family",
         "Sci-Fi"
       ],
-      "runtimeMinutes": 102
+      "runtimeMinutes": 102,
+      "dateConfidence": "year_only"
     },
     {
       "id": 24,
@@ -509,7 +523,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BZGQyYTA0Y2EtYTA1NC00YTkzLWJiMmQtNzUzZGMzNjc5ZjM1XkEyXkFqcGc@._V1_QL75_UX380_CR0,4,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -523,7 +537,8 @@
         "History",
         "Indian Cinema"
       ],
-      "runtimeMinutes": 169
+      "runtimeMinutes": 169,
+      "dateConfidence": "year_only"
     },
     {
       "id": 26,
@@ -534,7 +549,7 @@
       "poster": "https://th.bing.com/th?id=OIF.ORT9z%2b8HfxVaXR0Ac8S8OA&w=132&h=180&c=7&r=0&o=7&pid=1.7&rm=3",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -547,7 +562,8 @@
         "Thriller",
         "Indian Cinema"
       ],
-      "runtimeMinutes": 150
+      "runtimeMinutes": 150,
+      "dateConfidence": "year_only"
     },
     {
       "id": 27,
@@ -558,7 +574,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BMWYzZTM5ZGQtOGE5My00NmM2LWFlMDEtMGNjYjdmOWM1MzA1XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -570,7 +586,8 @@
         "Adventure",
         "Drama"
       ],
-      "runtimeMinutes": 148
+      "runtimeMinutes": 148,
+      "dateConfidence": "year_only"
     },
     {
       "id": 28,
@@ -581,7 +598,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BZmFkMjE4NjQtZTVmZS00MDZjLWE2ZmEtZTkzODljNjhlNWUxXkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -594,7 +611,8 @@
         "Comedy",
         "Fantasy"
       ],
-      "runtimeMinutes": 123
+      "runtimeMinutes": 123,
+      "dateConfidence": "year_only"
     },
     {
       "id": 29,
@@ -649,7 +667,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BYmQwNzRiNmItODc4Ny00Mjk4LThmYWQtNjI5OGU4OGUxMmY0XkEyXkFqcGc@._V1_QL75_UY562_CR2,0,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -660,7 +678,8 @@
         "Drama",
         "Romance"
       ],
-      "runtimeMinutes": 108
+      "runtimeMinutes": 108,
+      "dateConfidence": "year_only"
     },
     {
       "id": 32,
@@ -821,9 +840,10 @@
       "genres": [
         "Action",
         "Crime",
-        "Thriller"
+        "Thriller",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 145
+      "runtimeMinutes": 140
     },
     {
       "id": 39,
@@ -910,9 +930,12 @@
       "review": "",
       "createdAt": "2026-10-19T15:47:40.049Z",
       "genres": [
-        "Comedy"
+        "Action",
+        "Crime",
+        "Thriller",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 0
+      "runtimeMinutes": 145
     },
     {
       "id": 43,
@@ -923,7 +946,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BNDRjY2E0ZmEtN2QwNi00NTEwLWI3MWItODNkMGYwYWFjNGE0XkEyXkFqcGc@._V1_QL75_UX380_CR0,4,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -935,7 +958,8 @@
         "Adventure",
         "Sci-Fi"
       ],
-      "runtimeMinutes": 118
+      "runtimeMinutes": 118,
+      "dateConfidence": "year_only"
     },
     {
       "id": 44,
@@ -967,7 +991,7 @@
       "poster": "https://static.tvmaze.com/uploads/images/original_untouched/127/319264.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "Rewatch",
       "importedFrom": "bulk_import",
@@ -979,7 +1003,8 @@
         "Romance",
         "Sport"
       ],
-      "runtimeMinutes": 78
+      "runtimeMinutes": 78,
+      "dateConfidence": "year_only"
     },
     {
       "id": 55,
@@ -1022,9 +1047,10 @@
       "genres": [
         "Action",
         "Crime",
-        "Drama"
+        "Drama",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 168
+      "runtimeMinutes": 140
     },
     {
       "id": 57,
@@ -1093,7 +1119,8 @@
       "createdAt": "2026-10-19T17:16:44.672Z",
       "genres": [
         "Drama",
-        "Family"
+        "Family",
+        "Indian Cinema"
       ],
       "runtimeMinutes": 177
     },
@@ -1204,10 +1231,11 @@
       "review": "",
       "createdAt": "2026-10-19T17:16:47.562Z",
       "genres": [
-        "Game-Show",
-        "Music"
+        "Drama",
+        "Family",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 0
+      "runtimeMinutes": 165
     },
     {
       "id": 75,
@@ -1218,7 +1246,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BZTY5NTM5N2EtMzNmZS00MzYwLWFmYzItMWY4NGI1ZjI5NzUwXkEyXkFqcGc@._V1_QL75_UX380_CR0,35,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -1228,9 +1256,11 @@
       "genres": [
         "Action",
         "Crime",
-        "Drama"
+        "Drama",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 165
+      "runtimeMinutes": 155,
+      "dateConfidence": "year_only"
     },
     {
       "id": 76,
@@ -1249,9 +1279,11 @@
       "review": "",
       "createdAt": "2026-10-19T17:19:22.997Z",
       "genres": [
-        "Horror"
+        "Drama",
+        "Horror",
+        "Thriller"
       ],
-      "runtimeMinutes": 137
+      "runtimeMinutes": 120
     },
     {
       "id": 77,
@@ -1262,7 +1294,7 @@
       "poster": "https://upload.wikimedia.org/wikipedia/en/b/bc/To_All_the_Boys_-_P.S._I_Still_Love_You_official_release_poster.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -1274,7 +1306,8 @@
         "Drama",
         "Romance"
       ],
-      "runtimeMinutes": 101
+      "runtimeMinutes": 101,
+      "dateConfidence": "year_only"
     },
     {
       "id": 78,
@@ -1423,7 +1456,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BM2Q3ZWUxOGEtODU4OS00NjU0LTllZWYtODAxZmRkNDZmYmE4XkEyXkFqcGc@._V1_QL75_UX380_CR0,4,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -1433,9 +1466,11 @@
       "genres": [
         "Action",
         "Crime",
-        "Drama"
+        "Drama",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 181
+      "runtimeMinutes": 150,
+      "dateConfidence": "year_only"
     },
     {
       "id": 160,
@@ -1446,7 +1481,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BMTk5ODk1NDkxMF5BMl5BanBnXkFtZTcwNTA5OTY0OQ@@._V1_QL75_UY562_CR0,0,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -1458,7 +1493,8 @@
         "Adventure",
         "Sci-Fi"
       ],
-      "runtimeMinutes": 143
+      "runtimeMinutes": 143,
+      "dateConfidence": "year_only"
     },
     {
       "id": 161,
@@ -1501,10 +1537,11 @@
       "review": "",
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
-        "Short",
-        "Comedy"
+        "Action",
+        "Adventure",
+        "Sci-Fi"
       ],
-      "runtimeMinutes": 3
+      "runtimeMinutes": 151
     },
     {
       "id": 163,
@@ -1548,7 +1585,8 @@
       "genres": [
         "Action",
         "Crime",
-        "Thriller"
+        "Thriller",
+        "Indian Cinema"
       ],
       "runtimeMinutes": 155
     },
@@ -1571,9 +1609,10 @@
       "genres": [
         "Action",
         "Crime",
-        "Drama"
+        "Drama",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 168
+      "runtimeMinutes": 160
     },
     {
       "id": 166,
@@ -1629,7 +1668,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BZDEzYmZmOTYtMzdlYS00MWNjLWE2YjEtMzkyZTMyOWZjMjkyXkEyXkFqcGc@._V1_QL75_UX380_CR0,4,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -1639,9 +1678,11 @@
       "genres": [
         "Action",
         "Crime",
-        "Drama"
+        "Drama",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 179
+      "runtimeMinutes": 179,
+      "dateConfidence": "year_only"
     },
     {
       "id": 169,
@@ -1685,10 +1726,11 @@
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
         "Action",
-        "Crime",
-        "Horror"
+        "Adventure",
+        "Fantasy",
+        "Sci-Fi"
       ],
-      "runtimeMinutes": 82
+      "runtimeMinutes": 141
     },
     {
       "id": 171,
@@ -1722,7 +1764,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BNjg4YzU3NjEtYWYyMy00YTY2LWIxYzMtNmE1MjA3YjA5MjUzXkEyXkFqcGc@._V1_QL75_UY562_CR19,0,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -1730,9 +1772,12 @@
       "review": "",
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
-        "Drama"
+        "Crime",
+        "Drama",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 0
+      "runtimeMinutes": 175,
+      "dateConfidence": "year_only"
     },
     {
       "id": 173,
@@ -1743,7 +1788,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BMjM5YmQxM2YtZjI2Yy00YjhhLTg5N2MtMTEyMzdlZDU3OTVhXkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -1751,9 +1796,13 @@
       "review": "",
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
+        "Action",
+        "Adventure",
+        "Fantasy",
         "Sci-Fi"
       ],
-      "runtimeMinutes": 120
+      "runtimeMinutes": 120,
+      "dateConfidence": "year_only"
     },
     {
       "id": 174,
@@ -1787,7 +1836,7 @@
       "poster": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Uday_Kiran_Elephants_quarrel.jpg/330px-Uday_Kiran_Elephants_quarrel.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -1800,7 +1849,8 @@
         "Drama",
         "Indian Cinema"
       ],
-      "runtimeMinutes": 160
+      "runtimeMinutes": 160,
+      "dateConfidence": "year_only"
     },
     {
       "id": 176,
@@ -1821,9 +1871,10 @@
       "genres": [
         "Action",
         "Crime",
-        "Drama"
+        "Drama",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 168
+      "runtimeMinutes": 160
     },
     {
       "id": 177,
@@ -1865,9 +1916,12 @@
       "review": "",
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
-        "Short"
+        "Action",
+        "Adventure",
+        "Drama",
+        "Fantasy"
       ],
-      "runtimeMinutes": 0
+      "runtimeMinutes": 179
     },
     {
       "id": 179,
@@ -1923,7 +1977,7 @@
       "poster": "https://m.media-amazon.com/images/M/MV5BZDQ1NGE5MGMtYzdlZC00ODExLWJlMDMtNWU4NjA5OWYwMDEwXkEyXkFqcGc@._V1_QL75_UY562_CR2,0,380,562_.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2025",
       "venue": "",
       "notes": "",
       "importedFrom": "bulk_import",
@@ -1931,10 +1985,12 @@
       "review": "",
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
-        "Animation",
-        "Short"
+        "Drama",
+        "Horror",
+        "Sci-Fi"
       ],
-      "runtimeMinutes": 5
+      "runtimeMinutes": 141,
+      "dateConfidence": "year_only"
     },
     {
       "id": 182,
@@ -2022,9 +2078,12 @@
       "review": "",
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
-        "Western"
+        "Action",
+        "Drama",
+        "Sport",
+        "Indian Cinema"
       ],
-      "runtimeMinutes": 0
+      "runtimeMinutes": 140
     },
     {
       "id": 186,
@@ -2091,9 +2150,12 @@
       "review": "",
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
-        "Documentary"
+        "Action",
+        "Adventure",
+        "Drama",
+        "Fantasy"
       ],
-      "runtimeMinutes": 52
+      "runtimeMinutes": 201
     },
     {
       "id": 189,
@@ -2113,7 +2175,8 @@
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
         "Action",
-        "Thriller"
+        "Thriller",
+        "Indian Cinema"
       ],
       "runtimeMinutes": 148
     },
@@ -2135,7 +2198,8 @@
       "createdAt": "2026-10-19T17:42:53.667Z",
       "genres": [
         "Action",
-        "Thriller"
+        "Thriller",
+        "Indian Cinema"
       ],
       "runtimeMinutes": 145
     },
@@ -2154,7 +2218,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Strategy"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2181,7 +2247,10 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "RPG",
+        "Fantasy"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-01-04",
@@ -2208,7 +2277,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Shooter"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-01-06",
@@ -2235,7 +2306,10 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "RPG",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-01-17",
@@ -2262,7 +2336,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "RPG",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-01-19",
@@ -2289,7 +2365,8 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Simulation"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-01-27",
@@ -2316,7 +2393,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Horror",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-02-02",
@@ -2343,7 +2422,8 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Simulation"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-02-12",
@@ -2370,7 +2450,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Adventure",
+        "Drama"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2397,7 +2479,8 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Sports"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2424,7 +2507,10 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Adventure",
+        "Sci-Fi"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2451,7 +2537,8 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2478,7 +2565,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Strategy"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-02-25",
@@ -2505,7 +2594,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Shooter"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-03-09",
@@ -2532,7 +2623,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-03-12",
@@ -2559,7 +2652,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Sports",
+        "Action"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-03-12",
@@ -2586,7 +2681,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "RPG",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-03-18",
@@ -2613,7 +2710,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Shooter"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2640,7 +2739,8 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Sports"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2667,7 +2767,8 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Sports"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2694,7 +2795,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Shooter"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2721,7 +2824,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-06-03",
@@ -2748,7 +2853,11 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "RPG",
+        "Adventure",
+        "Fantasy"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-06-10",
@@ -2775,7 +2884,10 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Adventure",
+        "Horror",
+        "Drama"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-06-22",
@@ -2802,7 +2914,10 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Adventure",
+        "Horror",
+        "Drama"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-06-24",
@@ -2829,7 +2944,10 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Crime",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-06-26",
@@ -2856,7 +2974,8 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-07-13",
@@ -2883,7 +3002,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Horror",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-07-14",
@@ -2910,7 +3031,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-07-15",
@@ -2937,7 +3060,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Shooter"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-07-23",
@@ -2964,7 +3089,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Action",
+        "Shooter"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -2991,7 +3118,8 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Simulation"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
@@ -3011,19 +3139,20 @@
       "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple122/v4/58/85/71/5885715b-2dbb-f701-800e-2f77a1dec1c7/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
-      "watchedDate": "",
+      "watchedDate": "2026-01-01",
       "venue": "",
       "notes": "",
       "importedFrom": "game_log_2026",
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Sports"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "",
       "playedTo": "",
-      "playedMonth": "",
+      "playedMonth": "2026-01",
       "replay": false,
       "dateConfidence": "unknown",
       "needsCheck": "No date. Listed after July entries and before October.",
@@ -3045,7 +3174,8 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "Sports"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-10-02",
@@ -3072,7 +3202,9 @@
       "rating": null,
       "review": "",
       "genres": [
-        "Game"
+        "Game",
+        "RPG",
+        "Adventure"
       ],
       "runtimeMinutes": 0,
       "playedFrom": "2026-10-03",

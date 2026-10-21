@@ -37,6 +37,8 @@ function GamesPage({
 }) {
   const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'in_progress', 'completed', 'replay', 'dropped'
   const [monthFilter, setMonthFilter] = useState('all');
+  const [genreFilter, setGenreFilter] = useState('all');
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' = Chronological (Jan -> Oct), 'desc' = Newest first
 
   // ── Top Metrics ────────────────────────────────────
   const metrics = useMemo(() => {
@@ -90,16 +92,25 @@ function GamesPage({
         if (itemMonth !== monthFilter) return false;
       }
 
+      // Genre filter
+      if (genreFilter !== 'all') {
+        const target = genreFilter.toLowerCase();
+        const hasGenre =
+          Array.isArray(g.genres) &&
+          g.genres.some((x) => x.toLowerCase().includes(target) || target.includes(x.toLowerCase()));
+        if (!hasGenre) return false;
+      }
+
       // Search query
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        const text = `${g.title} ${g.notes || ''} ${g.platform || ''}`.toLowerCase();
+        const text = `${g.title} ${g.notes || ''} ${g.platform || ''} ${(g.genres || []).join(' ')}`.toLowerCase();
         if (!text.includes(q)) return false;
       }
 
       return true;
     });
-  }, [games, statusFilter, monthFilter, searchQuery]);
+  }, [games, statusFilter, monthFilter, genreFilter, searchQuery]);
 
   // ── Group By Month ─────────────────────────────────
   const groupedByMonth = useMemo(() => {
@@ -113,19 +124,27 @@ function GamesPage({
       map.get(monthKey).push(g);
     });
 
-    // Sort months descending (newest first, 'unknown' at end)
+    // Sort months according to sortOrder ('asc' = Chronological Jan -> Oct, 'desc' = Newest first Oct -> Jan)
     const sortedKeys = Array.from(map.keys()).sort((a, b) => {
       if (a === 'unknown') return 1;
       if (b === 'unknown') return -1;
-      return b.localeCompare(a);
+      return sortOrder === 'asc' ? a.localeCompare(b) : b.localeCompare(a);
     });
 
-    return sortedKeys.map((key) => ({
-      monthKey: key,
-      monthLabel: formatMonthLabel(key),
-      items: map.get(key),
-    }));
-  }, [filteredGames]);
+    return sortedKeys.map((key) => {
+      const itemsInMonth = [...map.get(key)];
+      itemsInMonth.sort((a, b) => {
+        const dateA = a.playedFrom || a.watchedDate || a.playedMonth || '';
+        const dateB = b.playedFrom || b.watchedDate || b.playedMonth || '';
+        return sortOrder === 'asc' ? dateA.localeCompare(dateB) : dateB.localeCompare(dateA);
+      });
+      return {
+        monthKey: key,
+        monthLabel: formatMonthLabel(key),
+        items: itemsInMonth,
+      };
+    });
+  }, [filteredGames, sortOrder]);
 
   // In-progress active playing shelf
   const activeGames = useMemo(() => {
@@ -297,24 +316,47 @@ function GamesPage({
           )}
         </div>
 
-        {/* Month Selector */}
-        {availableMonths.length > 0 && (
-          <div className="month-select-wrap">
-            <span className="month-label">Timeline Month:</span>
-            <select
-              className="month-dropdown"
-              value={monthFilter}
-              onChange={(e) => setMonthFilter(e.target.value)}
-            >
-              <option value="all">All Months ({games.length})</option>
-              {availableMonths.map((m) => (
-                <option key={m} value={m}>
-                  {formatMonthLabel(m)}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        {/* Month Selector & Chronological Sort Toggle */}
+        <div className="games-controls-right">
+          {availableMonths.length > 0 && (
+            <div className="month-select-wrap">
+              <span className="month-label">Month:</span>
+              <select
+                className="month-dropdown"
+                value={monthFilter}
+                onChange={(e) => setMonthFilter(e.target.value)}
+              >
+                <option value="all">All Months ({games.length})</option>
+                {availableMonths.map((m) => (
+                  <option key={m} value={m}>
+                    {formatMonthLabel(m)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <button
+            className="btn-sort-toggle"
+            onClick={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+            title={sortOrder === 'asc' ? 'Currently Chronological (Jan → Oct). Click for Newest First' : 'Currently Newest First (Oct → Jan). Click for Chronological'}
+          >
+            {sortOrder === 'asc' ? '📅 Jan → Oct' : '📅 Oct → Jan'}
+          </button>
+        </div>
+      </div>
+
+      {/* ── 3b. Quick Game Genre Pills ── */}
+      <div className="game-genre-pills">
+        {['all', 'Action', 'Sports', 'Adventure', 'Horror', 'RPG', 'Shooter', 'Simulation', 'Strategy'].map((g) => (
+          <button
+            key={g}
+            className={`genre-pill-btn ${genreFilter === g ? 'active' : ''}`}
+            onClick={() => setGenreFilter(g)}
+          >
+            {g === 'all' ? 'All Genres' : g}
+          </button>
+        ))}
       </div>
 
       {/* ── 4. Monthly Timeline & Game Cards ── */}

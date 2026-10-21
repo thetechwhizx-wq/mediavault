@@ -31,6 +31,10 @@ async function autoSyncMongo() {
     if (!local || !Array.isArray(local.media) || local.media.length === 0) return;
 
     const gameCount = await Media.countDocuments({ type: 'game' });
+    const multiGenreGameCount = await Media.countDocuments({
+      type: 'game',
+      genres: { $in: ['Action', 'Sports', 'RPG', 'Adventure', 'Horror', 'Simulation'] },
+    });
     const missingGenreCount = await Media.countDocuments({
       $or: [
         { genres: { $exists: false } },
@@ -39,9 +43,9 @@ async function autoSyncMongo() {
       ],
     });
 
-    console.log(`🔍 [Mongo Sync Check] Cloud Atlas currently has ${gameCount} games and ${missingGenreCount} items missing genres.`);
+    console.log(`🔍 [Mongo Sync Check] Cloud Atlas currently has ${gameCount} games (${multiGenreGameCount} with rich genres) and ${missingGenreCount} items missing genres.`);
 
-    if (gameCount < 30 || missingGenreCount > 5) {
+    if (gameCount < 35 || multiGenreGameCount < 20 || missingGenreCount > 0) {
       console.log('🔄 [Mongo Auto-Sync] Syncing full media library from data.json to MongoDB Atlas...');
       for (const item of local.media) {
         await Media.findOneAndUpdate(
@@ -78,7 +82,7 @@ async function autoSyncMongo() {
       }
       const newTotal = await Media.countDocuments({});
       const newGames = await Media.countDocuments({ type: 'game' });
-      console.log(`✅ [Mongo Auto-Sync] Sync complete! Atlas now has ${newTotal} items (${newGames} games) with all genres.`);
+      console.log(`✅ [Mongo Auto-Sync] Sync complete! Atlas now has ${newTotal} items (${newGames} games) with all genres and dates.`);
     }
   } catch (syncErr) {
     console.warn('⚠️ [Mongo Auto-Sync] Non-blocking sync warning:', syncErr.message);
