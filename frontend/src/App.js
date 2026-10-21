@@ -88,22 +88,22 @@ function App() {
   // ── Dynamic Years & Venue Counts ───────────────────
   const availableYears = useMemo(() => {
     const set = new Set();
-    media.forEach((m) => {
-      const d = m.watchedDate || m.playedFrom || m.playedMonth;
+    cinemaMedia.forEach((m) => {
+      const d = m.watchedDate;
       if (d && /^\d{4}/.test(d)) {
         set.add(d.slice(0, 4));
       }
     });
     return Array.from(set).sort((a, b) => b.localeCompare(a));
-  }, [media]);
+  }, [cinemaMedia]);
 
   const theatreCount = useMemo(() => {
-    return media.filter(
+    return cinemaMedia.filter(
       (m) =>
         m.venue === 'theatre' ||
         (m.notes && /theatre|theater|cinema|imax/i.test(m.notes))
     ).length;
-  }, [media]);
+  }, [cinemaMedia]);
 
   // ── In-Progress Active Items (Cinema & TV) ──────────
   const inProgressItems = useMemo(() => {
@@ -114,29 +114,34 @@ function App() {
   const statsSummary = useMemo(() => {
     const targetItems =
       yearFilter === 'all'
-        ? media
-        : media.filter((m) => {
-            const d = m.watchedDate || m.playedFrom || m.playedMonth;
+        ? cinemaMedia
+        : cinemaMedia.filter((m) => {
+            const d = m.watchedDate;
             return d && d.startsWith(yearFilter);
           });
 
-    let gamingHours = 0;
     let watchHours = 0;
     let totalRatings = 0;
     let ratingCount = 0;
 
     targetItems.forEach((m) => {
-      if (m.type === 'game') {
-        gamingHours += Number(m.hoursPlayed) || 0;
-      } else {
-        const runtime = Number(m.runtimeMinutes) || (m.type === 'movie' ? 120 : 45 * 4);
-        watchHours += runtime / 60;
-      }
+      const runtime = Number(m.runtimeMinutes) || (m.type === 'movie' ? 120 : 45 * 4);
+      watchHours += runtime / 60;
       if (m.rating && Number(m.rating) > 0) {
         totalRatings += Number(m.rating);
         ratingCount++;
       }
     });
+
+    const meanRating =
+      ratingCount > 0 ? (totalRatings / ratingCount).toFixed(2) : 0;
+
+    return {
+      total: targetItems.length,
+      watchHours: Number(watchHours.toFixed(1)),
+      meanRating,
+    };
+  }, [cinemaMedia, yearFilter]);
 
     const meanRating =
       ratingCount > 0 ? (totalRatings / ratingCount).toFixed(2) : 0;
@@ -296,10 +301,10 @@ function App() {
     }
   };
 
-  // ── Unified Media Filtering logic (Movies, Shows, Games across 2025, 2026, All Years & Genres) ──
-  const filteredMedia = useMemo(() => {
-    return media.filter((item) => {
-      // 1. Type Filter (all, movie, show, game)
+  // ── Cinema & TV Filtering logic ────────────────────
+  const filteredCinema = useMemo(() => {
+    return cinemaMedia.filter((item) => {
+      // 1. Type Filter (all, movie, show)
       if (typeFilter !== 'all' && item.type !== typeFilter) return false;
 
       // 2. Status Filter
@@ -313,15 +318,15 @@ function App() {
         if (!isTheatre) return false;
       }
 
-      // 4. Year Filter (matches 2025, 2026, or any year across watchedDate, playedFrom, or playedMonth)
+      // 4. Year Filter
       if (yearFilter !== 'all') {
-        const itemDate = item.watchedDate || item.playedFrom || item.playedMonth || '';
+        const itemDate = item.watchedDate || '';
         if (!itemDate.startsWith(yearFilter)) {
           return false;
         }
       }
 
-      // 5. Genre Filter (checks item.genres array and fallback text)
+      // 5. Genre Filter
       if (genreFilter !== 'All Genres') {
         const g = genreFilter.toLowerCase();
         const hasGenre =
@@ -342,15 +347,14 @@ function App() {
       }
       return true;
     });
-  }, [media, typeFilter, statusFilter, theatreOnly, yearFilter, genreFilter, searchQuery]);
+  }, [cinemaMedia, typeFilter, statusFilter, theatreOnly, yearFilter, genreFilter, searchQuery]);
 
-  // ── Counts for filter badges ───────────────────────
+  // ── Counts for Cinema filter badges ────────────────
   const counts = useMemo(() => ({
-    all: media.length,
-    movie: media.filter((m) => m.type === 'movie').length,
-    show: media.filter((m) => m.type === 'show').length,
-    game: media.filter((m) => m.type === 'game').length,
-  }), [media]);
+    all: cinemaMedia.length,
+    movie: cinemaMedia.filter((m) => m.type === 'movie').length,
+    show: cinemaMedia.filter((m) => m.type === 'show').length,
+  }), [cinemaMedia]);
 
   const handleTypeChange = (newType) => {
     setTypeFilter(newType);
@@ -472,38 +476,9 @@ function App() {
               />
             )}
 
-            {/* Quick banner if viewing Games in Archive Grid */}
-            {typeFilter === 'game' && (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  background: 'rgba(128, 131, 255, 0.1)',
-                  border: '1px solid rgba(128, 131, 255, 0.25)',
-                  padding: '0.65rem 1.25rem',
-                  borderRadius: '12px',
-                  marginBottom: '1rem',
-                  color: '#dfe2ee',
-                  fontSize: '0.85rem',
-                  flexWrap: 'wrap',
-                  gap: '0.5rem',
-                }}
-              >
-                <span>🎮 Viewing all 36 games in archive. Prefer the interactive monthly timeline?</span>
-                <button
-                  className="btn-secondary small"
-                  style={{ padding: '0.35rem 0.8rem', fontSize: '0.8rem', cursor: 'pointer' }}
-                  onClick={() => setActiveVaultTab('games')}
-                >
-                  Open Games Vault Timeline →
-                </button>
-              </div>
-            )}
-
             {/* Main Vault Archive Grid / Timeline */}
             <MediaList
-              items={filteredMedia}
+              items={filteredCinema}
               onEdit={setEditingItem}
               onDelete={(item) => setEditingItem(item)}
               onLogSession={handleLogSession}

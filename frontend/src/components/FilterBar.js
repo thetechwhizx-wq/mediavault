@@ -2,10 +2,9 @@ import React from 'react';
 import './FilterBar.css';
 
 const TYPE_FILTERS = [
-  { value: 'all', label: 'All Media', icon: 'apps' },
+  { value: 'all', label: 'All Cinema & TV', icon: 'apps' },
   { value: 'movie', label: 'Movies', icon: 'movie' },
   { value: 'show', label: 'Shows', icon: 'tv' },
-  { value: 'game', label: 'Games', icon: 'sports_esports' },
 ];
 
 const STATUS_OPTIONS = [
@@ -79,12 +78,14 @@ function FilterBar({
                   <strong>{statsSummary.watchHours || 0}h</strong> Watch
                 </span>
               </div>
-              <div className="ticker-metric-item">
-                <span className="metric-icon">🎮</span>
-                <span>
-                  <strong>{statsSummary.gamingHours || 0}h</strong> Gaming
-                </span>
-              </div>
+              {statsSummary.gamingHours !== undefined && (
+                <div className="ticker-metric-item">
+                  <span className="metric-icon">🎮</span>
+                  <span>
+                    <strong>{statsSummary.gamingHours || 0}h</strong> Gaming
+                  </span>
+                </div>
+              )}
               {statsSummary.meanRating > 0 && (
                 <div className="ticker-metric-item">
                   <span className="metric-icon">⭐</span>
