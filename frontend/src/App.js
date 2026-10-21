@@ -143,17 +143,6 @@ function App() {
     };
   }, [cinemaMedia, yearFilter]);
 
-    const meanRating =
-      ratingCount > 0 ? (totalRatings / ratingCount).toFixed(2) : 0;
-
-    return {
-      total: targetItems.length,
-      watchHours: Number(watchHours.toFixed(1)),
-      gamingHours: Number(gamingHours.toFixed(1)),
-      meanRating,
-    };
-  }, [media, yearFilter]);
-
   // ── Duplicate Groups Count (Excludes intentional rewatches & replays) ──
   const duplicateCount = useMemo(() => {
     const counts = {};
