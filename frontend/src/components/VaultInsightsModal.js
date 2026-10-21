@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { fetchStats } from '../api';
 import './VaultInsightsModal.css';
 
@@ -9,6 +9,7 @@ function VaultInsightsModal({ initialYear = 'all', availableYears = [], onClose 
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
   const [activeChartTab, setActiveChartTab] = useState('all'); // 'all', 'movies', 'shows', 'games'
+  const [selectedMonth, setSelectedMonth] = useState(null);
 
   useEffect(() => {
     let isCurrent = true;
@@ -16,6 +17,7 @@ function VaultInsightsModal({ initialYear = 'all', availableYears = [], onClose 
       try {
         setLoading(true);
         setError(null);
+        setSelectedMonth(null);
         const data = await fetchStats(selectedYear);
         if (isCurrent) {
           setStats(data);
@@ -40,6 +42,38 @@ function VaultInsightsModal({ initialYear = 'all', availableYears = [], onClose 
     ? Math.max(...stats.monthlyData.map((m) => m.total), 1)
     : 1;
 
+  // Selected Month Details & Comparison
+  const selectedMonthDetails = useMemo(() => {
+    if (!selectedMonth || !stats?.monthlyData) return null;
+    const idx = stats.monthlyData.findIndex((m) => m.month === selectedMonth);
+    if (idx === -1) return null;
+
+    const currentMonth = stats.monthlyData[idx];
+    const prevMonth = idx > 0 ? stats.monthlyData[idx - 1] : null;
+
+    let deltaText = 'First month of calendar year';
+    let deltaIsPositive = true;
+
+    if (prevMonth) {
+      const diff = currentMonth.total - prevMonth.total;
+      if (diff > 0) {
+        deltaText = `+${diff} titles (+${Math.round((diff / Math.max(1, prevMonth.total)) * 100)}%) vs ${prevMonth.month}`;
+        deltaIsPositive = true;
+      } else if (diff < 0) {
+        deltaText = `${diff} titles (${Math.round((diff / Math.max(1, prevMonth.total)) * 100)}%) vs ${prevMonth.month}`;
+        deltaIsPositive = false;
+      } else {
+        deltaText = `Even with ${prevMonth.month} (${currentMonth.total} titles)`;
+      }
+    }
+
+    return {
+      ...currentMonth,
+      deltaText,
+      deltaIsPositive,
+    };
+  }, [selectedMonth, stats]);
+
   // Generate shareable Wrapped text with multi-signal evidence
   const handleCopyWrapped = () => {
     if (!stats) return;
@@ -57,7 +91,8 @@ function VaultInsightsModal({ initialYear = 'all', availableYears = [], onClose 
 ✨ Total Titles: ${stats.total}
 🎥 Movies: ${stats.moviesCount} (${stats.theatreCount} in Theatres 🎭)
 📺 Series & Shows: ${stats.showsCount}
-🎮 Mobile Gaming: ${stats.gaming?.totalHours || 0} hrs
+🎮 Mobile & PC Gaming: ${stats.gaming?.totalHours || 0} hrs
+⏱️ Total Real Watch Time: ${stats.watchHours || 0} hrs
 🔥 Peak Month: ${stats.peakMonth ? `${stats.peakMonth.month} (${stats.peakMonth.total} titles)` : 'N/A'}
 🔄 Comfort Rewatches: ${stats.rewatchCount}
 ━━━━━━━━━━━━━━━━━━━━
@@ -77,10 +112,10 @@ Tracked with MediaVault (Obsidian Kinetic) 🚀`;
   const secondaryPersonas = personaProfile?.secondary || [];
   const signals = personaProfile?.signals || {};
 
-  // Estimates for display
-  const estimatedWatchHours = stats
-    ? Math.round(stats.moviesCount * 2 + stats.showsCount * 8 + (stats.gaming?.totalHours || 0))
-    : 0;
+  // Real watch hours from server runtimeMinutes calculation
+  const displayWatchHours = stats?.watchHours !== undefined
+    ? stats.watchHours
+    : Math.round((stats?.moviesCount || 0) * 2 + (stats?.showsCount || 0) * 4);
 
   return (
     <div className="modal-overlay insights-overlay" onClick={onClose}>
@@ -96,7 +131,7 @@ Tracked with MediaVault (Obsidian Kinetic) 🚀`;
               <div>
                 <h2>Vault Insights & Analytics</h2>
                 <p className="insights-subtitle">
-                  Deep-dive statistics across your logged media, watch velocity, and habit scoring.
+                  Deep-dive statistics across your logged media, real watch velocity, and habit scoring.
                 </p>
               </div>
             </div>
@@ -211,30 +246,30 @@ Tracked with MediaVault (Obsidian Kinetic) 🚀`;
                   </div>
                   <div className="banner-stat-block">
                     <span className="stat-big-num text-tertiary">
-                      {signals.completionRate !== undefined ? `${signals.completionRate}%` : '100%'}
+                      {displayWatchHours}h
                     </span>
-                    <span className="stat-subtext">Completion Rate</span>
+                    <span className="stat-subtext">Real Watch Time</span>
                   </div>
                 </div>
               </div>
 
               {/* 2. Bento Grid 4-Column KPI Row (Obsidian Kinetic) */}
               <div className="bento-kpi-grid">
-                {/* Bento Card 1: Watch Time & Velocity */}
+                {/* Bento Card 1: Real Watch Time & Velocity */}
                 <div className="bento-card">
                   <div className="bento-card-header">
-                    <span className="bento-card-title">Est. Screen Time</span>
+                    <span className="bento-card-title">Real Watch Time</span>
                     <span className="bento-badge-tertiary">
                       <span className="material-symbols-outlined text-xs">trending_up</span>
-                      Active
+                      Accurate
                     </span>
                   </div>
                   <div className="bento-card-value-row">
-                    <span className="bento-card-num">{estimatedWatchHours}</span>
+                    <span className="bento-card-num">{displayWatchHours}</span>
                     <span className="bento-card-unit">hrs</span>
                   </div>
                   <p className="bento-card-caption">
-                    ~{Math.round(stats.moviesCount * 2)}h Movies • ~{Math.round(stats.showsCount * 8)}h TV • {stats.gaming?.totalHours || 0}h Gaming
+                    Calculated from actual OMDb & TVMaze runtime minutes across your logs
                   </p>
                   {/* Decorative sparkline */}
                   <div className="bento-sparkline">
@@ -250,32 +285,26 @@ Tracked with MediaVault (Obsidian Kinetic) 🚀`;
                   </div>
                 </div>
 
-                {/* Bento Card 2: Completion Efficiency */}
+                {/* Bento Card 2: Interactive Gaming Hours */}
                 <div className="bento-card">
                   <div className="bento-card-header">
-                    <span className="bento-card-title">Completion Ratio</span>
+                    <span className="bento-card-title">Gaming Playtime</span>
                     <span className="bento-badge-purple">
-                      {signals.completionRate !== undefined ? `${signals.completionRate}%` : '—'}
+                      🎮 {stats.gamesCount} Games
                     </span>
                   </div>
                   <div className="bento-card-value-row">
-                    <span className="bento-card-num">{signals.completedCount || stats.total}</span>
-                    <span className="bento-card-denom">/ {signals.startedCount || stats.total}</span>
+                    <span className="bento-card-num">{stats.gaming?.totalHours || 0}</span>
+                    <span className="bento-card-unit">hrs</span>
                   </div>
                   <p className="bento-card-caption">
-                    {signals.planToWatchCount || 0} Queued Backlog • {signals.rewatchCount || 0} Rewatches
+                    {stats.gaming?.topGame ? `Top: ${stats.gaming.topGame.title} (${stats.gaming.topGame.hoursPlayed}h)` : 'Active session logger'}
                   </p>
-                  {/* Multi-tier progress bar */}
                   <div className="bento-progress-track">
                     <div
                       className="progress-slice-completed"
-                      style={{ width: `${signals.completionRate || 85}%` }}
-                      title="Completed"
-                    />
-                    <div
-                      className="progress-slice-progress"
-                      style={{ width: `${Math.min(10, 100 - (signals.completionRate || 85))}%` }}
-                      title="In Progress"
+                      style={{ width: `${Math.min(100, (stats.gaming?.totalHours || 1) * 3)}%` }}
+                      title="Gaming hours"
                     />
                   </div>
                 </div>
@@ -317,7 +346,7 @@ Tracked with MediaVault (Obsidian Kinetic) 🚀`;
                     <span className="bento-card-unit">marathons</span>
                   </div>
                   <p className="bento-card-caption">
-                    Days with 3+ logged releases • {signals.rewatchCount || 0} comfort re-evaluations
+                    Days with 3+ logged releases • {signals.rewatchCount || 0} comfort rewatches
                   </p>
                   <div className="bento-status-row">
                     <span className="text-tertiary flex items-center gap-1 font-bold">
@@ -327,13 +356,13 @@ Tracked with MediaVault (Obsidian Kinetic) 🚀`;
                 </div>
               </div>
 
-              {/* 3. Monthly Activity & Streams Chart (Obsidian Kinetic) */}
+              {/* 3. Monthly Activity & Streams Chart with Click-to-Drilldown */}
               <div className="insights-chart-card">
                 <div className="chart-header-row">
                   <div>
                     <h3 className="chart-title">Media Consumption & Watch Velocity</h3>
                     <p className="chart-subtitle">
-                      Monthly aggregate distribution across cinema, episodic series, and games
+                      Click any month column to reveal its title reel and month-over-month comparison
                     </p>
                   </div>
                   <div className="chart-stream-toggles">
@@ -374,20 +403,25 @@ Tracked with MediaVault (Obsidian Kinetic) 🚀`;
                       if (activeChartTab === 'games') displayVal = m.games;
 
                       const heightPercent =
-                        displayVal > 0 ? Math.max((displayVal / maxMonthlyCount) * 100, 10) : 0;
+                        displayVal > 0 ? Math.max((displayVal / maxMonthlyCount) * 100, 12) : 0;
                       const isPeak = stats.peakMonth?.month === m.month && displayVal > 0;
+                      const isSelected = selectedMonth === m.month;
 
                       return (
-                        <div key={m.month} className="kinetic-chart-column">
+                        <div
+                          key={m.month}
+                          className={`kinetic-chart-column ${isSelected ? 'selected' : ''}`}
+                          onClick={() => setSelectedMonth(selectedMonth === m.month ? null : m.month)}
+                          title={`Click to view ${m.month} logs (${m.total} items)`}
+                        >
                           <span className="col-val">{displayVal > 0 ? displayVal : ''}</span>
                           <div className="col-track">
                             <div
-                              className={`col-fill ${isPeak ? 'peak' : ''} ${activeChartTab}`}
+                              className={`col-fill ${isPeak ? 'peak' : ''} ${isSelected ? 'selected-bar' : ''} ${activeChartTab}`}
                               style={{ height: `${heightPercent}%` }}
-                              title={`${m.month}: ${m.total} total (${m.movies} movies, ${m.shows} shows, ${m.games} games)`}
                             />
                           </div>
-                          <span className={`col-month ${isPeak ? 'peak-text' : ''}`}>
+                          <span className={`col-month ${isPeak ? 'peak-text' : ''} ${isSelected ? 'selected-text' : ''}`}>
                             {m.month}
                           </span>
                         </div>
@@ -414,6 +448,65 @@ Tracked with MediaVault (Obsidian Kinetic) 🚀`;
                   </div>
                 </div>
               </div>
+
+              {/* ── 3B. Month Drill-Down Card (When Month is Clicked) ── */}
+              {selectedMonthDetails && (
+                <div className="month-drilldown-card">
+                  <div className="drilldown-header">
+                    <div className="drilldown-title-wrap">
+                      <span className="drilldown-badge">
+                        📅 {selectedMonthDetails.month} {selectedYear === 'all' ? '' : selectedYear} Breakdown
+                      </span>
+                      <span className={`drilldown-delta ${selectedMonthDetails.deltaIsPositive ? 'positive' : 'neutral'}`}>
+                        {selectedMonthDetails.deltaText}
+                      </span>
+                    </div>
+                    <button
+                      className="btn-close-drilldown"
+                      onClick={() => setSelectedMonth(null)}
+                      title="Close month drilldown"
+                    >
+                      ✕ Close Month
+                    </button>
+                  </div>
+
+                  <div className="drilldown-stats-pills">
+                    <span className="drilldown-pill">Total: <strong>{selectedMonthDetails.total}</strong></span>
+                    <span className="drilldown-pill">🎬 Movies: <strong>{selectedMonthDetails.movies}</strong></span>
+                    <span className="drilldown-pill">📺 Shows: <strong>{selectedMonthDetails.shows}</strong></span>
+                    <span className="drilldown-pill">🎮 Games: <strong>{selectedMonthDetails.games}</strong></span>
+                    {selectedMonthDetails.theatre > 0 && (
+                      <span className="drilldown-pill">🎭 Theatres: <strong>{selectedMonthDetails.theatre}</strong></span>
+                    )}
+                  </div>
+
+                  {selectedMonthDetails.items && selectedMonthDetails.items.length > 0 ? (
+                    <div className="drilldown-items-reel">
+                      {selectedMonthDetails.items.map((item) => (
+                        <div key={item.id} className="drilldown-item-chip" title={item.title}>
+                          <div className="drilldown-poster-wrap">
+                            {item.poster ? (
+                              <img src={item.poster} alt={item.title} />
+                            ) : (
+                              <span className="chip-placeholder">{item.type === 'game' ? '🎮' : '🎬'}</span>
+                            )}
+                          </div>
+                          <div className="drilldown-chip-info">
+                            <span className="drilldown-chip-title">{item.title}</span>
+                            <span className="drilldown-chip-meta">
+                              {item.venue === 'theatre' && '🎭 Cinema • '}
+                              {item.rating && `★ ${item.rating} • `}
+                              {item.watchedDate || ''}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="drilldown-empty">No individual titles logged for this month.</p>
+                  )}
+                </div>
+              )}
 
               {/* 4. Theatrical Cinema Reel (Obsidian Kinetic) */}
               {stats.theatreMovies && stats.theatreMovies.length > 0 && (

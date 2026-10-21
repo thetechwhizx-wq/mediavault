@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { searchMetadata } from '../api';
 import './AddMediaForm.css';
 
-function AddMediaForm({ onSubmit, onClose }) {
+function AddMediaForm({ onSubmit, onClose, defaultType = 'movie' }) {
   const [title, setTitle] = useState('');
-  const [type, setType] = useState('movie');
+  const [type, setType] = useState(defaultType);
   const [status, setStatus] = useState('completed');
   const [progress, setProgress] = useState('');
   const [poster, setPoster] = useState('');
@@ -12,6 +12,10 @@ function AddMediaForm({ onSubmit, onClose }) {
   const [venue, setVenue] = useState('');
   const [hoursPlayed, setHoursPlayed] = useState('');
   const [targetHours, setTargetHours] = useState('');
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [review, setReview] = useState('');
+  const [platform, setPlatform] = useState('');
   const [isFetchingMeta, setIsFetchingMeta] = useState(false);
 
   // Auto-fetch poster preview when user pauses typing title
@@ -60,6 +64,9 @@ function AddMediaForm({ onSubmit, onClose }) {
       venue,
       hoursPlayed: Number(hoursPlayed) || 0,
       targetHours: Number(targetHours) || 0,
+      rating: rating > 0 ? rating : null,
+      review: review.trim(),
+      platform: platform.trim(),
     });
   };
 
@@ -67,7 +74,7 @@ function AddMediaForm({ onSubmit, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Add New Media</h2>
+          <h2>{type === 'game' ? '🎮 Add Game to Vault' : '🎬 Add New Media'}</h2>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -100,7 +107,7 @@ function AddMediaForm({ onSubmit, onClose }) {
             <input
               id="title"
               type="text"
-              placeholder="e.g. Gladiator 2, Daredevil, Elden Ring"
+              placeholder={type === 'game' ? 'e.g. Red Dead Redemption, Delta Force' : 'e.g. Gladiator 2, Daredevil'}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               onBlur={handleTitleBlur}
@@ -128,9 +135,9 @@ function AddMediaForm({ onSubmit, onClose }) {
               <label htmlFor="status">Status</label>
               <select id="status" value={status} onChange={(e) => setStatus(e.target.value)}>
                 <option value="completed">Completed</option>
-                <option value="in_progress">In Progress</option>
-                <option value="rewatch">🔄 Rewatch</option>
-                <option value="plan_to_watch">Plan to Watch/Play</option>
+                <option value="in_progress">In Progress / Playing</option>
+                <option value="rewatch">🔄 Rewatch / Replay</option>
+                <option value="plan_to_watch">Plan to Watch / Backlog</option>
                 <option value="dropped">Dropped</option>
               </select>
             </div>
@@ -139,7 +146,9 @@ function AddMediaForm({ onSubmit, onClose }) {
           {/* Date & Venue Row */}
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="watchedDate">Date Watched / Started</label>
+              <label htmlFor="watchedDate">
+                {type === 'game' ? 'Date Started / Played' : 'Date Watched'}
+              </label>
               <input
                 id="watchedDate"
                 type="date"
@@ -147,13 +156,26 @@ function AddMediaForm({ onSubmit, onClose }) {
                 onChange={(e) => setWatchedDate(e.target.value)}
               />
             </div>
-            <div className="form-group">
-              <label htmlFor="venue">Venue</label>
-              <select id="venue" value={venue} onChange={(e) => setVenue(e.target.value)}>
-                <option value="">Default (Home / Device)</option>
-                <option value="theatre">🎭 Theatre / Cinema</option>
-              </select>
-            </div>
+            {type !== 'game' ? (
+              <div className="form-group">
+                <label htmlFor="venue">Venue</label>
+                <select id="venue" value={venue} onChange={(e) => setVenue(e.target.value)}>
+                  <option value="">Default (Home / Device)</option>
+                  <option value="theatre">🎭 Theatre / Cinema</option>
+                </select>
+              </div>
+            ) : (
+              <div className="form-group">
+                <label htmlFor="platform">Platform</label>
+                <input
+                  id="platform"
+                  type="text"
+                  placeholder="e.g. PC, Mobile, PS5, Switch"
+                  value={platform}
+                  onChange={(e) => setPlatform(e.target.value)}
+                />
+              </div>
+            )}
           </div>
 
           {/* Specific Gaming Hour tracking inputs */}
@@ -196,6 +218,57 @@ function AddMediaForm({ onSubmit, onClose }) {
               />
             </div>
           )}
+
+          {/* Rating (1-5 Interactive Stars) */}
+          <div className="form-group">
+            <div className="label-with-action">
+              <label>Your Rating</label>
+              {rating > 0 && (
+                <button
+                  type="button"
+                  className="btn-clear-rating"
+                  onClick={() => setRating(0)}
+                >
+                  Clear ({rating}.0 ★)
+                </button>
+              )}
+            </div>
+            <div className="star-rating-form-group">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  className={`star-form-btn ${(hoverRating || rating) >= star ? 'active' : ''}`}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(0)}
+                  onClick={() => setRating(rating === star ? 0 : star)}
+                >
+                  ★
+                </button>
+              ))}
+              <span className="star-rating-desc">
+                {rating === 5 && 'Masterpiece 🏆'}
+                {rating === 4 && 'Great & Recommended ⭐'}
+                {rating === 3 && 'Solid / Enjoyable 👍'}
+                {rating === 2 && 'Mediocre / Flawed 😐'}
+                {rating === 1 && 'Disappointing ❌'}
+                {rating === 0 && 'Unrated'}
+              </span>
+            </div>
+          </div>
+
+          {/* Review / Personal Thoughts */}
+          <div className="form-group">
+            <label htmlFor="review">Review / Personal Thoughts</label>
+            <textarea
+              id="review"
+              rows="3"
+              className="form-textarea"
+              placeholder="e.g. Loved it, peak pacing and audio. Main story was incredible..."
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+            />
+          </div>
 
           <div className="form-group">
             <label htmlFor="poster">Cover / Poster Image URL (Optional)</label>

@@ -268,3 +268,74 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Star Rating Picker in Add Form ── */
+.star-rating-form-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.star-form-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  color: #4b5563;
+  cursor: pointer;
+  padding: 0.1rem 0.2rem;
+  transition: transform 0.15s, color 0.15s;
+  line-height: 1;
+}
+
+.star-form-btn:hover {
+  transform: scale(1.2);
+  color: #fbbf24;
+}
+
+.star-form-btn.active {
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+}
+
+.star-rating-desc {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+.btn-clear-rating {
+  background: transparent;
+  border: none;
+  color: #fca5a5;
+  font-size: 0.72rem;
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+.btn-clear-rating:hover {
+  text-decoration: underline;
+}
+
+.form-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.88rem;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+}
+
+.form-textarea:focus {
+  border-color: #8083ff;
+  box-shadow: 0 0 0 2px rgba(128, 131, 255, 0.2);
+}

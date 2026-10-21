@@ -13,10 +13,6 @@ module.exports = {
       minBingeDays: 2, // 2+ days with 3+ items logged
       minWeeklyBurst: 5,
     },
-    completionist: {
-      minStarted: 8,
-      minRate: 0.75, // 75%+ completion rate
-    },
     masterGamer: {
       minHours: 15,
       minShare: 0.15,

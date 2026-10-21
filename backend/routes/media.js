@@ -186,6 +186,7 @@ async function searchCoverCandidates(query, type = 'movie', year = '', hint = ''
               type: 'game',
               poster: img,
               source: 'AppStore',
+              genres: item.genres || ['Game'],
               summary: item.genres ? item.genres.join(', ') : '',
             });
           }
@@ -265,6 +266,8 @@ async function searchCoverCandidates(query, type = 'movie', year = '', hint = ''
               type: 'show',
               poster: img,
               source: 'TVMaze',
+              genres: show.genres || [],
+              runtimeMinutes: show.averageRuntime || show.runtime || 45,
               summary: show.summary ? show.summary.replace(/<[^>]+>/g, '').slice(0, 150) + '...' : '',
             });
           }
@@ -333,10 +336,34 @@ async function fetchMetadata(rawTitle, type = 'movie', year = '', hint = '') {
         return matchType && matchYear;
       }) || candidates.find((c) => c.type === type) || candidates[0];
 
+      let genres = exactMatch.genres || [];
+      let runtimeMinutes = exactMatch.runtimeMinutes || 0;
+
+      // If OMDb candidate with imdbID, fetch full details for genres and runtime
+      if (exactMatch.imdbID && (genres.length === 0 || !runtimeMinutes)) {
+        try {
+          const detailRes = await fetch(
+            `https://www.omdbapi.com/?i=${exactMatch.imdbID}&apikey=trilogy`,
+            { signal: AbortSignal.timeout(3000) }
+          );
+          if (detailRes.ok) {
+            const detail = await detailRes.json();
+            if (detail.Genre && detail.Genre !== 'N/A') {
+              genres = detail.Genre.split(',').map((g) => g.trim());
+            }
+            if (detail.Runtime && detail.Runtime !== 'N/A') {
+              const parsed = parseInt(detail.Runtime, 10);
+              if (!isNaN(parsed)) runtimeMinutes = parsed;
+            }
+          }
+        } catch (e) {}
+      }
+
       return {
         poster: exactMatch.poster,
         year: exactMatch.year,
-        genres: [],
+        genres,
+        runtimeMinutes,
         summary: exactMatch.summary || '',
       };
     }
@@ -421,13 +448,14 @@ router.get('/stats', async (req, res) => {
   const gamesCompleted = games.filter((g) => g.status === 'completed').length;
   const gamesDropped = games.filter((g) => g.status === 'dropped').length;
 
-  // 7. Monthly Distribution (Jan - Dec)
+  // 7. Monthly Distribution (Jan - Dec) with Full Title Lists & Comparison
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const monthlyData = monthNames.map((name, idx) => {
     const monthIndexStr = String(idx + 1).padStart(2, '0');
     const monthItems = media.filter((m) => {
-      if (!m.watchedDate) return false;
-      const parts = m.watchedDate.split('-');
+      const date = m.watchedDate || m.playedFrom || (m.playedMonth ? `${m.playedMonth}-01` : '');
+      if (!date) return false;
+      const parts = date.split('-');
       return parts.length >= 2 && parts[1] === monthIndexStr;
     });
 
@@ -439,8 +467,30 @@ router.get('/stats', async (req, res) => {
       shows: monthItems.filter((m) => m.type === 'show').length,
       games: monthItems.filter((m) => m.type === 'game').length,
       theatre: monthItems.filter((m) => m.venue === 'theatre').length,
+      items: monthItems.map((m) => ({
+        id: m.id,
+        title: m.title,
+        type: m.type,
+        poster: m.poster,
+        rating: m.rating,
+        venue: m.venue,
+        watchedDate: m.watchedDate || m.playedFrom || m.playedMonth,
+        notes: m.notes,
+        replay: m.replay,
+        status: m.status,
+      })),
     };
   });
+
+  // Calculate Real Watch Hours from runtimeMinutes
+  let totalWatchMinutes = 0;
+  movies.forEach((m) => {
+    totalWatchMinutes += m.runtimeMinutes || 120;
+  });
+  shows.forEach((s) => {
+    totalWatchMinutes += s.runtimeMinutes ? s.runtimeMinutes * 6 : 45 * 8;
+  });
+  const totalWatchHours = Number((totalWatchMinutes / 60).toFixed(1));
 
   // Calculate Peak & Driest Month (among months with activity)
   let peakMonth = null;
@@ -515,6 +565,7 @@ router.get('/stats', async (req, res) => {
     year: reqYear,
     availableYears,
     total: media.length,
+    watchHours: totalWatchHours,
     moviesCount: movies.length,
     showsCount: shows.length,
     gamesCount: games.length,
@@ -567,6 +618,17 @@ router.post('/', async (req, res) => {
     venue,
     notes,
     importedFrom,
+    rating,
+    review,
+    genres,
+    runtimeMinutes,
+    playedFrom,
+    playedTo,
+    playedMonth,
+    replay,
+    dateConfidence,
+    needsCheck,
+    platform,
   } = req.body;
 
   if (!title || !type) {
@@ -574,28 +636,42 @@ router.post('/', async (req, res) => {
   }
 
   let finalPoster = poster || '';
-  if (!finalPoster) {
+  let finalGenres = Array.isArray(genres) ? genres : [];
+  let finalRuntime = Number(runtimeMinutes) || 0;
+
+  if (!finalPoster || finalGenres.length === 0 || !finalRuntime) {
     const yearHint = watchedDate ? watchedDate.slice(0, 4) : '';
     const meta = await fetchMetadata(title, type, yearHint, notes || '');
-    if (meta && meta.poster) {
-      finalPoster = meta.poster;
+    if (meta) {
+      if (!finalPoster && meta.poster) finalPoster = meta.poster;
+      if (finalGenres.length === 0 && meta.genres) finalGenres = meta.genres;
+      if (!finalRuntime && meta.runtimeMinutes) finalRuntime = meta.runtimeMinutes;
     }
   }
 
   const newItem = await addMediaItem({
     title: title.trim(),
     type,
-    status: status || 'plan_to_watch',
+    status: status || (replay ? 'rewatch' : 'plan_to_watch'),
     progress: progress || '',
     poster: finalPoster,
     hoursPlayed: Number(hoursPlayed) || 0,
     targetHours: Number(targetHours) || 0,
-    watchedDate: watchedDate || '',
+    watchedDate: watchedDate || playedFrom || '',
     venue: venue || '',
     notes: notes || '',
     importedFrom: importedFrom || 'manual',
-    rating: null,
-    review: '',
+    rating: rating !== undefined && rating !== null && rating !== '' ? Number(rating) : null,
+    review: review || '',
+    genres: finalGenres,
+    runtimeMinutes: finalRuntime,
+    playedFrom: playedFrom || '',
+    playedTo: playedTo || '',
+    playedMonth: playedMonth || '',
+    replay: Boolean(replay),
+    dateConfidence: dateConfidence || '',
+    needsCheck: needsCheck || '',
+    platform: platform || '',
   });
 
   res.status(201).json(newItem);
@@ -613,17 +689,26 @@ router.post('/bulk', async (req, res) => {
   const rawItems = items.map((rawItem) => ({
     title: (rawItem.title || '').trim(),
     type: rawItem.type || 'movie',
-    status: rawItem.status || 'completed',
+    status: rawItem.status || (rawItem.replay ? 'rewatch' : 'completed'),
     progress: rawItem.progress || '',
     poster: rawItem.poster || '',
     hoursPlayed: Number(rawItem.hoursPlayed) || 0,
     targetHours: Number(rawItem.targetHours) || 0,
-    watchedDate: rawItem.watchedDate || '',
+    watchedDate: rawItem.watchedDate || rawItem.playedFrom || '',
     venue: rawItem.venue || '',
     notes: rawItem.notes || '',
     importedFrom: rawItem.importedFrom || 'bulk_import',
-    rating: rawItem.rating || null,
+    rating: rawItem.rating !== undefined && rawItem.rating !== null ? Number(rawItem.rating) : null,
     review: rawItem.review || '',
+    genres: Array.isArray(rawItem.genres) ? rawItem.genres : [],
+    runtimeMinutes: Number(rawItem.runtimeMinutes) || 0,
+    playedFrom: rawItem.playedFrom || '',
+    playedTo: rawItem.playedTo || '',
+    playedMonth: rawItem.playedMonth || '',
+    replay: Boolean(rawItem.replay),
+    dateConfidence: rawItem.dateConfidence || '',
+    needsCheck: rawItem.needsCheck || '',
+    platform: rawItem.platform || '',
   }));
 
   const createdItems = await bulkAddMediaItems(rawItems);
@@ -632,7 +717,7 @@ router.post('/bulk', async (req, res) => {
   // Fast background cover resolution worker
   setImmediate(async () => {
     try {
-      const needsPosters = createdItems.filter((i) => !i.poster && i.title);
+      const needsPosters = createdItems.filter((i) => (!i.poster || (i.genres && i.genres.length === 0)) && i.title);
       const BATCH = 4;
       for (let b = 0; b < needsPosters.length; b += BATCH) {
         const slice = needsPosters.slice(b, b + BATCH);
@@ -645,8 +730,14 @@ router.post('/bulk', async (req, res) => {
                 item.watchedDate ? item.watchedDate.slice(0, 4) : '',
                 item.notes || ''
               );
-              if (meta && meta.poster) {
-                await updateMediaItem(item.id, { poster: meta.poster });
+              if (meta) {
+                const patchData = {};
+                if (!item.poster && meta.poster) patchData.poster = meta.poster;
+                if ((!item.genres || item.genres.length === 0) && meta.genres) patchData.genres = meta.genres;
+                if (!item.runtimeMinutes && meta.runtimeMinutes) patchData.runtimeMinutes = meta.runtimeMinutes;
+                if (Object.keys(patchData).length > 0) {
+                  await updateMediaItem(item.id, patchData);
+                }
               }
             } catch (e) {}
           })

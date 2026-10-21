@@ -449,7 +449,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.748Z"
+      "createdAt": "2026-10-19T15:47:37.748Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Thriller"
+      ],
+      "runtimeMinutes": 116
     },
     {
       "id": 31,
@@ -466,7 +472,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.812Z"
+      "createdAt": "2026-10-19T15:47:37.812Z",
+      "genres": [
+        "Drama",
+        "Romance"
+      ],
+      "runtimeMinutes": 108
     },
     {
       "id": 32,
@@ -483,7 +494,9 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.852Z"
+      "createdAt": "2026-10-19T15:47:37.852Z",
+      "genres": [],
+      "runtimeMinutes": 117
     },
     {
       "id": 33,
@@ -500,7 +513,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:38.060Z"
+      "createdAt": "2026-10-19T15:47:38.060Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtimeMinutes": 154
     },
     {
       "id": 34,
@@ -517,7 +536,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:38.121Z"
+      "createdAt": "2026-10-19T15:47:38.121Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtimeMinutes": 98
     },
     {
       "id": 35,
@@ -534,7 +559,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:38.361Z"
+      "createdAt": "2026-10-19T15:47:38.361Z",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Sport"
+      ],
+      "runtimeMinutes": 146
     },
     {
       "id": 36,
@@ -551,7 +582,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:38.833Z"
+      "createdAt": "2026-10-19T15:47:38.833Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 107
     },
     {
       "id": 37,
@@ -568,7 +605,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:38.833Z"
+      "createdAt": "2026-10-19T15:47:38.833Z",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Music"
+      ],
+      "runtimeMinutes": 128
     },
     {
       "id": 38,
@@ -585,7 +628,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:38.834Z"
+      "createdAt": "2026-10-19T15:47:38.834Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Thriller"
+      ],
+      "runtimeMinutes": 145
     },
     {
       "id": 39,
@@ -602,7 +651,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:39.788Z"
+      "createdAt": "2026-10-19T15:47:39.788Z",
+      "genres": [
+        "Comedy",
+        "Romance"
+      ],
+      "runtimeMinutes": 103
     },
     {
       "id": 40,
@@ -619,7 +673,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:40.049Z"
+      "createdAt": "2026-10-19T15:47:40.049Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtimeMinutes": 106
     },
     {
       "id": 41,
@@ -653,7 +713,11 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:40.049Z"
+      "createdAt": "2026-10-19T15:47:40.049Z",
+      "genres": [
+        "Comedy"
+      ],
+      "runtimeMinutes": 0
     },
     {
       "id": 43,
@@ -670,7 +734,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:40.388Z"
+      "createdAt": "2026-10-19T15:47:40.388Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 118
     },
     {
       "id": 44,
@@ -687,7 +757,11 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:40.399Z"
+      "createdAt": "2026-10-19T15:47:40.399Z",
+      "genres": [
+        "Drama"
+      ],
+      "runtimeMinutes": 142
     },
     {
       "id": 46,
@@ -704,7 +778,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:56.093Z"
+      "createdAt": "2026-10-19T15:47:56.093Z",
+      "genres": [
+        "Drama",
+        "Romance",
+        "Sport"
+      ],
+      "runtimeMinutes": 78
     },
     {
       "id": 55,
@@ -721,7 +801,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:36.947Z"
+      "createdAt": "2026-10-19T17:16:36.947Z",
+      "genres": [
+        "Comedy",
+        "Romance"
+      ],
+      "runtimeMinutes": 92
     },
     {
       "id": 56,
@@ -738,7 +823,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:37.000Z"
+      "createdAt": "2026-10-19T17:16:37.000Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtimeMinutes": 168
     },
     {
       "id": 57,
@@ -755,7 +846,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:38.148Z"
+      "createdAt": "2026-10-19T17:16:38.148Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtimeMinutes": 139
     },
     {
       "id": 58,
@@ -789,7 +886,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:44.672Z"
+      "createdAt": "2026-10-19T17:16:44.672Z",
+      "genres": [
+        "Drama",
+        "Family"
+      ],
+      "runtimeMinutes": 177
     },
     {
       "id": 60,
@@ -806,7 +908,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:46.909Z"
+      "createdAt": "2026-10-19T17:16:46.909Z",
+      "genres": [
+        "Action",
+        "Horror",
+        "Thriller"
+      ],
+      "runtimeMinutes": 118
     },
     {
       "id": 61,
@@ -874,7 +982,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:47.562Z"
+      "createdAt": "2026-10-19T17:16:47.562Z",
+      "genres": [
+        "Game-Show",
+        "Music"
+      ],
+      "runtimeMinutes": 0
     },
     {
       "id": 75,
@@ -891,7 +1004,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:22.697Z"
+      "createdAt": "2026-10-19T17:19:22.697Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtimeMinutes": 165
     },
     {
       "id": 76,
@@ -908,7 +1027,11 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:22.997Z"
+      "createdAt": "2026-10-19T17:19:22.997Z",
+      "genres": [
+        "Horror"
+      ],
+      "runtimeMinutes": 137
     },
     {
       "id": 77,
@@ -942,7 +1065,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:26.011Z"
+      "createdAt": "2026-10-19T17:19:26.011Z",
+      "genres": [
+        "Horror",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtimeMinutes": 127
     },
     {
       "id": 79,
@@ -959,7 +1088,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:26.096Z"
+      "createdAt": "2026-10-19T17:19:26.096Z",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "runtimeMinutes": 99
     },
     {
       "id": 80,
@@ -976,7 +1111,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:26.716Z"
+      "createdAt": "2026-10-19T17:19:26.716Z",
+      "genres": [
+        "Action",
+        "Drama"
+      ],
+      "runtimeMinutes": 117
     },
     {
       "id": 81,
@@ -993,7 +1133,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:26.732Z"
+      "createdAt": "2026-10-19T17:19:26.732Z",
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Comedy"
+      ],
+      "runtimeMinutes": 106
     },
     {
       "id": 82,
@@ -1010,7 +1156,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:28.491Z"
+      "createdAt": "2026-10-19T17:19:28.491Z",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "runtimeMinutes": 97
     },
     {
       "id": 83,
@@ -1044,7 +1196,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:30.884Z"
+      "createdAt": "2026-10-19T17:19:30.884Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtimeMinutes": 181
     },
     {
       "id": 160,
@@ -1061,7 +1219,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 143
     },
     {
       "id": 161,
@@ -1095,7 +1259,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Short",
+        "Comedy"
+      ],
+      "runtimeMinutes": 3
     },
     {
       "id": 163,
@@ -1112,7 +1281,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Animation",
+        "Action",
+        "Adventure"
+      ],
+      "runtimeMinutes": 108
     },
     {
       "id": 164,
@@ -1129,7 +1304,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Thriller"
+      ],
+      "runtimeMinutes": 155
     },
     {
       "id": 165,
@@ -1146,7 +1327,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtimeMinutes": 168
     },
     {
       "id": 166,
@@ -1163,7 +1350,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 129
     },
     {
       "id": 167,
@@ -1180,7 +1373,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Drama",
+        "Sport"
+      ],
+      "runtimeMinutes": 155
     },
     {
       "id": 168,
@@ -1197,7 +1395,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtimeMinutes": 179
     },
     {
       "id": 169,
@@ -1231,7 +1435,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Horror"
+      ],
+      "runtimeMinutes": 82
     },
     {
       "id": 171,
@@ -1248,7 +1458,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Comedy"
+      ],
+      "runtimeMinutes": 102
     },
     {
       "id": 172,
@@ -1265,7 +1481,11 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Drama"
+      ],
+      "runtimeMinutes": 0
     },
     {
       "id": 173,
@@ -1282,7 +1502,11 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 120
     },
     {
       "id": 174,
@@ -1299,7 +1523,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtimeMinutes": 143
     },
     {
       "id": 175,
@@ -1333,7 +1563,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "runtimeMinutes": 168
     },
     {
       "id": 177,
@@ -1367,7 +1603,11 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Short"
+      ],
+      "runtimeMinutes": 0
     },
     {
       "id": 179,
@@ -1401,7 +1641,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Mystery",
+        "Thriller"
+      ],
+      "runtimeMinutes": 113
     },
     {
       "id": 181,
@@ -1418,7 +1663,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Animation",
+        "Short"
+      ],
+      "runtimeMinutes": 5
     },
     {
       "id": 182,
@@ -1435,7 +1685,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Biography",
+        "Drama",
+        "History"
+      ],
+      "runtimeMinutes": 180
     },
     {
       "id": 183,
@@ -1452,7 +1708,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 115
     },
     {
       "id": 184,
@@ -1469,7 +1731,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Adventure",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "runtimeMinutes": 148
     },
     {
       "id": 185,
@@ -1486,7 +1754,11 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Western"
+      ],
+      "runtimeMinutes": 0
     },
     {
       "id": 186,
@@ -1503,7 +1775,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "runtimeMinutes": 116
     },
     {
       "id": 187,
@@ -1537,7 +1815,11 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Documentary"
+      ],
+      "runtimeMinutes": 52
     },
     {
       "id": 189,
@@ -1554,7 +1836,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Thriller"
+      ],
+      "runtimeMinutes": 148
     },
     {
       "id": 190,
@@ -1571,7 +1858,957 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Thriller"
+      ],
+      "runtimeMinutes": 145
+    },
+    {
+      "title": "Pokemon Unite",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-01-01",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-01",
+      "replay": false,
+      "dateConfidence": "month_only",
+      "needsCheck": "",
+      "platform": "",
+      "id": 191
+    },
+    {
+      "title": "Game of Thrones: Kingsroad",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-01-04",
+      "venue": "",
+      "notes": "Promising but not optimised enough",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-01-04",
+      "playedTo": "2026-01-06",
+      "playedMonth": "2026-01",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 192
+    },
+    {
+      "title": "Delta Force",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-01-06",
+      "venue": "",
+      "notes": "Was good, skill-based matchmaking",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-01-06",
+      "playedTo": "2026-01-16",
+      "playedMonth": "2026-01",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 193
+    },
+    {
+      "title": "Where Winds Meet",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-01-17",
+      "venue": "",
+      "notes": "Looks good; battery / interest",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-01-17",
+      "playedTo": "",
+      "playedMonth": "2026-01",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 194
+    },
+    {
+      "title": "Pokemon Emerald",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-01-19",
+      "venue": "",
+      "notes": "Obsessed",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-01-19",
+      "playedTo": "",
+      "playedMonth": "2026-01",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 195
+    },
+    {
+      "title": "Bus Simulator Indonesia",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-01-27",
+      "venue": "",
+      "notes": "Chill, mobile graphics",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-01-27",
+      "playedTo": "",
+      "playedMonth": "2026-01",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 196
+    },
+    {
+      "title": "Detention",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-02-02",
+      "venue": "",
+      "notes": "Nothing special, not appealing",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-02-02",
+      "playedTo": "",
+      "playedMonth": "2026-02",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 197
+    },
+    {
+      "title": "Truckers of Europe 3",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-02-12",
+      "venue": "",
+      "notes": "Boring routes, trailer bugs",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-02-12",
+      "playedTo": "",
+      "playedMonth": "2026-02",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 198
+    },
+    {
+      "title": "Life is Strange",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-02-01",
+      "venue": "",
+      "notes": "Good",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-02",
+      "replay": false,
+      "dateConfidence": "month_only",
+      "needsCheck": "",
+      "platform": "",
+      "id": 199
+    },
+    {
+      "title": "EA Cricket 07",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-02-01",
+      "venue": "",
+      "notes": "Nice",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-02",
+      "replay": false,
+      "dateConfidence": "month_only",
+      "needsCheck": "",
+      "platform": "",
+      "id": 200
+    },
+    {
+      "title": "ARK",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-02-01",
+      "venue": "",
+      "notes": "Meh",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-02",
+      "replay": false,
+      "dateConfidence": "month_only",
+      "needsCheck": "",
+      "platform": "",
+      "id": 201
+    },
+    {
+      "title": "Pokemon GO",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-02-01",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-02",
+      "replay": false,
+      "dateConfidence": "month_only",
+      "needsCheck": "",
+      "platform": "",
+      "id": 202
+    },
+    {
+      "title": "Pokemon Unite",
+      "type": "game",
+      "status": "rewatch",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-02-25",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-02-25",
+      "playedTo": "",
+      "playedMonth": "2026-02",
+      "replay": true,
+      "dateConfidence": "exact",
+      "needsCheck": "Second Pokemon Unite entry (first was January). Confirm it is a return/replay.",
+      "platform": "",
+      "id": 203
+    },
+    {
+      "title": "Call of Duty",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-03-09",
+      "venue": "",
+      "notes": "Boring",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-03-09",
+      "playedTo": "",
+      "playedMonth": "2026-03",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "Which Call of Duty? (mobile / other)",
+      "platform": "",
+      "id": 204
+    },
+    {
+      "title": "God of War",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-03-12",
+      "venue": "",
+      "notes": "It's gooood",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-03-12",
+      "playedTo": "",
+      "playedMonth": "2026-03",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 205
+    },
+    {
+      "title": "WWE SmackDown! Here Comes the Pain",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-03-12",
+      "venue": "",
+      "notes": "Is gooood",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-03-12",
+      "playedTo": "",
+      "playedMonth": "2026-03",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 206
+    },
+    {
+      "title": "Pokemon Platinum",
+      "type": "game",
+      "status": "dropped",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-03-18",
+      "venue": "",
+      "notes": "Stopped playing: lost interest in watching Pokemon and didn't complete the season the game is based on",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-03-18",
+      "playedTo": "",
+      "playedMonth": "2026-03",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 207
+    },
+    {
+      "title": "Rainbow Six Mobile",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-03-01",
+      "venue": "",
+      "notes": "Good, but a lot of sweaty lobbies",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-03",
+      "replay": false,
+      "dateConfidence": "month_only",
+      "needsCheck": "",
+      "platform": "",
+      "id": 208
+    },
+    {
+      "title": "Real Cricket 17",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-04-01",
+      "venue": "",
+      "notes": "Addicted",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-04",
+      "replay": false,
+      "dateConfidence": "inferred_month",
+      "needsCheck": "Month inferred from grouping (between March and June); confirm April. Title assumed Real Cricket 17.",
+      "platform": "",
+      "id": 209
+    },
+    {
+      "title": "Real Cricket 20",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-04-01",
+      "venue": "",
+      "notes": "Mm",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-04",
+      "replay": false,
+      "dateConfidence": "inferred_month",
+      "needsCheck": "Month inferred from grouping; confirm April. Title assumed Real Cricket 20.",
+      "platform": "",
+      "id": 210
+    },
+    {
+      "title": "BGMI",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-05-01",
+      "venue": "",
+      "notes": "A lot of sweaty lobbies and have to grind",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-05",
+      "replay": false,
+      "dateConfidence": "inferred_month",
+      "needsCheck": "Month inferred from grouping; confirm May.",
+      "platform": "",
+      "id": 211
+    },
+    {
+      "title": "Red Dead Redemption",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-06-03",
+      "venue": "",
+      "notes": "Loved it, peak. Main story 3-19 June, DLC until 22 June",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-06-03",
+      "playedTo": "2026-06-22",
+      "playedMonth": "2026-06",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "Confirm this is Red Dead Redemption (1), since the DLC mention fits Undead Nightmare, not RDR2.",
+      "platform": "",
+      "id": 212
+    },
+    {
+      "title": "Skyrim",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-06-10",
+      "venue": "",
+      "notes": "Could have had a better experience on PC",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-06-10",
+      "playedTo": "",
+      "playedMonth": "2026-06",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 213
+    },
+    {
+      "title": "The Walking Dead: Season Two",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-06-22",
+      "venue": "",
+      "notes": "Peak",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-06-22",
+      "playedTo": "2026-06-23",
+      "playedMonth": "2026-06",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 214
+    },
+    {
+      "title": "The Walking Dead: Season Three",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-06-24",
+      "venue": "",
+      "notes": "Peak",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-06-24",
+      "playedTo": "2026-06-26",
+      "playedMonth": "2026-06",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 215
+    },
+    {
+      "title": "Grand Theft Auto: San Andreas",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-06-26",
+      "venue": "",
+      "notes": "Mediocre, feels outdated",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-06-26",
+      "playedTo": "",
+      "playedMonth": "2026-06",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "Log says end date 09/06, which is before the 26/06 start. Likely 09/07; confirm.",
+      "platform": "",
+      "id": 216
+    },
+    {
+      "title": "Devil May Cry 3",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-07-13",
+      "venue": "",
+      "notes": "Too sweaty, and no controller makes it tough",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-07-13",
+      "playedTo": "2026-07-14",
+      "playedMonth": "2026-07",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 217
+    },
+    {
+      "title": "Silent Hill 2",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-07-14",
+      "venue": "",
+      "notes": "Outdated",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-07-14",
+      "playedTo": "2026-07-18",
+      "playedMonth": "2026-07",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 218
+    },
+    {
+      "title": "God of War II",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-07-15",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-07-15",
+      "playedTo": "2026-07-22",
+      "playedMonth": "2026-07",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 219
+    },
+    {
+      "title": "Call of Duty: WWII",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-07-23",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-07-23",
+      "playedTo": "",
+      "playedMonth": "2026-07",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 220
+    },
+    {
+      "title": "BGMI",
+      "type": "game",
+      "status": "rewatch",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-07-01",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-07",
+      "replay": true,
+      "dateConfidence": "inferred_month",
+      "needsCheck": "Undated mention in the July group; confirm month and that it is a return to BGMI.",
+      "platform": "",
+      "id": 221
+    },
+    {
+      "title": "Bus Simulator Indonesia",
+      "type": "game",
+      "status": "rewatch",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-07-01",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "2026-07",
+      "replay": true,
+      "dateConfidence": "inferred_month",
+      "needsCheck": "Undated mention in the July group; confirm month and that it is a return to BUSSID.",
+      "platform": "",
+      "id": 222
+    },
+    {
+      "title": "Super Cricket 2",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "",
+      "playedTo": "",
+      "playedMonth": "",
+      "replay": false,
+      "dateConfidence": "unknown",
+      "needsCheck": "No date. Listed after July entries and before October.",
+      "platform": "",
+      "id": 223
+    },
+    {
+      "title": "Super Cricket 3",
+      "type": "game",
+      "status": "completed",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-10-02",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-10-02",
+      "playedTo": "",
+      "playedMonth": "2026-10",
+      "replay": false,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 224
+    },
+    {
+      "title": "Pokemon Platinum",
+      "type": "game",
+      "status": "rewatch",
+      "progress": "",
+      "poster": "",
+      "hoursPlayed": 0,
+      "targetHours": 0,
+      "watchedDate": "2026-10-03",
+      "venue": "",
+      "notes": "",
+      "importedFrom": "game_log_2026",
+      "rating": null,
+      "review": "",
+      "genres": [
+        "Game"
+      ],
+      "runtimeMinutes": 0,
+      "playedFrom": "2026-10-03",
+      "playedTo": "",
+      "playedMonth": "2026-10",
+      "replay": true,
+      "dateConfidence": "exact",
+      "needsCheck": "",
+      "platform": "",
+      "id": 225
     }
   ],
   "nextId": 192

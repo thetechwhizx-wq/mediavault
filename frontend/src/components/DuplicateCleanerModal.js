@@ -17,7 +17,7 @@ function DuplicateCleanerModal({
   onUpdateOne,
   onClose,
 }) {
-  const [filterMode, setFilterMode] = useState('all'); // 'all', 'rewatches', 'exact'
+  const [filterMode, setFilterMode] = useState('exact'); // 'exact', 'rewatches', 'all'
   const [dismissedKeys, setDismissedKeys] = useState(new Set());
   const [selectedDeletes, setSelectedDeletes] = useState({}); // groupKey -> idToDelete
   const [isDeleting, setIsDeleting] = useState(false);
@@ -44,16 +44,18 @@ function DuplicateCleanerModal({
 
         const datesDiffer =
           itemA.watchedDate && itemB.watchedDate && itemA.watchedDate !== itemB.watchedDate;
-        const notesSayRewatch =
-          (itemA.notes && /rewatch/i.test(itemA.notes)) ||
-          (itemB.notes && /rewatch/i.test(itemB.notes)) ||
-          itemA.status === 'rewatch' ||
-          itemB.status === 'rewatch';
+        
+        const hasRewatchFlag = items.some(
+          (m) =>
+            m.status === 'rewatch' ||
+            m.replay ||
+            (m.notes && /rewatch|replay/i.test(m.notes))
+        );
 
-        const isPotentialRewatch = Boolean(datesDiffer || notesSayRewatch);
-        const hasDifferentStatus =
-          itemA.status !== itemB.status || itemA.notes !== itemB.notes;
-        const isExactDuplicate = !datesDiffer && !hasDifferentStatus;
+        const isConfirmedRewatch = Boolean(hasRewatchFlag || (datesDiffer && items.some((m) => m.status === 'rewatch' || m.replay)));
+        const isPotentialRewatch = Boolean(datesDiffer && !hasRewatchFlag);
+        const hasDifferentStatus = itemA.status !== itemB.status || itemA.notes !== itemB.notes;
+        const isExactDuplicate = !isConfirmedRewatch && (!datesDiffer || !hasDifferentStatus);
 
         groups.push({
           key,
@@ -62,6 +64,7 @@ function DuplicateCleanerModal({
           items: sorted,
           itemA,
           itemB,
+          isConfirmedRewatch,
           isPotentialRewatch,
           hasDifferentStatus,
           isExactDuplicate,
@@ -75,21 +78,17 @@ function DuplicateCleanerModal({
 
   // Filter groups according to active tab
   const filteredGroups = useMemo(() => {
-    if (filterMode === 'rewatches') {
-      return duplicateGroups.filter((g) => g.isPotentialRewatch);
-    }
     if (filterMode === 'exact') {
-      return duplicateGroups.filter((g) => g.isExactDuplicate);
+      return duplicateGroups.filter((g) => !g.isConfirmedRewatch);
+    }
+    if (filterMode === 'rewatches') {
+      return duplicateGroups.filter((g) => g.isConfirmedRewatch || g.isPotentialRewatch);
     }
     return duplicateGroups;
   }, [duplicateGroups, filterMode]);
 
-  const potentialRewatchesCount = duplicateGroups.filter(
-    (g) => g.isPotentialRewatch
-  ).length;
-  const exactDuplicatesCount = duplicateGroups.filter(
-    (g) => g.isExactDuplicate
-  ).length;
+  const unresolvedDuplicatesCount = duplicateGroups.filter((g) => !g.isConfirmedRewatch).length;
+  const rewatchesCount = duplicateGroups.filter((g) => g.isConfirmedRewatch || g.isPotentialRewatch).length;
 
   // By default, mark Item B (the later copy) as the one to delete
   const getIdToDelete = (group) => {
@@ -138,7 +137,8 @@ function DuplicateCleanerModal({
       setIsDeleting(true);
       await onUpdateOne(laterItem.id, {
         status: 'rewatch',
-        notes: laterItem.notes ? `${laterItem.notes} (rewatch)` : 'rewatch',
+        replay: true,
+        notes: laterItem.notes ? (laterItem.notes.includes('rewatch') ? laterItem.notes : `${laterItem.notes} (rewatch)`) : 'rewatch',
       });
       // Mark as resolved
       setDismissedKeys((prev) => new Set([...prev, group.key]));
@@ -156,14 +156,14 @@ function DuplicateCleanerModal({
 
   // 1-Click Clean all exact duplicates (Safely excludes potential rewatches)
   const handleCleanAllExact = async () => {
-    const exactGroups = duplicateGroups.filter((g) => g.isExactDuplicate);
+    const exactGroups = duplicateGroups.filter((g) => !g.isConfirmedRewatch);
     if (exactGroups.length === 0) return;
 
     const idsToDelete = exactGroups.map((g) => getIdToDelete(g));
 
     if (
       !window.confirm(
-        `Are you sure you want to clean ${idsToDelete.length} exact duplicates?\n\n(Potential rewatches with different watch dates will NOT be touched)`
+        `Are you sure you want to clean ${idsToDelete.length} exact duplicates?\n\n(Intentional rewatches with different watch dates will NOT be touched)`
       )
     ) {
       return;
@@ -206,33 +206,33 @@ function DuplicateCleanerModal({
         <div className="dup-tabs-bar">
           <div className="dup-tabs">
             <button
-              className={`dup-tab ${filterMode === 'all' ? 'active' : ''}`}
-              onClick={() => setFilterMode('all')}
-            >
-              All ({duplicateGroups.length})
-            </button>
-            <button
               className={`dup-tab ${filterMode === 'exact' ? 'active' : ''}`}
               onClick={() => setFilterMode('exact')}
             >
-              Exact Duplicates ({exactDuplicatesCount})
+              Exact Duplicates ({unresolvedDuplicatesCount})
             </button>
             <button
               className={`dup-tab ${filterMode === 'rewatches' ? 'active' : ''}`}
               onClick={() => setFilterMode('rewatches')}
             >
-              🔄 Potential Rewatches ({potentialRewatchesCount})
+              🔄 Rewatches & Returns ({rewatchesCount})
+            </button>
+            <button
+              className={`dup-tab ${filterMode === 'all' ? 'active' : ''}`}
+              onClick={() => setFilterMode('all')}
+            >
+              All ({duplicateGroups.length})
             </button>
           </div>
 
-          {exactDuplicatesCount > 0 && (
+          {unresolvedDuplicatesCount > 0 && (
             <button
               className="btn-clean-exact"
               onClick={handleCleanAllExact}
               disabled={isDeleting}
               title="Quickly removes 100% identical duplicates while keeping rewatches safe"
             >
-              ⚡ Clean {exactDuplicatesCount} Exact Duplicates
+              ⚡ Clean {unresolvedDuplicatesCount} Exact Duplicates
             </button>
           )}
         </div>

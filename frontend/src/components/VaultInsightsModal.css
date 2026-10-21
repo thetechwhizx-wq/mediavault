@@ -927,3 +927,193 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* ── Month Drill-Down Card & Interactive Columns ── */
+.kinetic-chart-column {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 0.15rem;
+  transition: all 0.2s;
+}
+
+.kinetic-chart-column:hover {
+  background: rgba(128, 131, 255, 0.1);
+}
+
+.kinetic-chart-column.selected {
+  background: rgba(128, 131, 255, 0.2);
+  outline: 1px solid #8083ff;
+}
+
+.col-fill.selected-bar {
+  background: #4edea3 !important;
+  box-shadow: 0 0 14px rgba(78, 222, 163, 0.6) !important;
+}
+
+.col-month.selected-text {
+  color: #4edea3 !important;
+  font-weight: 800;
+}
+
+.month-drilldown-card {
+  background: #1c2028;
+  border: 1px solid rgba(128, 131, 255, 0.35);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  animation: slideDown 0.25s ease;
+}
+
+.drilldown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.drilldown-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.drilldown-badge {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.drilldown-delta {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+}
+
+.drilldown-delta.positive {
+  background: rgba(78, 222, 163, 0.15);
+  color: #4edea3;
+}
+
+.drilldown-delta.neutral {
+  background: rgba(255, 255, 255, 0.08);
+  color: #c7c4d7;
+}
+
+.btn-close-drilldown {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #908fa0;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-close-drilldown:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.drilldown-stats-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.drilldown-pill {
+  font-size: 0.75rem;
+  background: #262a33;
+  color: #c7c4d7;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+.drilldown-pill strong {
+  color: #ffffff;
+}
+
+.drilldown-items-reel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.drilldown-item-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #181c24;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+  transition: all 0.15s;
+}
+
+.drilldown-item-chip:hover {
+  border-color: rgba(128, 131, 255, 0.3);
+  background: #262a33;
+}
+
+.drilldown-poster-wrap {
+  width: 32px;
+  height: 48px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #0a0e16;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drilldown-poster-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chip-placeholder {
+  font-size: 1rem;
+}
+
+.drilldown-chip-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.drilldown-chip-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drilldown-chip-meta {
+  font-size: 0.68rem;
+  color: #908fa0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drilldown-empty {
+  font-size: 0.8rem;
+  color: #908fa0;
+  margin: 0;
+}

@@ -10,6 +10,10 @@ function Header({
   onInsightsClick,
   duplicateCount = 0,
   onDuplicatesClick,
+  activeTab = 'cinema',
+  onTabChange,
+  gamesCount = 0,
+  cinemaCount = 0,
 }) {
   const searchInputRef = useRef(null);
 
@@ -40,17 +44,58 @@ function Header({
           </div>
         </div>
 
-        {/* Global Search Bar with ⌘K */}
+        {/* Primary Vault Navigation Switcher: Cinema & TV vs Games Vault */}
+        {onTabChange && (
+          <div className="header-vault-tabs">
+            <button
+              className={`vault-tab-btn ${activeTab === 'cinema' ? 'active' : ''}`}
+              onClick={() => onTabChange('cinema')}
+              title="Movies & TV Series"
+            >
+              <span className="material-symbols-outlined tab-icon">movie</span>
+              <span className="tab-label">Cinema & TV</span>
+              {cinemaCount > 0 && <span className="tab-count-pill">{cinemaCount}</span>}
+            </button>
+            <button
+              className={`vault-tab-btn ${activeTab === 'games' ? 'active' : ''}`}
+              onClick={() => onTabChange('games')}
+              title="Dedicated Games Vault"
+            >
+              <span className="material-symbols-outlined tab-icon">sports_esports</span>
+              <span className="tab-label">Games Vault</span>
+              {gamesCount > 0 && <span className="tab-count-pill">{gamesCount}</span>}
+            </button>
+          </div>
+        )}
+
+        {/* Global Search Bar with High-Contrast Obsidian Kinetic styling & ⌘K */}
         <div className="header-search-container">
           <div className="search-box">
-            <span className="search-icon">🔍</span>
+            <span className="material-symbols-outlined search-icon">search</span>
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="Search titles, directors, venues, notes..."
+              placeholder={
+                activeTab === 'games'
+                  ? 'Search games, platforms, notes, replays...'
+                  : 'Search titles, genres, directors, notes...'
+              }
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
             />
+            {searchQuery && (
+              <button
+                type="button"
+                className="search-clear-btn"
+                onClick={() => {
+                  onSearchChange('');
+                  if (searchInputRef.current) searchInputRef.current.focus();
+                }}
+                title="Clear search"
+              >
+                ✕
+              </button>
+            )}
             <kbd className="search-kbd">⌘K</kbd>
           </div>
         </div>
@@ -98,7 +143,7 @@ function Header({
 
           <button className="btn-header btn-add" onClick={onAddClick}>
             <span className="btn-icon add-plus">+</span>
-            <span>Add Media</span>
+            <span>{activeTab === 'games' ? 'Add Game' : 'Add Media'}</span>
           </button>
         </div>
       </div>

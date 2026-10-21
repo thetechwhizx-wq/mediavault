@@ -1,0 +1,103 @@
+/* ── Weekly Recap Banner (Obsidian Kinetic) ── */
+
+.weekly-recap-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  background: #181c24;
+  border: 1px solid rgba(128, 131, 255, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.weekly-recap-banner.active {
+  background: linear-gradient(135deg, rgba(87, 27, 193, 0.25) 0%, rgba(24, 28, 36, 0.95) 100%);
+  border-color: rgba(128, 131, 255, 0.35);
+}
+
+.weekly-recap-banner.quiet {
+  background: #181c24;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.recap-content {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.recap-sparkle {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.recap-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.recap-kicker {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #c0c1ff;
+}
+
+.recap-message {
+  font-size: 0.84rem;
+  color: #dfe2ee;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.recap-message strong {
+  color: #8083ff;
+}
+
+.recap-highlights {
+  color: #908fa0;
+}
+
+.recap-highlights em {
+  color: #4edea3;
+  font-style: normal;
+}
+
+.recap-close-btn {
+  background: transparent;
+  border: none;
+  color: #908fa0;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.recap-close-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+@media (max-width: 640px) {
+  .weekly-recap-banner {
+    padding: 0.65rem 1rem;
+  }
+
+  .recap-message {
+    font-size: 0.78rem;
+  }
+}

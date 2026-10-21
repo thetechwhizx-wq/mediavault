@@ -14,10 +14,12 @@ import ActiveMediaShelf from './components/ActiveMediaShelf';
 import MediaList from './components/MediaList';
 import AddMediaForm from './components/AddMediaForm';
 import EditMediaModal from './components/EditMediaModal';
-import ImportModal from './components/ImportModal';
 import CoverPickerModal from './components/CoverPickerModal';
+import ImportModal from './components/ImportModal';
 import VaultInsightsModal from './components/VaultInsightsModal';
 import DuplicateCleanerModal from './components/DuplicateCleanerModal';
+import GamesPage from './components/GamesPage';
+import WeeklyRecapBanner from './components/WeeklyRecapBanner';
 import './App.css';
 
 function App() {
@@ -25,6 +27,9 @@ function App() {
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Vault Switcher (Cinema & TV vs Games Vault)
+  const [activeVaultTab, setActiveVaultTab] = useState('cinema'); // 'cinema' or 'games'
 
   // Filters & search
   const [searchQuery, setSearchQuery] = useState('');
@@ -76,12 +81,17 @@ function App() {
     } catch (e) {}
   };
 
+  // ── Segregated Media ───────────────────────────────
+  const gamesMedia = useMemo(() => media.filter((m) => m.type === 'game'), [media]);
+  const cinemaMedia = useMemo(() => media.filter((m) => m.type !== 'game'), [media]);
+
   // ── Dynamic Years & Venue Counts ───────────────────
   const availableYears = useMemo(() => {
     const set = new Set();
     media.forEach((m) => {
-      if (m.watchedDate && /^\d{4}/.test(m.watchedDate)) {
-        set.add(m.watchedDate.slice(0, 4));
+      const d = m.watchedDate || m.playedFrom || m.playedMonth;
+      if (d && /^\d{4}/.test(d)) {
+        set.add(d.slice(0, 4));
       }
     });
     return Array.from(set).sort((a, b) => b.localeCompare(a));
@@ -95,17 +105,20 @@ function App() {
     ).length;
   }, [media]);
 
-  // ── In-Progress Active Items ───────────────────────
+  // ── In-Progress Active Items (Cinema & TV) ──────────
   const inProgressItems = useMemo(() => {
-    return media.filter((m) => m.status === 'in_progress');
-  }, [media]);
+    return cinemaMedia.filter((m) => m.status === 'in_progress');
+  }, [cinemaMedia]);
 
-  // ── Top Ticker Stats Summary ───────────────────────
+  // ── Top Ticker Stats Summary (Real Watch Hours) ────
   const statsSummary = useMemo(() => {
     const targetItems =
       yearFilter === 'all'
         ? media
-        : media.filter((m) => m.watchedDate && m.watchedDate.startsWith(yearFilter));
+        : media.filter((m) => {
+            const d = m.watchedDate || m.playedFrom || m.playedMonth;
+            return d && d.startsWith(yearFilter);
+          });
 
     let gamingHours = 0;
     let watchHours = 0;
@@ -116,7 +129,8 @@ function App() {
       if (m.type === 'game') {
         gamingHours += Number(m.hoursPlayed) || 0;
       } else {
-        watchHours += m.type === 'movie' ? 2 : 4;
+        const runtime = Number(m.runtimeMinutes) || (m.type === 'movie' ? 120 : 45 * 4);
+        watchHours += runtime / 60;
       }
       if (m.rating && Number(m.rating) > 0) {
         totalRatings += Number(m.rating);
@@ -129,17 +143,20 @@ function App() {
 
     return {
       total: targetItems.length,
-      watchHours,
+      watchHours: Number(watchHours.toFixed(1)),
       gamingHours: Number(gamingHours.toFixed(1)),
       meanRating,
     };
   }, [media, yearFilter]);
 
-  // ── Duplicate Groups Count ─────────────────────────
+  // ── Duplicate Groups Count (Excludes intentional rewatches & replays) ──
   const duplicateCount = useMemo(() => {
     const counts = {};
     let dups = 0;
-    media.forEach((m) => {
+    const candidates = media.filter(
+      (m) => m.status !== 'rewatch' && !m.replay && !(m.notes && /rewatch|replay/i.test(m.notes))
+    );
+    candidates.forEach((m) => {
       const norm = (m.title || '')
         .toLowerCase()
         .replace(/[^\w\s]/g, '')
@@ -186,27 +203,10 @@ function App() {
       }
 
       setShowImportModal(false);
-
-      // Auto live-poll every 2.5s so background-resolved posters pop in live!
-      let cycles = 0;
-      const pollTimer = setInterval(async () => {
-        cycles++;
-        try {
-          const fresh = await fetchMedia();
-          if (fresh && Array.isArray(fresh)) {
-            setMedia(fresh);
-            const stillMissing = fresh.some((m) => !m.poster);
-            if (!stillMissing || cycles >= 6) {
-              clearInterval(pollTimer);
-            }
-          }
-        } catch (e) {
-          clearInterval(pollTimer);
-        }
-      }, 2500);
+      loadMedia();
     } catch (err) {
       console.error(err);
-      throw err;
+      alert('Failed to import items: ' + err.message);
     }
   };
 
@@ -296,8 +296,8 @@ function App() {
     }
   };
 
-  // ── Filtering logic ────────────────────────────────
-  const filtered = media.filter((item) => {
+  // ── Cinema & TV Filtering logic ────────────────────
+  const filteredCinema = cinemaMedia.filter((item) => {
     if (typeFilter !== 'all' && item.type !== typeFilter) return false;
     if (statusFilter !== 'all' && item.status !== statusFilter) return false;
 
@@ -316,11 +316,17 @@ function App() {
       }
     }
 
-    // Filter by genre
+    // Filter by genre (checks item.genres array and fallback text)
     if (genreFilter !== 'All Genres') {
       const g = genreFilter.toLowerCase();
+      const hasGenre =
+        Array.isArray(item.genres) &&
+        item.genres.some(
+          (genreName) =>
+            genreName.toLowerCase().includes(g) || g.includes(genreName.toLowerCase())
+        );
       const textToSearch = `${item.title} ${item.notes || ''} ${item.review || ''}`.toLowerCase();
-      if (!textToSearch.includes(g)) return false;
+      if (!hasGenre && !textToSearch.includes(g)) return false;
     }
 
     // Search query
@@ -333,10 +339,10 @@ function App() {
 
   // ── Counts for filter badges ───────────────────────
   const counts = {
-    all: media.length,
-    movie: media.filter((m) => m.type === 'movie').length,
-    show: media.filter((m) => m.type === 'show').length,
-    game: media.filter((m) => m.type === 'game').length,
+    all: cinemaMedia.length,
+    movie: cinemaMedia.filter((m) => m.type === 'movie').length,
+    show: cinemaMedia.filter((m) => m.type === 'show').length,
+    game: gamesMedia.length,
   };
 
   // ── Keyboard: Escape to close modals ───────────────
@@ -376,9 +382,16 @@ function App() {
         onInsightsClick={() => setShowInsightsModal(true)}
         duplicateCount={duplicateCount}
         onDuplicatesClick={() => setShowDuplicatesModal(true)}
+        activeTab={activeVaultTab}
+        onTabChange={setActiveVaultTab}
+        gamesCount={gamesMedia.length}
+        cinemaCount={cinemaMedia.length}
       />
 
       <main className="main-content">
+        {/* Weekly Recap Dismissible Greeting Banner */}
+        <WeeklyRecapBanner media={media} />
+
         {error && (
           <div className="error-banner">
             <span>⚠️ {error}</span>
@@ -401,44 +414,60 @@ function App() {
           </div>
         )}
 
-        {/* Ticker & Filter Bar */}
-        <FilterBar
-          typeFilter={typeFilter}
-          statusFilter={statusFilter}
-          onTypeChange={setTypeFilter}
-          onStatusChange={setStatusFilter}
-          counts={counts}
-          yearFilter={yearFilter}
-          onYearChange={setYearFilter}
-          availableYears={availableYears}
-          theatreOnly={theatreOnly}
-          onTheatreToggle={() => setTheatreOnly((prev) => !prev)}
-          theatreCount={theatreCount}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-          statsSummary={statsSummary}
-          genreFilter={genreFilter}
-          onGenreChange={setGenreFilter}
-        />
-
-        {/* Active Media Shelf ("In Progress") */}
-        {!searchQuery && statusFilter === 'all' && viewMode === 'grid' && inProgressItems.length > 0 && (
-          <ActiveMediaShelf
-            inProgressItems={inProgressItems}
-            onEdit={setEditingItem}
+        {/* ── Vault Switcher Body ── */}
+        {activeVaultTab === 'games' ? (
+          <GamesPage
+            games={gamesMedia}
+            onUpdateGame={handleUpdate}
+            onDeleteGame={handleDelete}
+            onEditGame={setEditingItem}
+            onOpenAddModal={() => setShowAddForm(true)}
             onLogSession={handleLogSession}
+            onFixCover={(item) => setCoverPickerItem(item)}
+            searchQuery={searchQuery}
           />
-        )}
+        ) : (
+          <>
+            {/* Ticker & Filter Bar for Cinema & TV */}
+            <FilterBar
+              typeFilter={typeFilter}
+              statusFilter={statusFilter}
+              onTypeChange={setTypeFilter}
+              onStatusChange={setStatusFilter}
+              counts={counts}
+              yearFilter={yearFilter}
+              onYearChange={setYearFilter}
+              availableYears={availableYears}
+              theatreOnly={theatreOnly}
+              onTheatreToggle={() => setTheatreOnly((prev) => !prev)}
+              theatreCount={theatreCount}
+              viewMode={viewMode}
+              onViewModeChange={handleViewModeChange}
+              statsSummary={statsSummary}
+              genreFilter={genreFilter}
+              onGenreChange={setGenreFilter}
+            />
 
-        {/* Main Vault Archive Grid / Timeline */}
-        <MediaList
-          items={filtered}
-          onEdit={setEditingItem}
-          onDelete={(item) => setEditingItem(item)}
-          onLogSession={handleLogSession}
-          onPickCover={(item) => setCoverPickerItem(item)}
-          viewMode={viewMode}
-        />
+            {/* Active Media Shelf ("In Progress" Cinema & TV) */}
+            {!searchQuery && statusFilter === 'all' && viewMode === 'grid' && inProgressItems.length > 0 && (
+              <ActiveMediaShelf
+                inProgressItems={inProgressItems}
+                onEdit={setEditingItem}
+                onLogSession={handleLogSession}
+              />
+            )}
+
+            {/* Main Vault Archive Grid / Timeline */}
+            <MediaList
+              items={filteredCinema}
+              onEdit={setEditingItem}
+              onDelete={(item) => setEditingItem(item)}
+              onLogSession={handleLogSession}
+              onPickCover={(item) => setCoverPickerItem(item)}
+              viewMode={viewMode}
+            />
+          </>
+        )}
       </main>
 
       {/* ── Modals ── */}
@@ -479,6 +508,7 @@ function App() {
         <AddMediaForm
           onSubmit={handleAdd}
           onClose={() => setShowAddForm(false)}
+          defaultType={activeVaultTab === 'games' ? 'game' : 'movie'}
         />
       )}
 

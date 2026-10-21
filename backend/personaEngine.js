@@ -139,19 +139,6 @@ function calculatePersonas(media, context = {}) {
     });
   }
 
-  // 3. Completionist
-  if (started >= R.completionist.minStarted && completionRate >= R.completionist.minRate) {
-    const score = Math.min(100, Math.round(completionRate * 90 + (started / 20) * 10));
-    candidates.push({
-      id: 'completionist',
-      name: 'Completionist',
-      icon: '✅',
-      score,
-      evidence: `You finished ${completed.length} of ${started} media titles you began (${signals.completionRate}% completion efficiency).`,
-      quote: 'Started is committed. Unfinished is not in the vocabulary.',
-    });
-  }
-
   // 4. Master Gamer
   if (totalGamingHours >= R.masterGamer.minHours) {
     const score = Math.min(100, Math.round(Math.min(60, totalGamingHours * 2) + games.length * 8));
