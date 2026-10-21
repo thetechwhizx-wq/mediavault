@@ -58,6 +58,15 @@ async function migrate() {
       rating: item.rating !== undefined ? item.rating : null,
       review: item.review || '',
       importedFrom: item.importedFrom || '',
+      genres: Array.isArray(item.genres) ? item.genres : [],
+      runtimeMinutes: Number(item.runtimeMinutes) || 0,
+      playedFrom: item.playedFrom || '',
+      playedTo: item.playedTo || '',
+      playedMonth: item.playedMonth || '',
+      replay: Boolean(item.replay),
+      dateConfidence: item.dateConfidence || '',
+      needsCheck: item.needsCheck || '',
+      platform: item.platform || '',
     }));
 
     await Media.insertMany(docs);

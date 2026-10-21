@@ -25,6 +25,66 @@ function saveLocalData(data) {
 }
 
 // ── Connect to Database ──
+async function autoSyncMongo() {
+  try {
+    const local = readLocalData();
+    if (!local || !Array.isArray(local.media) || local.media.length === 0) return;
+
+    const gameCount = await Media.countDocuments({ type: 'game' });
+    const missingGenreCount = await Media.countDocuments({
+      $or: [
+        { genres: { $exists: false } },
+        { genres: { $size: 0 } },
+        { genres: null },
+      ],
+    });
+
+    console.log(`🔍 [Mongo Sync Check] Cloud Atlas currently has ${gameCount} games and ${missingGenreCount} items missing genres.`);
+
+    if (gameCount < 30 || missingGenreCount > 5) {
+      console.log('🔄 [Mongo Auto-Sync] Syncing full media library from data.json to MongoDB Atlas...');
+      for (const item of local.media) {
+        await Media.findOneAndUpdate(
+          { title: item.title, type: item.type },
+          {
+            $set: {
+              id: item.id,
+              title: item.title,
+              type: item.type || 'movie',
+              status: item.status || 'completed',
+              progress: item.progress || '',
+              poster: item.poster || '',
+              watchedDate: item.watchedDate || '',
+              venue: item.venue || '',
+              notes: item.notes || '',
+              hoursPlayed: Number(item.hoursPlayed) || 0,
+              targetHours: Number(item.targetHours) || 0,
+              rating: item.rating !== undefined ? item.rating : null,
+              review: item.review || '',
+              importedFrom: item.importedFrom || '',
+              genres: Array.isArray(item.genres) ? item.genres : [],
+              runtimeMinutes: Number(item.runtimeMinutes) || 0,
+              playedFrom: item.playedFrom || '',
+              playedTo: item.playedTo || '',
+              playedMonth: item.playedMonth || '',
+              replay: Boolean(item.replay),
+              dateConfidence: item.dateConfidence || '',
+              needsCheck: item.needsCheck || '',
+              platform: item.platform || '',
+            },
+          },
+          { upsert: true, new: true }
+        );
+      }
+      const newTotal = await Media.countDocuments({});
+      const newGames = await Media.countDocuments({ type: 'game' });
+      console.log(`✅ [Mongo Auto-Sync] Sync complete! Atlas now has ${newTotal} items (${newGames} games) with all genres.`);
+    }
+  } catch (syncErr) {
+    console.warn('⚠️ [Mongo Auto-Sync] Non-blocking sync warning:', syncErr.message);
+  }
+}
+
 async function connectDB() {
   const uri = process.env.MONGODB_URI;
   if (!uri) {
@@ -38,6 +98,7 @@ async function connectDB() {
     await mongoose.connect(uri);
     useMongo = true;
     console.log('✅ [Storage] Successfully connected to MongoDB Atlas!');
+    await autoSyncMongo();
     return true;
   } catch (err) {
     console.error('❌ [Storage] MongoDB connection error:', err.message);

@@ -20,13 +20,19 @@ const STATUS_OPTIONS = [
 const GENRE_PILLS = [
   'All Genres',
   'Action',
-  'Sci-Fi',
   'Drama',
   'Comedy',
-  'Anime',
+  'Sci-Fi',
   'Thriller',
   'Indian Cinema',
   'Animation',
+  'Anime',
+  'Crime',
+  'Romance',
+  'Adventure',
+  'Fantasy',
+  'Horror',
+  'Mystery',
 ];
 
 function FilterBar({

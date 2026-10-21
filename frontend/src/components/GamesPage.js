@@ -32,6 +32,7 @@ function GamesPage({
   onOpenAddModal,
   onLogSession,
   onFixCover,
+  onSwitchToCinema,
   searchQuery = '',
 }) {
   const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'in_progress', 'completed', 'replay', 'dropped'
@@ -177,6 +178,16 @@ function GamesPage({
         </div>
 
         <div className="ticker-right">
+          {onSwitchToCinema && (
+            <button
+              className="btn-switch-cinema"
+              onClick={onSwitchToCinema}
+              title="Switch back to Movies & TV Series"
+            >
+              <span className="material-symbols-outlined text-sm">movie</span>
+              <span>Cinema & TV</span>
+            </button>
+          )}
           <button
             className="btn-add-game-hero"
             onClick={onOpenAddModal}

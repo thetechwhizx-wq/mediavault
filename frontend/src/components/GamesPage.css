@@ -102,6 +102,27 @@
   transform: translateY(-1px);
 }
 
+.btn-switch-cinema {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: #dfe2ee;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-switch-cinema:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(128, 131, 255, 0.4);
+}
+
 /* ── Currently Playing Shelf ── */
 .active-games-shelf {
   background: #181c24;

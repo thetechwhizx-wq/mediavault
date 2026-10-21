@@ -11,7 +11,13 @@
       "targetHours": 0,
       "rating": 5,
       "review": "One of the best comedy series ever!",
-      "createdAt": "2026-10-17T13:42:14.775Z"
+      "createdAt": "2026-10-17T13:42:14.775Z",
+      "genres": [
+        "Comedy",
+        "Romance",
+        "Drama"
+      ],
+      "runtimeMinutes": 22
     },
     {
       "id": 4,
@@ -24,7 +30,12 @@
       "targetHours": 0,
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T14:57:06.817Z"
+      "createdAt": "2026-10-19T14:57:06.817Z",
+      "genres": [
+        "Game",
+        "Sports"
+      ],
+      "runtimeMinutes": 0
     },
     {
       "id": 5,
@@ -41,7 +52,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:34.112Z"
+      "createdAt": "2026-10-19T15:47:34.112Z",
+      "genres": [
+        "Comedy",
+        "Crime",
+        "Fantasy",
+        "Mystery"
+      ],
+      "runtimeMinutes": 45
     },
     {
       "id": 6,
@@ -58,7 +76,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:34.114Z"
+      "createdAt": "2026-10-19T15:47:34.114Z",
+      "genres": [
+        "Action",
+        "Comedy",
+        "Crime",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 60
     },
     {
       "id": 7,
@@ -75,7 +100,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:34.156Z"
+      "createdAt": "2026-10-19T15:47:34.156Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Drama",
+        "History"
+      ],
+      "runtimeMinutes": 44
     },
     {
       "id": 8,
@@ -92,7 +124,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:34.311Z"
+      "createdAt": "2026-10-19T15:47:34.311Z",
+      "genres": [
+        "Action",
+        "Drama",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtimeMinutes": 55
     },
     {
       "id": 9,
@@ -109,7 +148,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:34.717Z"
+      "createdAt": "2026-10-19T15:47:34.717Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Crime",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 50
     },
     {
       "id": 10,
@@ -126,7 +172,15 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:34.915Z"
+      "createdAt": "2026-10-19T15:47:34.915Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "runtimeMinutes": 54
     },
     {
       "id": 11,
@@ -143,7 +197,15 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:35.314Z"
+      "createdAt": "2026-10-19T15:47:35.314Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "runtimeMinutes": 54
     },
     {
       "id": 12,
@@ -160,7 +222,15 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:35.356Z"
+      "createdAt": "2026-10-19T15:47:35.356Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "runtimeMinutes": 54
     },
     {
       "id": 13,
@@ -177,7 +247,15 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:35.555Z"
+      "createdAt": "2026-10-19T15:47:35.555Z",
+      "genres": [
+        "Animation",
+        "Action",
+        "Adventure",
+        "Fantasy",
+        "Anime"
+      ],
+      "runtimeMinutes": 24
     },
     {
       "id": 14,
@@ -194,7 +272,15 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:35.612Z"
+      "createdAt": "2026-10-19T15:47:35.612Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "runtimeMinutes": 50
     },
     {
       "id": 15,
@@ -211,7 +297,15 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:36.199Z"
+      "createdAt": "2026-10-19T15:47:36.199Z",
+      "genres": [
+        "Crime",
+        "Drama",
+        "Mystery",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "runtimeMinutes": 60
     },
     {
       "id": 16,
@@ -228,7 +322,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:36.358Z"
+      "createdAt": "2026-10-19T15:47:36.358Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Drama",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 45
     },
     {
       "id": 17,
@@ -245,7 +346,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:36.434Z"
+      "createdAt": "2026-10-19T15:47:36.434Z",
+      "genres": [
+        "Action",
+        "Drama",
+        "Mystery",
+        "Thriller"
+      ],
+      "runtimeMinutes": 55
     },
     {
       "id": 18,
@@ -262,7 +370,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:36.491Z"
+      "createdAt": "2026-10-19T15:47:36.491Z",
+      "genres": [
+        "Comedy",
+        "Crime",
+        "Fantasy",
+        "Mystery"
+      ],
+      "runtimeMinutes": 45
     },
     {
       "id": 19,
@@ -279,7 +394,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:36.672Z"
+      "createdAt": "2026-10-19T15:47:36.672Z",
+      "genres": [
+        "Horror",
+        "Mystery",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 50
     },
     {
       "id": 20,
@@ -296,7 +417,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:36.717Z"
+      "createdAt": "2026-10-19T15:47:36.717Z",
+      "genres": [
+        "Drama",
+        "Fantasy",
+        "Horror",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 60
     },
     {
       "id": 22,
@@ -313,7 +441,17 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:36.842Z"
+      "createdAt": "2026-10-19T15:47:36.842Z",
+      "genres": [
+        "Animation",
+        "Crime",
+        "Drama",
+        "Fantasy",
+        "Mystery",
+        "Thriller",
+        "Anime"
+      ],
+      "runtimeMinutes": 23
     },
     {
       "id": 23,
@@ -330,7 +468,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.026Z"
+      "createdAt": "2026-10-19T15:47:37.026Z",
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Family",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 102
     },
     {
       "id": 24,
@@ -347,7 +492,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.109Z"
+      "createdAt": "2026-10-19T15:47:37.109Z",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "runtimeMinutes": 70
     },
     {
       "id": 25,
@@ -364,7 +515,15 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.367Z"
+      "createdAt": "2026-10-19T15:47:37.367Z",
+      "genres": [
+        "Action",
+        "Biography",
+        "Drama",
+        "History",
+        "Indian Cinema"
+      ],
+      "runtimeMinutes": 169
     },
     {
       "id": 26,
@@ -381,7 +540,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.395Z"
+      "createdAt": "2026-10-19T15:47:37.395Z",
+      "genres": [
+        "Crime",
+        "Drama",
+        "Thriller",
+        "Indian Cinema"
+      ],
+      "runtimeMinutes": 150
     },
     {
       "id": 27,
@@ -398,7 +564,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.440Z"
+      "createdAt": "2026-10-19T15:47:37.440Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Drama"
+      ],
+      "runtimeMinutes": 148
     },
     {
       "id": 28,
@@ -415,7 +587,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.502Z"
+      "createdAt": "2026-10-19T15:47:37.502Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Comedy",
+        "Fantasy"
+      ],
+      "runtimeMinutes": 123
     },
     {
       "id": 29,
@@ -432,7 +611,11 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:37.715Z"
+      "createdAt": "2026-10-19T15:47:37.715Z",
+      "genres": [
+        "Drama"
+      ],
+      "runtimeMinutes": 101
     },
     {
       "id": 30,
@@ -495,8 +678,11 @@
       "rating": null,
       "review": "",
       "createdAt": "2026-10-19T15:47:37.852Z",
-      "genres": [],
-      "runtimeMinutes": 117
+      "genres": [
+        "Action",
+        "Thriller"
+      ],
+      "runtimeMinutes": 122
     },
     {
       "id": 33,
@@ -517,7 +703,8 @@
       "genres": [
         "Action",
         "Crime",
-        "Drama"
+        "Drama",
+        "Indian Cinema"
       ],
       "runtimeMinutes": 154
     },
@@ -540,7 +727,8 @@
       "genres": [
         "Action",
         "Crime",
-        "Drama"
+        "Drama",
+        "Indian Cinema"
       ],
       "runtimeMinutes": 98
     },
@@ -563,7 +751,8 @@
       "genres": [
         "Comedy",
         "Drama",
-        "Sport"
+        "Sport",
+        "Indian Cinema"
       ],
       "runtimeMinutes": 146
     },
@@ -696,7 +885,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T15:47:40.049Z"
+      "createdAt": "2026-10-19T15:47:40.049Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 92
     },
     {
       "id": 42,
@@ -850,7 +1045,8 @@
       "genres": [
         "Action",
         "Crime",
-        "Drama"
+        "Drama",
+        "Indian Cinema"
       ],
       "runtimeMinutes": 139
     },
@@ -869,7 +1065,15 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:39.470Z"
+      "createdAt": "2026-10-19T17:16:39.470Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Mystery",
+        "Thriller",
+        "Indian Cinema"
+      ],
+      "runtimeMinutes": 145
     },
     {
       "id": 59,
@@ -931,7 +1135,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:47.353Z"
+      "createdAt": "2026-10-19T17:16:47.353Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtimeMinutes": 144
     },
     {
       "id": 62,
@@ -948,7 +1158,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:47.367Z"
+      "createdAt": "2026-10-19T17:16:47.367Z",
+      "genres": [
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtimeMinutes": 161
     },
     {
       "id": 63,
@@ -965,7 +1180,12 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:16:47.387Z"
+      "createdAt": "2026-10-19T17:16:47.387Z",
+      "genres": [
+        "Adventure",
+        "Fantasy"
+      ],
+      "runtimeMinutes": 169
     },
     {
       "id": 64,
@@ -1048,7 +1268,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:24.677Z"
+      "createdAt": "2026-10-19T17:19:24.677Z",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "runtimeMinutes": 101
     },
     {
       "id": 78,
@@ -1179,7 +1405,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:19:29.537Z"
+      "createdAt": "2026-10-19T17:19:29.537Z",
+      "genres": [
+        "Action",
+        "Crime",
+        "Drama",
+        "Indian Cinema"
+      ],
+      "runtimeMinutes": 140
     },
     {
       "id": 84,
@@ -1242,7 +1475,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Drama",
+        "Fantasy"
+      ],
+      "runtimeMinutes": 178
     },
     {
       "id": 162,
@@ -1418,7 +1658,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Drama",
+        "Thriller",
+        "Indian Cinema"
+      ],
+      "runtimeMinutes": 137
     },
     {
       "id": 170,
@@ -1546,7 +1793,14 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Comedy",
+        "Drama",
+        "Indian Cinema"
+      ],
+      "runtimeMinutes": 160
     },
     {
       "id": 176,
@@ -1586,7 +1840,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Action",
+        "Thriller",
+        "Indian Cinema"
+      ],
+      "runtimeMinutes": 140
     },
     {
       "id": 178,
@@ -1624,7 +1884,13 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Drama",
+        "Comedy",
+        "Indian Cinema"
+      ],
+      "runtimeMinutes": 135
     },
     {
       "id": 180,
@@ -1798,7 +2064,15 @@
       "importedFrom": "bulk_import",
       "rating": null,
       "review": "",
-      "createdAt": "2026-10-19T17:42:53.667Z"
+      "createdAt": "2026-10-19T17:42:53.667Z",
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Comedy",
+        "Family",
+        "Sci-Fi"
+      ],
+      "runtimeMinutes": 85
     },
     {
       "id": 188,
@@ -1870,7 +2144,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/f8/87/a1/f887a1db-782d-9c7f-41f7-59419f460c9e/AppIcon-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-01-01",
@@ -1897,7 +2171,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/ec/22/3d/ec223d29-1ecd-ffb7-4883-34bcfb736fb1/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-01-04",
@@ -1924,7 +2198,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/58/5d/a0/585da0e7-9e9c-a7b5-8b5f-cfe69fca3188/AppIcon-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-01-06",
@@ -1951,7 +2225,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/21/b4/16/21b4168f-3af1-5eb5-a4ca-1009b0d08588/AppIcon-0-0-1x_U007emarketing-0-11-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-01-17",
@@ -1978,7 +2252,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/ed/08/91/ed089193-2334-fd9b-752e-fc330791ee48/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-sRGB-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-01-19",
@@ -2005,7 +2279,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/53/71/d9/5371d993-d01e-7d39-07a5-40db18b30d67/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-01-27",
@@ -2032,7 +2306,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/4d/c7/26/4dc7261d-95c8-c47d-662f-363ab59dc04a/AppIcon-0-0-1x_U007emarketing-0-0-0-9-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-02-02",
@@ -2059,7 +2333,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/85/a3/0f/85a30fc9-a6b3-d8cd-4e9f-bbfb938d31d5/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-02-12",
@@ -2086,7 +2360,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/33/08/8d/33088df2-9e40-f200-0a97-7d711c8c1f19/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-02-01",
@@ -2113,7 +2387,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/9f/e8/88/9fe88807-d382-b943-b224-1cf6f8976a6b/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-02-01",
@@ -2140,7 +2414,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/ef/d8/36/efd836d6-dab6-1d66-8088-95cf1d5df8cf/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-02-01",
@@ -2167,7 +2441,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/43/f4/a8/43f4a876-bd4f-f5ca-4167-38abafd00f96/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-02-01",
@@ -2194,7 +2468,7 @@
       "type": "game",
       "status": "rewatch",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/f8/87/a1/f887a1db-782d-9c7f-41f7-59419f460c9e/AppIcon-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-02-25",
@@ -2221,7 +2495,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/bc/66/35/bc6635d9-68f4-6ab5-969f-92e034a50cfa/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-03-09",
@@ -2248,7 +2522,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/97/83/ff/9783ff78-2fe9-8175-6a39-4f2739bab6cc/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-03-12",
@@ -2275,7 +2549,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/57/d2/5b/57d25b00-d37e-eef1-a7bb-1ef5d9a10533/AppIcon-0-0-1x_U007emarketing-0-11-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-03-12",
@@ -2302,7 +2576,7 @@
       "type": "game",
       "status": "dropped",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/ed/08/91/ed089193-2334-fd9b-752e-fc330791ee48/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-sRGB-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-03-18",
@@ -2329,7 +2603,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/47/70/b6/4770b665-b0db-ed88-f784-09978115d38a/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-03-01",
@@ -2356,7 +2630,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/2b/23/15/2b2315c7-fc17-40ee-640c-f6ee30476531/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-04-01",
@@ -2383,7 +2657,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/2b/23/15/2b2315c7-fc17-40ee-640c-f6ee30476531/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-04-01",
@@ -2410,7 +2684,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/6d/98/24/6d9824dd-f75f-9bd6-221e-33324fedecb2/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-05-01",
@@ -2437,7 +2711,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/ea/96/56/ea965654-f78a-bb79-6c7f-82f361f5a1f2/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-06-03",
@@ -2464,7 +2738,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/51/ed/7b/51ed7b90-2f42-3579-56a7-05e99e3228c8/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-06-10",
@@ -2491,7 +2765,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/f7/e5/d1/f7e5d17a-da44-f8f4-24fc-403ba4db1bb7/AppIcon-0-0-1x_U007epad-0-0-0-2-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-06-22",
@@ -2518,7 +2792,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/67/c9/13/67c91339-e0d5-e3a3-11c4-cf2217f7f02e/AppIcon-0-0-1x_U007epad-0-0-0-2-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-06-24",
@@ -2545,7 +2819,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/c0/02/f2/c002f295-cf73-0278-8e73-d8d1f9e7a9af/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-06-26",
@@ -2572,7 +2846,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/c2/91/16/c29116d2-391f-0da3-14fb-65aed69a90b9/AppIcon-0-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-07-13",
@@ -2599,7 +2873,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/24/c8/c9/24c8c984-811f-2806-f307-1535d0fe84c8/AppIcon-1x_U007epad-0-11-0-85-220-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-07-14",
@@ -2626,7 +2900,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/ca/33/15/ca3315de-4028-378c-4cb0-24351a4929b9/AppIcon-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-07-15",
@@ -2653,7 +2927,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/02/e1/fd/02e1fd17-7734-34bb-ef60-d79b34bab003/AppIcon-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-07-23",
@@ -2680,7 +2954,7 @@
       "type": "game",
       "status": "rewatch",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/6d/98/24/6d9824dd-f75f-9bd6-221e-33324fedecb2/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-07-01",
@@ -2707,7 +2981,7 @@
       "type": "game",
       "status": "rewatch",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/53/71/d9/5371d993-d01e-7d39-07a5-40db18b30d67/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-07-01",
@@ -2734,7 +3008,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple122/v4/58/85/71/5885715b-2dbb-f701-800e-2f77a1dec1c7/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "",
@@ -2761,7 +3035,7 @@
       "type": "game",
       "status": "completed",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple4/v4/9c/e0/55/9ce05597-d9b4-fbab-828c-521c291cab71/mzl.wgzsgmcf.jpg/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-10-02",
@@ -2788,7 +3062,7 @@
       "type": "game",
       "status": "rewatch",
       "progress": "",
-      "poster": "",
+      "poster": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/ed/08/91/ed089193-2334-fd9b-752e-fc330791ee48/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-sRGB-85-220.png/512x512bb.jpg",
       "hoursPlayed": 0,
       "targetHours": 0,
       "watchedDate": "2026-10-03",

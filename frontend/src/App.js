@@ -345,6 +345,16 @@ function App() {
     game: gamesMedia.length,
   };
 
+  const handleTypeChange = (newType) => {
+    if (newType === 'game') {
+      setActiveVaultTab('games');
+      setTypeFilter('all');
+    } else {
+      setActiveVaultTab('cinema');
+      setTypeFilter(newType);
+    }
+  };
+
   // ── Keyboard: Escape to close modals ───────────────
   useEffect(() => {
     const handleKey = (e) => {
@@ -424,6 +434,10 @@ function App() {
             onOpenAddModal={() => setShowAddForm(true)}
             onLogSession={handleLogSession}
             onFixCover={(item) => setCoverPickerItem(item)}
+            onSwitchToCinema={() => {
+              setActiveVaultTab('cinema');
+              setTypeFilter('all');
+            }}
             searchQuery={searchQuery}
           />
         ) : (
@@ -432,7 +446,7 @@ function App() {
             <FilterBar
               typeFilter={typeFilter}
               statusFilter={statusFilter}
-              onTypeChange={setTypeFilter}
+              onTypeChange={handleTypeChange}
               onStatusChange={setStatusFilter}
               counts={counts}
               yearFilter={yearFilter}
