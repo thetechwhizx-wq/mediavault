@@ -69,13 +69,13 @@ export function parseDateFromEntry(text, sectionYear) {
   return null;
 }
 
-export function parseNotes(rawText) {
+export function parseNotes(rawText, defaultType = 'movie') {
   if (!rawText || !rawText.trim()) return [];
 
   const lines = rawText.split(/\r?\n/);
   const entries = [];
 
-  let currentType = 'movie';
+  let currentType = defaultType;
   let currentYear = new Date().getFullYear().toString();
 
   for (let i = 0; i < lines.length; i++) {
@@ -85,7 +85,7 @@ export function parseNotes(rawText) {
     let line = rawLine.replace(/\u00a0/g, ' ').trim();
     if (!line) continue;
 
-    // Check for section headers (e.g. Movies 2025, SHOWS/SERIES/ANIME(2025))
+    // Check for section headers (e.g. Movies 2025, SHOWS/SERIES/ANIME(2025), Games 2026)
     const header = detectSectionHeader(line);
     if (header) {
       currentType = header.type;
@@ -103,6 +103,30 @@ export function parseNotes(rawText) {
     let working = line.replace(/^\d*\.\s*/, '').trim();
     if (!working) continue;
 
+    // Detect playtime / hours in parens: e.g. (35h), (12.5 hrs), (20 hours)
+    let hoursPlayed = 0;
+    const hoursMatch = working.match(/\((\d+(?:\.\d+)?)\s*(?:hrs?|hours?|h)\)/i);
+    if (hoursMatch) {
+      hoursPlayed = parseFloat(hoursMatch[1]) || 0;
+      working = working.replace(hoursMatch[0], '').trim();
+    }
+
+    // Detect hardware platform in parens: e.g. (PC), (Steam Deck), (Mobile), (PS5), (PlayStation), (Switch)
+    let platform = '';
+    const platMatch = working.match(/\((pc|steam(?:\s*deck)?|mobile|ios|android|ps[245]|playstation(?:\s*[245])?|switch|nintendo(?:\s*switch|\s*ds)?|xbox(?:\s*one|\s*series\s*[xs])?|gba)\)/i);
+    if (platMatch) {
+      const rawPlat = platMatch[1].toLowerCase();
+      if (/steam\s*deck/i.test(rawPlat)) platform = 'Steam Deck';
+      else if (/pc|steam/i.test(rawPlat)) platform = 'PC';
+      else if (/mobile|ios|android/i.test(rawPlat)) platform = 'Mobile';
+      else if (/ps[245]|playstation/i.test(rawPlat)) platform = 'PlayStation';
+      else if (/switch|nintendo|ds/i.test(rawPlat)) platform = 'Nintendo';
+      else if (/xbox/i.test(rawPlat)) platform = 'Xbox';
+      else if (/gba/i.test(rawPlat)) platform = 'GBA';
+      else platform = platMatch[1];
+      working = working.replace(platMatch[0], '').trim();
+    }
+
     // Detect theatre/cinema venue flags: (theatre), (theater), (imax), (cinema)
     let venue = '';
     if (/\((?:theatre|theater|imax|cinema)\)/i.test(working)) {
@@ -112,7 +136,7 @@ export function parseNotes(rawText) {
 
     // Detect notes such as (not finished), (rewatch), (incomplete), (dropped)
     let notes = isRewatchDot ? 'Rewatch' : '';
-    const notesMatch = working.match(/\((not finished|rewatch(?:ed)?|incomplete|dropped|dnf)\)/i);
+    const notesMatch = working.match(/\((not finished|rewatch(?:ed)?|incomplete|dropped|dnf|in progress|now playing)\)/i);
     if (notesMatch) {
       const parsedNote = notesMatch[1];
       notes = notes ? `${notes}, ${parsedNote}` : parsedNote;
@@ -149,7 +173,7 @@ export function parseNotes(rawText) {
       status = 'rewatch';
     } else if (/not finished|incomplete|dropped|dnf/i.test(notes)) {
       status = 'dropped';
-    } else if (restarted) {
+    } else if (restarted || /in progress|now playing/i.test(notes)) {
       status = 'in_progress';
     }
 
@@ -160,6 +184,8 @@ export function parseNotes(rawText) {
       watchedDate,
       venue,
       notes,
+      platform: platform || (currentType === 'game' ? 'Mobile' : ''),
+      hoursPlayed: Number(hoursPlayed) || 0,
       progress: '',
       importedFrom: 'bulk_import',
       include: true,

@@ -30,6 +30,7 @@ function GamesPage({
   onDeleteGame,
   onEditGame,
   onOpenAddModal,
+  onOpenImportModal,
   onLogSession,
   onFixCover,
   onSwitchToCinema,
@@ -228,6 +229,17 @@ function GamesPage({
             >
               <span className="material-symbols-outlined text-sm">movie</span>
               <span>Back to Cinema &amp; TV</span>
+            </button>
+          )}
+
+          {onOpenImportModal && (
+            <button
+              className="btn-import-game-secondary"
+              onClick={onOpenImportModal}
+              title="Bulk import games from copied notes"
+            >
+              <span className="material-symbols-outlined text-sm">content_paste</span>
+              <span>Import Games</span>
             </button>
           )}
 
@@ -586,7 +598,7 @@ function GamesPage({
             >
               All
             </button>
-            {['Action', 'Sports', 'Adventure', 'Horror', 'RPG', 'Shooter', 'Simulation'].map((g) => (
+            {['Action', 'Sports', 'Adventure', 'Horror', 'RPG', 'Shooter', 'Simulation', 'Strategy', 'Fantasy', 'Drama'].map((g) => (
               <button
                 key={g}
                 className={`genre-chip ${genreFilter === g ? 'active' : ''}`}

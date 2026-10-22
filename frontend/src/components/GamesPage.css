@@ -85,6 +85,28 @@
   border-color: rgba(128, 131, 255, 0.4);
 }
 
+.btn-import-game-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(128, 131, 255, 0.12);
+  border: 1px solid rgba(128, 131, 255, 0.35);
+  color: #c0c1ff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-import-game-secondary:hover {
+  background: rgba(128, 131, 255, 0.25);
+  color: #ffffff;
+  border-color: rgba(128, 131, 255, 0.6);
+  transform: translateY(-1px);
+}
+
 .btn-add-game-primary {
   display: flex;
   align-items: center;

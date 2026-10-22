@@ -426,6 +426,7 @@ function App() {
             onDeleteGame={handleDelete}
             onEditGame={setEditingItem}
             onOpenAddModal={() => setShowAddForm(true)}
+            onOpenImportModal={() => setShowImportModal(true)}
             onLogSession={handleLogSession}
             onFixCover={(item) => setCoverPickerItem(item)}
             onSwitchToCinema={() => {
@@ -509,6 +510,7 @@ function App() {
         <ImportModal
           onImport={handleBulkImport}
           onClose={() => setShowImportModal(false)}
+          defaultType={activeVaultTab === 'games' ? 'game' : 'movie'}
         />
       )}
 

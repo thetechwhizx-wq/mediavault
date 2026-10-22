@@ -48,8 +48,10 @@ async function autoSyncMongo() {
     if (gameCount < 35 || multiGenreGameCount < 20 || missingGenreCount > 0) {
       console.log('🔄 [Mongo Auto-Sync] Syncing full media library from data.json to MongoDB Atlas...');
       for (const item of local.media) {
+        // Query by unique numeric ID so updates/corrections are never lost or cross-overwritten
+        const query = item.id ? { id: item.id } : { title: item.title, type: item.type };
         await Media.findOneAndUpdate(
-          { title: item.title, type: item.type },
+          query,
           {
             $set: {
               id: item.id,

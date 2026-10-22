@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { parseNotes } from '../utils/parseNotes';
 import './ImportModal.css';
 
-function ImportModal({ onImport, onClose }) {
+function ImportModal({ onImport, onClose, defaultType = 'movie' }) {
   const [rawText, setRawText] = useState('');
   const [step, setStep] = useState('paste'); // 'paste' | 'preview'
   const [entries, setEntries] = useState([]);
@@ -11,8 +11,8 @@ function ImportModal({ onImport, onClose }) {
 
   const parsed = useMemo(() => {
     if (!rawText.trim()) return [];
-    return parseNotes(rawText);
-  }, [rawText]);
+    return parseNotes(rawText, defaultType);
+  }, [rawText, defaultType]);
 
   const handleProceedToPreview = () => {
     if (parsed.length === 0) return;
@@ -87,11 +87,15 @@ function ImportModal({ onImport, onClose }) {
         {step === 'paste' ? (
           <div className="import-step-paste">
             <p className="import-tip">
-              💡 <strong>Tip:</strong> Section headers like <code>Movies 2025</code> or <code>SHOWS/SERIES/ANIME(2025)</code> automatically set the category and year. Dates in parentheses like <code>(13/02)</code> and <code>(theatre)</code> are auto-detected!
+              💡 <strong>Tip:</strong> Section headers like <code>Movies 2025</code>, <code>Series 2025</code>, or <code>Games 2026</code> automatically set the category and year. Dates like <code>(13/02)</code>, platforms like <code>(PC)</code> or <code>(Steam Deck)</code>, and playtime like <code>(25h)</code> are auto-detected! Missing hours/dates can be edited or left blank anytime.
             </p>
             <textarea
               className="import-textarea"
-              placeholder={`Movies 2025\n1. The wild robot\n2. Lucky Bhaskar\n7. Gifted(13/02)\n22. Retro(01/05) (theatre)\n\nSHOWS/SERIES/ANIME(2025)\n1. Squid games S2\n5. Daredevil season1(15/mar)`}
+              placeholder={
+                defaultType === 'game'
+                  ? `Games 2026\n1. Delta Force(06/01)\n2. Skyrim (PC) (35h)\n3. Pokemon Unite\n4. Silent Hill 2 (Steam Deck) (14/07)\n5. Cyberpunk 2077 (in progress)`
+                  : `Movies 2025\n1. The wild robot\n2. Lucky Bhaskar\n7. Gifted(13/02)\n22. Retro(01/05) (theatre)\n\nSHOWS/SERIES/ANIME(2025)\n1. Squid games S2\n5. Daredevil season1(15/mar)`
+              }
               value={rawText}
               onChange={(e) => setRawText(e.target.value)}
               autoFocus
@@ -163,8 +167,9 @@ function ImportModal({ onImport, onClose }) {
                     <th className="col-chk"></th>
                     <th>Title</th>
                     <th className="col-type">Type</th>
-                    <th className="col-date">Watch Date</th>
-                    <th className="col-venue">Venue</th>
+                    <th className="col-date">Date</th>
+                    <th className="col-venue">Platform / Venue</th>
+                    <th className="col-hours">Playtime</th>
                     <th className="col-status">Status</th>
                   </tr>
                 </thead>
@@ -206,21 +211,49 @@ function ImportModal({ onImport, onClose }) {
                         </span>
                       </td>
                       <td className="col-venue">
-                        <button
-                          type="button"
-                          className={`venue-toggle-btn ${entry.venue === 'theatre' ? 'active-theatre' : ''}`}
-                          onClick={() =>
-                            updateEntryField(
-                              entry._id,
-                              'venue',
-                              entry.venue === 'theatre' ? '' : 'theatre'
-                            )
-                          }
-                          disabled={importing}
-                          title={entry.venue === 'theatre' ? 'Watched in Theatre' : 'Not marked as Theatre'}
-                        >
-                          {entry.venue === 'theatre' ? '🎭 Theatre' : '🏠 Home'}
-                        </button>
+                        {entry.type === 'game' ? (
+                          <input
+                            type="text"
+                            className="table-input platform-input"
+                            placeholder="Mobile / PC / Steam"
+                            value={entry.platform || ''}
+                            onChange={(e) => updateEntryField(entry._id, 'platform', e.target.value)}
+                            disabled={importing}
+                          />
+                        ) : (
+                          <button
+                            type="button"
+                            className={`venue-toggle-btn ${entry.venue === 'theatre' ? 'active-theatre' : ''}`}
+                            onClick={() =>
+                              updateEntryField(
+                                entry._id,
+                                'venue',
+                                entry.venue === 'theatre' ? '' : 'theatre'
+                              )
+                            }
+                            disabled={importing}
+                            title={entry.venue === 'theatre' ? 'Watched in Theatre' : 'Not marked as Theatre'}
+                          >
+                            {entry.venue === 'theatre' ? '🎭 Theatre' : '🏠 Home'}
+                          </button>
+                        )}
+                      </td>
+                      <td className="col-hours">
+                        {entry.type === 'game' ? (
+                          <input
+                            type="number"
+                            step="0.5"
+                            min="0"
+                            className="table-input hours-input"
+                            placeholder="0h"
+                            value={entry.hoursPlayed || ''}
+                            onChange={(e) => updateEntryField(entry._id, 'hoursPlayed', e.target.value)}
+                            disabled={importing}
+                            title="Hours played (optional)"
+                          />
+                        ) : (
+                          <span style={{ color: '#64748b', fontSize: '0.8rem' }}>—</span>
+                        )}
                       </td>
                       <td className="col-status">
                         <select
